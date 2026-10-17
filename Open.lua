@@ -92,7 +92,19 @@ MainFrame.Draggable = true
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 16)
 local MainStroke = Instance.new("UIStroke", MainFrame)
 MainStroke.Color = Color3.fromRGB(160, 0, 255)
-MainStroke.Thickness = 2
+MainStroke.Thickness = 2.5
+
+-- HIỆU ỨNG HOLOGRAM CỰC KỲ BẤT NGỜ (VIỀN ĐỔI MÀU RGB LIÊN TỤC)
+task.spawn(function()
+    while true do
+        for hue = 0, 1, 0.01 do
+            local col = Color3.fromHSV(hue, 1, 1)
+            MainStroke.Color = col
+            SlideArea.BackgroundColor3 = col
+            task.wait(0.08)
+        end
+    end
+end)
 
 local TitleLabel = Instance.new("TextLabel", MainFrame)
 TitleLabel.Size = UDim2.new(1, -80, 0, 40)
@@ -201,51 +213,14 @@ local ThemeLabel = Instance.new("TextLabel", TabHome)
 ThemeLabel.Size = UDim2.new(1, 0, 0, 20)
 ThemeLabel.BackgroundTransparency = 1
 ThemeLabel.Font = Enum.Font.GothamBold
-ThemeLabel.Text = "🎨 Chọn Chủ Đề Màu:"
+ThemeLabel.Text = "💎 Độ Trong Suốt Kính Mờ:"
 ThemeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 ThemeLabel.TextSize = 11
 ThemeLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-local ColorContainer = Instance.new("Frame", TabHome)
-ColorContainer.Size = UDim2.new(1, 0, 0, 32)
-ColorContainer.BackgroundTransparency = 1
-local ColorList = Instance.new("UIListLayout", ColorContainer)
-ColorList.FillDirection = Enum.FillDirection.Horizontal
-ColorList.SortOrder = Enum.SortOrder.LayoutOrder
-ColorList.Padding = UDim.new(0, 5)
-
-local colors = {
-    {Color3.fromRGB(160, 0, 255)}, {Color3.fromRGB(255, 50, 50)},
-    {Color3.fromRGB(0, 150, 255)}, {Color3.fromRGB(0, 230, 100)},
-    {Color3.fromRGB(255, 105, 180)}, {Color3.fromRGB(255, 140, 0)}, {Color3.fromRGB(255, 215, 0)}
-}
-
-for _, col in ipairs(colors) do
-    local cBtn = Instance.new("TextButton", ColorContainer)
-    cBtn.Size = UDim2.new(0, 38, 0, 28)
-    cBtn.BackgroundColor3 = col[1]
-    cBtn.Text = ""
-    Instance.new("UICorner", cBtn).CornerRadius = UDim.new(0, 6)
-    cBtn.MouseButton1Click:Connect(function()
-        MainStroke.Color = col[1]
-        SlideArea.BackgroundColor3 = col[1]
-        notify("Đã chuyển màu giao diện!")
-    end)
-end
-
-local TransLabel = Instance.new("TextLabel", TabHome)
-TransLabel.Size = UDim2.new(1, 0, 0, 20)
-TransLabel.Position = UDim2.new(0, 0, 0, 42)
-TransLabel.BackgroundTransparency = 1
-TransLabel.Font = Enum.Font.GothamBold
-TransLabel.Text = "💎 Độ Trong Suốt Kính Mờ:"
-TransLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TransLabel.TextSize = 11
-TransLabel.TextXAlignment = Enum.TextXAlignment.Left
-
 local TransContainer = Instance.new("Frame", TabHome)
 TransContainer.Size = UDim2.new(1, 0, 0, 32)
-TransContainer.Position = UDim2.new(0, 0, 0, 65)
+TransContainer.Position = UDim2.new(0, 0, 0, 25)
 TransContainer.BackgroundTransparency = 1
 local TransList = Instance.new("UIListLayout", TransContainer)
 TransList.FillDirection = Enum.FillDirection.Horizontal
@@ -327,6 +302,7 @@ createButton(TabUtility, "👻 Đi Xuyên Tường (Noclip)", function(state)
     end
 end)
 
+-- SỬA LỖI ĐỊNH VỊ ESP CHUẨN XÁC TÊN & KHOẢNG CÁCH THỰC TẾ
 local espActive = false
 local espFolder = Instance.new("Folder", ScreenGui)
 espFolder.Name = "KienESPFolder"
@@ -346,15 +322,15 @@ local function applyESP(player)
         local bg = Instance.new("BillboardGui", espFolder)
         bg.Name = player.Name
         bg.AlwaysOnTop = true
-        bg.Size = UDim2.new(0, 120, 0, 50)
+        bg.Size = UDim2.new(0, 140, 0, 50)
         bg.Adornee = root
         
         local txt = Instance.new("TextLabel", bg)
         txt.Size = UDim2.new(1, 0, 1, 0)
         txt.BackgroundTransparency = 1
         txt.Font = Enum.Font.GothamBold
+        txt.TextSize = 12
         txt.TextColor3 = Color3.fromRGB(0, 255, 200)
-        txt.TextSize = 11
         txt.TextStrokeTransparency = 0
         
         task.spawn(function()
@@ -362,7 +338,7 @@ local function applyESP(player)
                 local myChar = LocalPlayer.Character
                 if myChar and myChar:FindFirstChild("HumanoidRootPart") then
                     local dist = math.floor((myChar.HumanoidRootPart.Position - root.Position).Magnitude)
-                    txt.Text = "🎯 " .. player.Name .. "\n[" .. dist .. "m]"
+                    txt.Text = "🎯 " .. player.Name .. " [" .. dist .. "m]"
                 end
                 task.wait(0.1)
             end
@@ -386,7 +362,7 @@ createButton(TabUtility, "👁️ Định Vị Người Chơi (ESP)", function(s
         Players.PlayerAdded:Connect(function(plr)
             if espActive then applyESP(plr) end
         end)
-        notify("Đã bật Định Vị chuẩn xác khoảng cách!")
+        notify("Đã bật Định Vị chuẩn khoảng cách!")
     else
         notify("Đã tắt Định Vị!")
     end
@@ -521,7 +497,7 @@ InfoText.Size = UDim2.new(1, -20, 1, -20)
 InfoText.Position = UDim2.new(0, 10, 0, 10)
 InfoText.BackgroundTransparency = 1
 InfoText.Font = Enum.Font.GothamBold
-InfoText.Text = "👑 TÁC GIẢ VIP: Trương Trọng Kiên\n🏫 Lớp: 9.4 - THCS Nhuận Phú Tân\n\n✨ [Tính năng độc quyền]:\n- Giao diện Kính mờ siêu cấp có chỉnh độ trong suốt\n- Định vị người chơi ESP chuẩn xác từng mét\n- Dáng chạy Fly V3 kẹp chân lướt gió đỉnh cao\n\n🔥 Chúc ông chơi game cực vui vẻ và bá đạo!"
+InfoText.Text = "👑 TÁC GIẢ VIP: Trương Trọng Kiên\n🏫 Lớp: 9.4 - THCS Nhuận Phú Tân\n\n✨ [Tính năng độc quyền]:\n- Viền menu đổi màu RGB Hologram liên tục\n- Định vị người chơi ESP chuẩn tên & khoảng cách\n- Dáng chạy Fly V3 kẹp chân lướt gió đỉnh cao\n\n🔥 Chúc ông chơi game cực vui vẻ và bá đạo!"
 InfoText.TextColor3 = Color3.fromRGB(240, 240, 255)
 InfoText.TextSize = 11
 InfoText.TextWrapped = true
