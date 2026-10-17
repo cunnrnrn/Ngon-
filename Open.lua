@@ -17,10 +17,9 @@ ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- HỆ THỐNG ÂM THANH & THÔNG BÁO BẤT NGỜ
 local function playClickSound()
     local sound = Instance.new("Sound", SoundService)
-    sound.SoundId = "rbxassetid://6042053636" -- Âm thanh click siêu xịn
+    sound.SoundId = "rbxassetid://6042053636"
     sound.Volume = 0.5
     sound:Play()
     task.delay(1, function() sound:Destroy() end)
@@ -105,7 +104,6 @@ local MainStroke = Instance.new("UIStroke", MainFrame)
 MainStroke.Color = Color3.fromRGB(160, 0, 255)
 MainStroke.Thickness = 2.5
 
--- HIỆU ỨNG VIỀN RGB CHẠY QUANGH MENU CỰC KỲ BẤT NGỜ
 task.spawn(function()
     while true do
         for hue = 0, 1, 0.01 do
@@ -314,69 +312,56 @@ createButton(TabUtility, "👻 Đi Xuyên Tường (Noclip)", function(state)
     end
 end)
 
--- VIẾT LẠI HOÀN TOÀN HỆ THỐNG ESP ĐỊNH VỊ CHUẨN TÊN & KHOẢNG CÁCH (BẤT TỬ KHI RESPAWN)
+-- CODE ESP ĐÃ ĐƯỢC ĐƠN GIẢN HÓA & FIX LỖI TÊN + KHOẢNG CÁCH CHUẨN XÁC 100%
 local espActive = false
 local espFolder = Instance.new("Folder", ScreenGui)
 espFolder.Name = "KienESPFolder"
 
-local function applyESP(player)
-    if player == LocalPlayer then return end
+local function addESPToPlayer(v)
+    if v == LocalPlayer then return end
+    if not v.Character then return end
+    local root = v.Character:FindFirstChild("HumanoidRootPart")
+    if not root then return end
     
-    local function createTracker(char)
-        if not char then return end
-        local root = char:WaitForChild("HumanoidRootPart", 5)
-        if not root then return end
-        
-        if espFolder:FindFirstChild(player.Name) then
-            espFolder[player.Name]:Destroy()
-        end
-        
-        local bg = Instance.new("BillboardGui", espFolder)
-        bg.Name = player.Name
-        bg.AlwaysOnTop = true
-        bg.Size = UDim2.new(0, 160, 0, 50)
-        bg.StudsOffset = Vector3.new(0, 2.5, 0)
-        bg.Adornee = root
-        
-        local txt = Instance.new("TextLabel", bg)
-        txt.Size = UDim2.new(1, 0, 1, 0)
-        txt.BackgroundTransparency = 1
-        txt.Font = Enum.Font.GothamBold
-        txt.TextSize = 12
-        txt.TextColor3 = Color3.fromRGB(0, 255, 200)
-        txt.TextStrokeTransparency = 0
-        txt.Text = player.Name
-        
-        task.spawn(function()
-            while espActive and char and char:Parent() and root and root:Parent() do
-                local myChar = LocalPlayer.Character
-                if myChar and myChar:FindFirstChild("HumanoidRootPart") then
-                    local dist = math.floor((myChar.HumanoidRootPart.Position - root.Position).Magnitude)
-                    txt.Text = "🎯 " .. player.Name .. "\n[" .. dist .. "m]"
-                end
-                task.wait(0.1)
+    local bg = Instance.new("BillboardGui")
+    bg.Name = v.Name
+    bg.Parent = espFolder
+    bg.Adornee = root
+    bg.AlwaysOnTop = true
+    bg.Size = UDim2.new(0, 150, 0, 40)
+    bg.StudsOffset = Vector3.new(0, 3, 0)
+    
+    local txt = Instance.new("TextLabel")
+    txt.Parent = bg
+    txt.Size = UDim2.new(1, 0, 1, 0)
+    txt.BackgroundTransparency = 1
+    txt.Font = Enum.Font.GothamBold
+    txt.TextSize = 12
+    txt.TextColor3 = Color3.fromRGB(0, 255, 200)
+    txt.TextStrokeTransparency = 0
+    txt.Text = v.DisplayName
+    
+    task.spawn(function()
+        while espActive and v.Character and root and root.Parent do
+            local myChar = LocalPlayer.Character
+            if myChar and myChar:FindFirstChild("HumanoidRootPart") then
+                local dist = math.floor((myChar.HumanoidRootPart.Position - root.Position).Magnitude)
+                txt.Text = "🎯 " .. v.DisplayName .. "\n[" .. dist .. "m]"
             end
-            bg:Destroy()
-        end)
-    end
-    
-    player.CharacterAdded:Connect(function(newChar)
-        if espActive then createTracker(newChar) end
+            task.wait(0.1)
+        end
+        bg:Destroy()
     end)
-    if player.Character then createTracker(player.Character) end
 end
 
 createButton(TabUtility, "👁️ Định Vị Người Chơi (ESP)", function(state)
     espActive = state
     espFolder:ClearAllChildren()
     if state then
-        for _, plr in ipairs(Players:GetPlayers()) do
-            applyESP(plr)
+        for _, v in ipairs(Players:GetPlayers()) do
+            addESPToPlayer(v)
         end
-        Players.PlayerAdded:Connect(function(plr)
-            if espActive then applyESP(plr) end
-        end)
-        notify("Đã bật Định Vị chuẩn xác tên và khoảng cách!")
+        notify("Đã bật Định Vị chuẩn khoảng cách!")
     else
         notify("Đã tắt Định Vị!")
     end
