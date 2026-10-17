@@ -1,7 +1,3 @@
--- ==============================================================================
--- Trương Trọng Kiên Hub - Pro Max ESP Edition (Lớp 9.4 THCS Nhuận Phú Tân)
--- ==============================================================================
-
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
@@ -20,7 +16,6 @@ ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- HỆ THỐNG THÔNG BÁO SIÊU GỌN (NOTIFY TOAST)
 local function notify(text)
     local note = Instance.new("Frame", ScreenGui)
     note.Size = UDim2.new(0, 0, 0, 36)
@@ -30,8 +25,8 @@ local function notify(text)
     Instance.new("UICorner", note).CornerRadius = UDim.new(0, 10)
     
     local stroke = Instance.new("UIStroke", note)
-    stroke.Color = Color3.fromRGB(160, 0, 255)
-    stroke.Thickness = 1.5
+    stroke.Color = Color3.fromRGB(255, 215, 0)
+    stroke.Thickness = 2
 
     local lbl = Instance.new("TextLabel", note)
     lbl.Size = UDim2.new(1, -20, 1, 0)
@@ -44,8 +39,8 @@ local function notify(text)
     lbl.TextXAlignment = Enum.TextXAlignment.Left
 
     TweenService:Create(note, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Size = UDim2.new(0, 270, 0, 36),
-        Position = UDim2.new(0.5, -135, 0, 15)
+        Size = UDim2.new(0, 280, 0, 36),
+        Position = UDim2.new(0.5, -140, 0, 15)
     }):Play()
 
     task.delay(2.2, function()
@@ -58,7 +53,6 @@ local function notify(text)
     end)
 end
 
--- 1. NÚT KÉO NGANG (SLIDE BAR) SÁT MÉP TRÊN
 local SlideArea = Instance.new("TextButton", ScreenGui)
 SlideArea.BackgroundColor3 = Color3.fromRGB(160, 0, 255)
 SlideArea.BackgroundTransparency = 0.2
@@ -71,7 +65,6 @@ SlideArea.TextSize = 16
 SlideArea.AutoButtonColor = false
 Instance.new("UICorner", SlideArea).CornerRadius = UDim.new(0, 6)
 
--- 2. NÚT KHÓA MÀN HÌNH (SHIFT LOCK)
 local ShiftLockButton = Instance.new("TextButton", ScreenGui)
 ShiftLockButton.BackgroundColor3 = Color3.fromRGB(18, 18, 25)
 ShiftLockButton.BackgroundTransparency = 0.3
@@ -87,7 +80,6 @@ local LockStroke = Instance.new("UIStroke", ShiftLockButton)
 LockStroke.Color = Color3.fromRGB(255, 60, 60)
 LockStroke.Thickness = 1.5
 
--- 3. KHUNG MENU CHÍNH
 local MainFrame = Instance.new("Frame", ScreenGui)
 MainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 16)
 MainFrame.BackgroundTransparency = 0.18
@@ -102,7 +94,6 @@ local MainStroke = Instance.new("UIStroke", MainFrame)
 MainStroke.Color = Color3.fromRGB(160, 0, 255)
 MainStroke.Thickness = 2
 
--- TIÊU ĐỀ
 local TitleLabel = Instance.new("TextLabel", MainFrame)
 TitleLabel.Size = UDim2.new(1, -80, 0, 40)
 TitleLabel.Position = UDim2.new(0, 14, 0, 0)
@@ -113,7 +104,6 @@ TitleLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
 TitleLabel.TextSize = 12
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
--- NÚT THU GỌN VÀ ĐÓNG
 local MinimizeBtn = Instance.new("TextButton", MainFrame)
 MinimizeBtn.Position = UDim2.new(1, -68, 0, 8)
 MinimizeBtn.Size = UDim2.new(0, 26, 0, 26)
@@ -136,7 +126,6 @@ CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseBtn.TextSize = 12
 Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 6)
 
--- THANH TAB
 local TabBar = Instance.new("Frame", MainFrame)
 TabBar.Position = UDim2.new(0, 12, 0, 42)
 TabBar.Size = UDim2.new(1, -24, 0, 32)
@@ -145,7 +134,7 @@ TabBar.BackgroundTransparency = 1
 local TabListLayout = Instance.new("UIListLayout", TabBar)
 TabListLayout.FillDirection = Enum.FillDirection.Horizontal
 TabListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-TabListLayout.Padding = UDim.new(0, 4)
+TabListLayout.Padding = UDim.new(0, 3)
 
 local ContentFrame = Instance.new("Frame", MainFrame)
 ContentFrame.Position = UDim2.new(0, 12, 0, 80)
@@ -163,13 +152,13 @@ end
 
 local function createTab(name)
     local tBtn = Instance.new("TextButton", TabBar)
-    tBtn.Size = UDim2.new(0.23, 0, 1, 0)
+    tBtn.Size = UDim2.new(0.19, 0, 1, 0)
     tBtn.BackgroundColor3 = Color3.fromRGB(22, 22, 32)
     tBtn.BackgroundTransparency = 0.4
     tBtn.Font = Enum.Font.GothamBold
     tBtn.Text = name
     tBtn.TextColor3 = Color3.fromRGB(160, 160, 180)
-    tBtn.TextSize = 10
+    tBtn.TextSize = 9
     Instance.new("UICorner", tBtn).CornerRadius = UDim.new(0, 6)
     
     local page = Instance.new("ScrollingFrame", ContentFrame)
@@ -206,8 +195,8 @@ local TabHome = createTab("🏠 Cài Đặt")
 local TabUtility = createTab("⚡ Tiện Ích")
 local TabAnims = createTab("🏃‍♂️ Dáng Chạy")
 local TabBoost = createTab("🚀 Tối Ưu")
+local TabInfo = createTab("ℹ️ Info")
 
--- TAB 1: CÀI ĐẶT
 local ThemeLabel = Instance.new("TextLabel", TabHome)
 ThemeLabel.Size = UDim2.new(1, 0, 0, 20)
 ThemeLabel.BackgroundTransparency = 1
@@ -244,7 +233,42 @@ for _, col in ipairs(colors) do
     end)
 end
 
--- HÀM TẠO NÚT BẤM CHUẨN ĐẸP
+local TransLabel = Instance.new("TextLabel", TabHome)
+TransLabel.Size = UDim2.new(1, 0, 0, 20)
+TransLabel.Position = UDim2.new(0, 0, 0, 42)
+TransLabel.BackgroundTransparency = 1
+TransLabel.Font = Enum.Font.GothamBold
+TransLabel.Text = "💎 Độ Trong Suốt Kính Mờ:"
+TransLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TransLabel.TextSize = 11
+TransLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local TransContainer = Instance.new("Frame", TabHome)
+TransContainer.Size = UDim2.new(1, 0, 0, 32)
+TransContainer.Position = UDim2.new(0, 0, 0, 65)
+TransContainer.BackgroundTransparency = 1
+local TransList = Instance.new("UIListLayout", TransContainer)
+TransList.FillDirection = Enum.FillDirection.Horizontal
+TransList.SortOrder = Enum.SortOrder.LayoutOrder
+TransList.Padding = UDim.new(0, 6)
+
+local transLevels = {{"Trong 10%", 0.1}, {"Mặc Định", 0.18}, {"Mờ 50%", 0.5}, {"Đậm 80%", 0.8}}
+for _, level in ipairs(transLevels) do
+    local tBtn = Instance.new("TextButton", TransContainer)
+    tBtn.Size = UDim2.new(0, 75, 0, 28)
+    tBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 38)
+    tBtn.BackgroundTransparency = 0.3
+    tBtn.Font = Enum.Font.GothamBold
+    tBtn.Text = level[1]
+    tBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
+    tBtn.TextSize = 9
+    Instance.new("UICorner", tBtn).CornerRadius = UDim.new(0, 6)
+    tBtn.MouseButton1Click:Connect(function()
+        MainFrame.BackgroundTransparency = level[2]
+        notify("Đã đặt độ trong suốt: " .. level[1])
+    end)
+end
+
 local function createButton(parent, name, callback)
     local btn = Instance.new("TextButton", parent)
     btn.Size = UDim2.new(1, 0, 0, 38)
@@ -279,10 +303,6 @@ local function createButton(parent, name, callback)
         callback(active)
     end)
 end
-
--- TAB 2: TIỆN ÍCH (XUYÊN TƯỜNG, SHIFT LOCK, NHẶT ĐỒ, ĐỊNH VỊ ESP)
-
--- 1. Đi Xuyên Tường
 local noclipConn = nil
 createButton(TabUtility, "👻 Đi Xuyên Tường (Noclip)", function(state)
     if state then
@@ -307,7 +327,6 @@ createButton(TabUtility, "👻 Đi Xuyên Tường (Noclip)", function(state)
     end
 end)
 
--- 2. ĐỊNH VỊ NGƯỜI CHƠI (ESP PLAYER TRACKER - BẤT TỬ KHI CHẾT)
 local espActive = false
 local espFolder = Instance.new("Folder", ScreenGui)
 espFolder.Name = "KienESPFolder"
@@ -315,12 +334,11 @@ espFolder.Name = "KienESPFolder"
 local function applyESP(player)
     if player == LocalPlayer then return end
     
-    local function createHighlight(char)
+    local function createTracker(char)
         if not char then return end
         local root = char:WaitForChild("HumanoidRootPart", 5)
         if not root then return end
         
-        -- Xóa khung cũ nếu bị đúp
         if espFolder:FindFirstChild(player.Name) then
             espFolder[player.Name]:Destroy()
         end
@@ -328,7 +346,7 @@ local function applyESP(player)
         local bg = Instance.new("BillboardGui", espFolder)
         bg.Name = player.Name
         bg.AlwaysOnTop = true
-        bg.Size = UDim2.new(0, 100, 0, 40)
+        bg.Size = UDim2.new(0, 120, 0, 50)
         bg.Adornee = root
         
         local txt = Instance.new("TextLabel", bg)
@@ -339,13 +357,12 @@ local function applyESP(player)
         txt.TextSize = 11
         txt.TextStrokeTransparency = 0
         
-        -- Cập nhật khoảng cách & tự nhận diện khi hồi sinh/chết
         task.spawn(function()
             while espActive and char and char:Parent() and root and root:Parent() do
                 local myChar = LocalPlayer.Character
                 if myChar and myChar:FindFirstChild("HumanoidRootPart") then
                     local dist = math.floor((myChar.HumanoidRootPart.Position - root.Position).Magnitude)
-                    txt.Text = "👤 " .. player.Name .. "\n[" .. dist .. "m]"
+                    txt.Text = "🎯 " .. player.Name .. "\n[" .. dist .. "m]"
                 end
                 task.wait(0.1)
             end
@@ -353,17 +370,15 @@ local function applyESP(player)
         end)
     end
     
-    -- Tự động định vị lại kể cả khi người chơi đó chết rồi hồi sinh
     player.CharacterAdded:Connect(function(newChar)
-        if espActive then createHighlight(newChar) end
+        if espActive then createTracker(newChar) end
     end)
-    if player.Character then createHighlight(player.Character) end
+    if player.Character then createTracker(player.Character) end
 end
 
-createButton(TabUtility, "👁️ Định Vị Người Chơi (ESP Always)", function(state)
+createButton(TabUtility, "👁️ Định Vị Người Chơi (ESP)", function(state)
     espActive = state
     espFolder:ClearAllChildren()
-    
     if state then
         for _, plr in ipairs(Players:GetPlayers()) do
             applyESP(plr)
@@ -371,13 +386,12 @@ createButton(TabUtility, "👁️ Định Vị Người Chơi (ESP Always)", fun
         Players.PlayerAdded:Connect(function(plr)
             if espActive then applyESP(plr) end
         end)
-        notify("Đã bật: Định vị người chơi (Xuyên tường)!")
+        notify("Đã bật Định Vị chuẩn xác khoảng cách!")
     else
-        notify("Đã tắt: Định vị!")
+        notify("Đã tắt Định Vị!")
     end
 end)
 
--- 3. Khóa Màn Hình (Shift Lock Mobile)
 local shiftLockEnabled = false
 local isLocked = false
 local slConn = nil
@@ -419,7 +433,6 @@ ShiftLockButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- 4. Nhặt Đồ Tức Thì
 createButton(TabUtility, "⚡ Nhặt Đồ / Tương Tác Tức Thì", function(state)
     getgenv().FastInteract = state
     task.spawn(function()
@@ -435,42 +448,37 @@ createButton(TabUtility, "⚡ Nhặt Đồ / Tương Tác Tức Thì", function(
     notify(state and "Đã bật: Nhặt đồ tức thì" or "Đã tắt: Nhặt đồ tức thì")
 end)
 
--- TAB 3: DÁNG CHẠY BAY LƠ LỬNG
 local legFlyConn = nil
-createButton(TabAnims, "🚀 Dáng Chạy Lơ Lửng (Kẹp Chân Bay)", function(state)
+createButton(TabAnims, "🚀 Dáng Chạy Lơ Lửng (Fly V3)", function(state)
     if state then
         legFlyConn = RunService.RenderStepped:Connect(function()
             local char = LocalPlayer.Character
             if not char then return end
-            local hrp = char:FindFirstChild("HumanoidRootPart")
             local humanoid = char:FindFirstChildOfClass("Humanoid")
-            
-            if hrp and humanoid then
+            local hrp = char:FindFirstChild("HumanoidRootPart")
+            if humanoid and hrp then
                 if humanoid.MoveDirection.Magnitude > 0 then
                     local animate = char:FindFirstChild("Animate")
-                    if animate then
-                        local runAnim = animate:FindFirstChild("run")
-                        if runAnim then runAnim:FindFirstChildOfClass("Animation").AnimationId = "" end
-                    end
-                    
-                    local rightHip = char:FindFirstChild("Right Hip", true) or char:FindFirstChild("RightHip", true)
-                    local leftHip = char:FindFirstChild("Left Hip", true) or char:FindFirstChild("LeftHip", true)
-                    
-                    if rightHip then rightHip.C0 = CFrame.new(0.5, -1, 0) * CFrame.Angles(0, 0, 0) end
-                    if leftHip then leftHip.C0 = CFrame.new(-0.5, -1, 0) * CFrame.Angles(0, 0, 0) end
-                    
-                    hrp.CFrame = hrp.CFrame + Vector3.new(0, 0.2, 0)
+                    if animate then animate.Enabled = false end
+                    hrp.CFrame = hrp.CFrame + Vector3.new(0, 0.15, 0)
+                else
+                    local animate = char:FindFirstChild("Animate")
+                    if animate then animate.Enabled = true end
                 end
             end
         end)
-        notify("Đã bật: Kẹp chân lơ lửng như bay!")
+        notify("Đã bật Fly V3: Kẹp chân lướt gió siêu ngầu!")
     else
         if legFlyConn then legFlyConn:Disconnect(); legFlyConn = nil end
+        local char = LocalPlayer.Character
+        if char then
+            local animate = char:FindFirstChild("Animate")
+            if animate then animate.Enabled = true end
+        end
         notify("Đã tắt dáng lơ lửng!")
     end
 end)
 
--- TAB 4: TỐI ƯU (ANTI-LAG)
 createButton(TabBoost, "🚀 Chống Lag / Anti-Lag (Tăng FPS)", function(state)
     if state then
         Lighting.GlobalShadows = false
@@ -481,7 +489,7 @@ createButton(TabBoost, "🚀 Chống Lag / Anti-Lag (Tăng FPS)", function(state
                 v.Enabled = false
             end
         end
-        notify("Đã bật Anti-Lag tăng FPS cực mượt!")
+        notify("Đã bật Anti-Lag tối đa tăng FPS!")
     else
         Lighting.GlobalShadows = true
         settings().Rendering.QualityLevel = Enum.QualityLevel.Automatic
@@ -489,7 +497,36 @@ createButton(TabBoost, "🚀 Chống Lag / Anti-Lag (Tăng FPS)", function(state
     end
 end)
 
--- HIỆU ỨNG MỞ MENU
+local InfoBg = Instance.new("Frame", TabInfo)
+InfoBg.Size = UDim2.new(1, 0, 1, 0)
+InfoBg.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
+InfoBg.BackgroundTransparency = 0.5
+Instance.new("UICorner", InfoBg).CornerRadius = UDim.new(0, 10)
+
+local InfoStroke = Instance.new("UIStroke", InfoBg)
+InfoStroke.Color = Color3.fromRGB(255, 215, 0)
+InfoStroke.Thickness = 1.5
+
+task.spawn(function()
+    while true do
+        for hue = 0, 1, 0.01 do
+            InfoStroke.Color = Color3.fromHSV(hue, 1, 1)
+            task.wait(0.1)
+        end
+    end
+end)
+
+local InfoText = Instance.new("TextLabel", InfoBg)
+InfoText.Size = UDim2.new(1, -20, 1, -20)
+InfoText.Position = UDim2.new(0, 10, 0, 10)
+InfoText.BackgroundTransparency = 1
+InfoText.Font = Enum.Font.GothamBold
+InfoText.Text = "👑 TÁC GIẢ VIP: Trương Trọng Kiên\n🏫 Lớp: 9.4 - THCS Nhuận Phú Tân\n\n✨ [Tính năng độc quyền]:\n- Giao diện Kính mờ siêu cấp có chỉnh độ trong suốt\n- Định vị người chơi ESP chuẩn xác từng mét\n- Dáng chạy Fly V3 kẹp chân lướt gió đỉnh cao\n\n🔥 Chúc ông chơi game cực vui vẻ và bá đạo!"
+InfoText.TextColor3 = Color3.fromRGB(240, 240, 255)
+InfoText.TextSize = 11
+InfoText.TextWrapped = true
+InfoText.TextXAlignment = Enum.TextXAlignment.Center
+
 local isMenuOpen = false
 local function toggleMenu()
     isMenuOpen = not isMenuOpen
