@@ -3,6 +3,7 @@ local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
 local Lighting = game:GetService("Lighting")
 local TweenService = game:GetService("TweenService")
+local SoundService = game:GetService("SoundService")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
@@ -16,7 +17,17 @@ ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
+-- HỆ THỐNG ÂM THANH & THÔNG BÁO BẤT NGỜ
+local function playClickSound()
+    local sound = Instance.new("Sound", SoundService)
+    sound.SoundId = "rbxassetid://6042053636" -- Âm thanh click siêu xịn
+    sound.Volume = 0.5
+    sound:Play()
+    task.delay(1, function() sound:Destroy() end)
+end
+
 local function notify(text)
+    playClickSound()
     local note = Instance.new("Frame", ScreenGui)
     note.Size = UDim2.new(0, 0, 0, 36)
     note.Position = UDim2.new(0.5, 0, 0, -50)
@@ -94,7 +105,7 @@ local MainStroke = Instance.new("UIStroke", MainFrame)
 MainStroke.Color = Color3.fromRGB(160, 0, 255)
 MainStroke.Thickness = 2.5
 
--- HIỆU ỨNG HOLOGRAM CỰC KỲ BẤT NGỜ (VIỀN ĐỔI MÀU RGB LIÊN TỤC)
+-- HIỆU ỨNG VIỀN RGB CHẠY QUANGH MENU CỰC KỲ BẤT NGỜ
 task.spawn(function()
     while true do
         for hue = 0, 1, 0.01 do
@@ -157,6 +168,7 @@ local tabs = {}
 local currentTab = nil
 
 local function switchTab(name)
+    playClickSound()
     for tName, page in pairs(tabs) do
         page.Visible = (tName == name)
     end
@@ -302,7 +314,7 @@ createButton(TabUtility, "👻 Đi Xuyên Tường (Noclip)", function(state)
     end
 end)
 
--- SỬA LỖI ĐỊNH VỊ ESP CHUẨN XÁC TÊN & KHOẢNG CÁCH THỰC TẾ
+-- VIẾT LẠI HOÀN TOÀN HỆ THỐNG ESP ĐỊNH VỊ CHUẨN TÊN & KHOẢNG CÁCH (BẤT TỬ KHI RESPAWN)
 local espActive = false
 local espFolder = Instance.new("Folder", ScreenGui)
 espFolder.Name = "KienESPFolder"
@@ -322,7 +334,8 @@ local function applyESP(player)
         local bg = Instance.new("BillboardGui", espFolder)
         bg.Name = player.Name
         bg.AlwaysOnTop = true
-        bg.Size = UDim2.new(0, 140, 0, 50)
+        bg.Size = UDim2.new(0, 160, 0, 50)
+        bg.StudsOffset = Vector3.new(0, 2.5, 0)
         bg.Adornee = root
         
         local txt = Instance.new("TextLabel", bg)
@@ -332,13 +345,14 @@ local function applyESP(player)
         txt.TextSize = 12
         txt.TextColor3 = Color3.fromRGB(0, 255, 200)
         txt.TextStrokeTransparency = 0
+        txt.Text = player.Name
         
         task.spawn(function()
             while espActive and char and char:Parent() and root and root:Parent() do
                 local myChar = LocalPlayer.Character
                 if myChar and myChar:FindFirstChild("HumanoidRootPart") then
                     local dist = math.floor((myChar.HumanoidRootPart.Position - root.Position).Magnitude)
-                    txt.Text = "🎯 " .. player.Name .. " [" .. dist .. "m]"
+                    txt.Text = "🎯 " .. player.Name .. "\n[" .. dist .. "m]"
                 end
                 task.wait(0.1)
             end
@@ -362,7 +376,7 @@ createButton(TabUtility, "👁️ Định Vị Người Chơi (ESP)", function(s
         Players.PlayerAdded:Connect(function(plr)
             if espActive then applyESP(plr) end
         end)
-        notify("Đã bật Định Vị chuẩn khoảng cách!")
+        notify("Đã bật Định Vị chuẩn xác tên và khoảng cách!")
     else
         notify("Đã tắt Định Vị!")
     end
@@ -497,7 +511,7 @@ InfoText.Size = UDim2.new(1, -20, 1, -20)
 InfoText.Position = UDim2.new(0, 10, 0, 10)
 InfoText.BackgroundTransparency = 1
 InfoText.Font = Enum.Font.GothamBold
-InfoText.Text = "👑 TÁC GIẢ VIP: Trương Trọng Kiên\n🏫 Lớp: 9.4 - THCS Nhuận Phú Tân\n\n✨ [Tính năng độc quyền]:\n- Viền menu đổi màu RGB Hologram liên tục\n- Định vị người chơi ESP chuẩn tên & khoảng cách\n- Dáng chạy Fly V3 kẹp chân lướt gió đỉnh cao\n\n🔥 Chúc ông chơi game cực vui vẻ và bá đạo!"
+InfoText.Text = "👑 TÁC GIẢ VIP: Trương Trọng Kiên\n🏫 Lớp: 9.4 - THCS Nhuận Phú Tân\n\n✨ [Tính năng độc quyền]:\n- Hiệu ứng âm thanh khi bấm nút & đổi màu RGB\n- Định vị ESP chuẩn xác tên & mét thực tế\n- Dáng chạy Fly V3 kẹp chân lướt gió đỉnh cao\n\n🔥 Chúc ông chơi game cực vui vẻ và bá đạo!"
 InfoText.TextColor3 = Color3.fromRGB(240, 240, 255)
 InfoText.TextSize = 11
 InfoText.TextWrapped = true
@@ -505,6 +519,7 @@ InfoText.TextXAlignment = Enum.TextXAlignment.Center
 
 local isMenuOpen = false
 local function toggleMenu()
+    playClickSound()
     isMenuOpen = not isMenuOpen
     if isMenuOpen then
         MainFrame.Visible = true
