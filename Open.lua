@@ -32,7 +32,7 @@ local function notify(text)
     local note = Instance.new("Frame", ScreenGui)
     note.Size = UDim2.new(0, 0, 0, 40)
     note.Position = UDim2.new(0.5, 0, 0, -50)
-    note.BackgroundColor3 = Color3.fromRGB(15, 18, 28)
+    note.BackgroundColor3 = Color3.fromRGB(18, 22, 34)
     note.BackgroundTransparency = 0.15
     Instance.new("UICorner", note).CornerRadius = UDim.new(0, 12)
     
@@ -55,7 +55,7 @@ local function notify(text)
         Position = UDim2.new(0.5, -155, 0, 15)
     }):Play()
 
-    task.delay(2.5, function()
+    task.delay(2.2, function()
         local tw = TweenService:Create(note, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
             Size = UDim2.new(0, 0, 0, 40),
             Position = UDim2.new(0.5, 0, 0, -50)
@@ -65,24 +65,40 @@ local function notify(text)
     end)
 end
 
--- 1. NÚT BẬT/TẮT DÙNG ID HÌNH ẢNH MỚI 117828154165313
+-- 1. NÚT DỪNG BAY TỨC THÌ (GÓC CÙNG BÊN PHẢI NGOÀI MÀN HÌNH)
+local StopFlyButton = Instance.new("TextButton", ScreenGui)
+StopFlyButton.Name = "StopFlyButton"
+StopFlyButton.BackgroundColor3 = Color3.fromRGB(230, 30, 50)
+StopFlyButton.Position = UDim2.new(0.92, 0, 0.02, 0)
+StopFlyButton.Size = UDim2.new(0, 38, 0, 38)
+StopFlyButton.Font = Enum.Font.GothamBold
+StopFlyButton.Text = "✕"
+StopFlyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+StopFlyButton.TextSize = 18
+StopFlyButton.Visible = false
+Instance.new("UICorner", StopFlyButton).CornerRadius = UDim.new(0, 12)
+local stopStroke = Instance.new("UIStroke", StopFlyButton)
+stopStroke.Color = Color3.fromRGB(255, 255, 255)
+stopStroke.Thickness = 2
+
+-- 2. NÚT BẬT/TẮT MENU VỚI DỰNG ẢNH MỚI
 local SlideArea = Instance.new("ImageButton", ScreenGui)
 SlideArea.Image = CUSTOM_IMAGE_ID
 SlideArea.BackgroundTransparency = 0.1
-SlideArea.BackgroundColor3 = Color3.fromRGB(15, 18, 28)
+SlideArea.BackgroundColor3 = Color3.fromRGB(18, 22, 34)
 SlideArea.Position = UDim2.new(0.005, 0, 0.005, 0)
 SlideArea.Size = UDim2.new(0, 42, 0, 42)
 SlideArea.AutoButtonColor = false
-Instance.new("UICorner", SlideArea).CornerRadius = UDim.new(0, 10)
+Instance.new("UICorner", SlideArea).CornerRadius = UDim.new(0, 12)
 local slideStroke = Instance.new("UIStroke", SlideArea)
 slideStroke.Color = Color3.fromRGB(0, 240, 255)
 slideStroke.Thickness = 2
 
--- 2. NÚT SHIFT LOCK chuẩn
+-- 3. NÚT SHIFT LOCK MOBILE
 local ShiftLockButton = Instance.new("TextButton", ScreenGui)
 ShiftLockButton.BackgroundColor3 = Color3.fromRGB(18, 22, 32)
 ShiftLockButton.BackgroundTransparency = 0.2
-ShiftLockButton.Position = UDim2.new(0.055, 0, 0.005, 0)
+ShiftLockButton.Position = UDim2.new(0.058, 0, 0.005, 0)
 ShiftLockButton.Size = UDim2.new(0, 36, 0, 36)
 ShiftLockButton.Font = Enum.Font.GothamBold
 ShiftLockButton.Text = "🎯"
@@ -94,30 +110,29 @@ local LockStroke = Instance.new("UIStroke", ShiftLockButton)
 LockStroke.Color = Color3.fromRGB(255, 60, 60)
 LockStroke.Thickness = 2
 
--- 3. KHUNG MENU CHÍNH VỚI HÌNH NỀN LÀM BẰNG ID 117828154165313
+-- 4. KHUNG MENU MỀM MẠI PHONG CÁCH TỰ NHIÊN (440 x 320)
 local MainFrame = Instance.new("Frame", ScreenGui)
-MainFrame.BackgroundColor3 = Color3.fromRGB(10, 12, 18)
+MainFrame.BackgroundColor3 = Color3.fromRGB(12, 15, 24)
 MainFrame.BackgroundTransparency = 0.15
-MainFrame.Position = UDim2.new(0.5, -230, 0.5, -165)
-MainFrame.Size = UDim2.new(0, 460, 0, 330)
+MainFrame.Position = UDim2.new(0.5, -220, 0.5, -160)
+MainFrame.Size = UDim2.new(0, 440, 0, 320)
 MainFrame.Visible = false
 MainFrame.Active = true
 MainFrame.Draggable = true
 MainFrame.ClipsDescendants = true
 
-Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 20)
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 22)
 local MainStroke = Instance.new("UIStroke", MainFrame)
 MainStroke.Color = Color3.fromRGB(0, 240, 255)
 MainStroke.Thickness = 2.5
 
--- HÌNH NỀN PHÍA SAU KHUNG MENU
 local BgImage = Instance.new("ImageLabel", MainFrame)
 BgImage.Image = CUSTOM_IMAGE_ID
 BgImage.Size = UDim2.new(1, 0, 1, 0)
 BgImage.BackgroundTransparency = 1
-BgImage.ImageTransparency = 0.65
+BgImage.ImageTransparency = 0.72
 BgImage.ScaleType = Enum.ScaleType.Crop
-Instance.new("UICorner", BgImage).CornerRadius = UDim.new(0, 20)
+Instance.new("UICorner", BgImage).CornerRadius = UDim.new(0, 22)
 
 task.spawn(function()
     while true do
@@ -131,10 +146,10 @@ task.spawn(function()
 end)
 
 local TitleFrame = Instance.new("Frame", MainFrame)
-TitleFrame.Size = UDim2.new(1, 0, 0, 45)
-TitleFrame.BackgroundColor3 = Color3.fromRGB(15, 18, 28)
-TitleFrame.BackgroundTransparency = 0.3
-Instance.new("UICorner", TitleFrame).CornerRadius = UDim.new(0, 20)
+TitleFrame.Size = UDim2.new(1, 0, 0, 42)
+TitleFrame.BackgroundColor3 = Color3.fromRGB(18, 22, 34)
+TitleFrame.BackgroundTransparency = 0.35
+Instance.new("UICorner", TitleFrame).CornerRadius = UDim.new(0, 22)
 
 local TitleLabel = Instance.new("TextLabel", TitleFrame)
 TitleLabel.Size = UDim2.new(1, -80, 1, 0)
@@ -147,30 +162,32 @@ TitleLabel.TextSize = 11
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local CloseBtn = Instance.new("TextButton", TitleFrame)
-CloseBtn.Position = UDim2.new(1, -38, 0, 9)
-CloseBtn.Size = UDim2.new(0, 28, 0, 28)
+CloseBtn.Position = UDim2.new(1, -36, 0, 8)
+CloseBtn.Size = UDim2.new(0, 26, 0, 26)
 CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 40, 60)
 CloseBtn.Font = Enum.Font.GothamBold
 CloseBtn.Text = "✕"
 CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseBtn.TextSize = 13
+CloseBtn.TextSize = 12
 Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
 
--- SIDEBAR DỌC
-local Sidebar = Instance.new("Frame", MainFrame)
-Sidebar.Position = UDim2.new(0, 12, 0, 54)
-Sidebar.Size = UDim2.new(0, 120, 1, -66)
-Sidebar.BackgroundColor3 = Color3.fromRGB(14, 18, 28)
-Sidebar.BackgroundTransparency = 0.4
-Instance.new("UICorner", Sidebar).CornerRadius = UDim.new(0, 14)
+-- THANH TAB NẰM NGANG Ở TRÊN KÉO QUA KÉO LẠI CỰC MƯỢT
+local TabBarScroller = Instance.new("ScrollingFrame", MainFrame)
+TabBarScroller.Position = UDim2.new(0, 12, 0, 48)
+TabBarScroller.Size = UDim2.new(1, -24, 0, 36)
+TabBarScroller.BackgroundTransparency = 1
+TabBarScroller.CanvasSize = UDim2.new(0, 520, 0, 0)
+TabBarScroller.ScrollBarThickness = 0
+TabBarScroller.ScrollingDirection = Enum.ScrollingDirection.Horizontal
 
-local SidebarList = Instance.new("UIListLayout", Sidebar)
-SidebarList.SortOrder = Enum.SortOrder.LayoutOrder
-SidebarList.Padding = UDim.new(0, 6)
+local TabBarLayout = Instance.new("UIListLayout", TabBarScroller)
+TabBarLayout.FillDirection = Enum.FillDirection.Horizontal
+TabBarLayout.SortOrder = Enum.SortOrder.LayoutOrder
+TabBarLayout.Padding = UDim.new(0, 6)
 
 local ContentFrame = Instance.new("Frame", MainFrame)
-ContentFrame.Position = UDim2.new(0, 140, 0, 54)
-ContentFrame.Size = UDim2.new(1, -152, 1, -66)
+ContentFrame.Position = UDim2.new(0, 12, 0, 90)
+ContentFrame.Size = UDim2.new(1, -24, 1, -98)
 ContentFrame.BackgroundTransparency = 1
 
 local tabs = {}
@@ -184,20 +201,20 @@ local function switchTab(name)
 end
 
 local function createTab(name, icon)
-    local tBtn = Instance.new("TextButton", Sidebar)
-    tBtn.Size = UDim2.new(1, 0, 0, 38)
-    tBtn.BackgroundColor3 = Color3.fromRGB(20, 25, 40)
-    tBtn.BackgroundTransparency = 0.5
+    local tBtn = Instance.new("TextButton", TabBarScroller)
+    tBtn.Size = UDim2.new(0, 82, 1, 0)
+    tBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 44)
+    tBtn.BackgroundTransparency = 0.4
     tBtn.Font = Enum.Font.GothamBold
     tBtn.Text = icon .. " " .. name
     tBtn.TextColor3 = Color3.fromRGB(160, 175, 200)
     tBtn.TextSize = 10
-    Instance.new("UICorner", tBtn).CornerRadius = UDim.new(0, 8)
+    Instance.new("UICorner", tBtn).CornerRadius = UDim.new(0, 10)
     
     local page = Instance.new("ScrollingFrame", ContentFrame)
     page.Size = UDim2.new(1, 0, 1, 0)
     page.BackgroundTransparency = 1
-    page.CanvasSize = UDim2.new(0, 0, 0, 320)
+    page.CanvasSize = UDim2.new(0, 0, 0, 280)
     page.ScrollBarThickness = 2
     page.Visible = false
     
@@ -207,14 +224,14 @@ local function createTab(name, icon)
     
     tabs[name] = page
     tBtn.MouseButton1Click:Connect(function()
-        for _, otherBtn in ipairs(Sidebar:GetChildren()) do
+        for _, otherBtn in ipairs(TabBarScroller:GetChildren()) do
             if otherBtn:IsA("TextButton") then
                 otherBtn.TextColor3 = Color3.fromRGB(160, 175, 200)
-                otherBtn.BackgroundColor3 = Color3.fromRGB(20, 25, 40)
+                otherBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 44)
             end
         end
         tBtn.TextColor3 = Color3.fromRGB(0, 240, 255)
-        tBtn.BackgroundColor3 = Color3.fromRGB(35, 45, 70)
+        tBtn.BackgroundColor3 = Color3.fromRGB(35, 50, 80)
         switchTab(name)
     end)
     
@@ -222,7 +239,7 @@ local function createTab(name, icon)
         currentTab = name
         page.Visible = true
         tBtn.TextColor3 = Color3.fromRGB(0, 240, 255)
-        tBtn.BackgroundColor3 = Color3.fromRGB(35, 45, 70)
+        tBtn.BackgroundColor3 = Color3.fromRGB(35, 50, 80)
     end
     return page
 end
@@ -363,7 +380,7 @@ end
 createButton(TabUtility, "👁️ Định Vị Người Chơi (ESP)", function(state)
     espActive = state
     espFolder:ClearAllChildren()
-    if state then
+    if state me then
         for _, v in ipairs(Players:GetPlayers()) do
             addESPToPlayer(v)
         end
@@ -373,7 +390,7 @@ createButton(TabUtility, "👁️ Định Vị Người Chơi (ESP)", function(s
     end
 end)
 
--- KHÓA MÀN HÌNH SHIFT LOCK CHUẨN XÁC BAN ĐẦU
+-- SHIFT LOCK MOBILE CHUẨN XÁC
 local shiftLockEnabled = false
 local isLocked = false
 local slConn = nil
@@ -431,10 +448,11 @@ createButton(TabUtility, "⚡ Nhặt Đồ / Tương Tác Tức Thì", function(
     notify(state and "Đã bật: Nhặt đồ tức thì" or "Đã tắt: Nhặt đồ tức thì")
 end)
 
--- LƯU VỊ TRÍ & BẢNG MINI RÚT GỌN
+-- CƠ CHẾ BAY CHỐNG LAG VÀ DỪNG BẰNG NÚT DẤU X TỨC THÌ
 local savedPos1 = nil
 local savedPos2 = nil
 local selectedPos = 1
+local isFlying = false
 
 local posTitle = Instance.new("TextLabel", TabPos)
 posTitle.Size = UDim2.new(1, 0, 0, 22)
@@ -506,22 +524,33 @@ local function flyToCFrame(targetCFrame)
     local char = LocalPlayer.Character
     if char and char:FindFirstChild("HumanoidRootPart") then
         local myHrp = char.HumanoidRootPart
-        notify("Đang bay mượt về vị trí...")
+        isFlying = true
+        StopFlyButton.Visible = true
+        notify("Đang bay mượt (Bấm nút ✕ góc trên để DỪNG)!")
+        
         task.spawn(function()
             local speed = 165
-            while targetCFrame do
+            while isFlying and targetCFrame do
                 local direction = (targetCFrame.Position - myHrp.Position)
                 local distance = direction.Magnitude
-                if distance < 5 then break end
+                if distance < 5 or not isFlying then break end
                 local step = math.min(distance, speed * 0.03)
                 myHrp.CFrame = myHrp.CFrame + (direction.Unit * step)
                 RunService.RenderStepped:Wait()
             end
-            myHrp.CFrame = targetCFrame
-            notify("Đã bay về vị trí an toàn!")
+            if isFlying then myHrp.CFrame = targetCFrame end
+            isFlying = false
+            StopFlyButton.Visible = false
+            notify("Đã hoàn tất hành trình!")
         end)
     end
 end
+
+StopFlyButton.MouseButton1Click:Connect(function()
+    isFlying = false
+    StopFlyButton.Visible = false
+    notify("🛑 ĐÃ DỪNG BAY TỨC THÌ!")
+end)
 
 local btnFlySaved = Instance.new("TextButton", TabPos)
 btnFlySaved.Size = UDim2.new(1, 0, 0, 38)
@@ -537,7 +566,7 @@ btnFlySaved.MouseButton1Click:Connect(function()
     if target then flyToCFrame(target) else notify("Chưa lưu Vị Trí " .. selectedPos .. "!") end
 end)
 
--- BẢNG MINI MINI WIDGET
+-- BẢNG MINI
 local MiniFrame = Instance.new("Frame", ScreenGui)
 MiniFrame.Size = UDim2.new(0, 160, 0, 110)
 MiniFrame.Position = UDim2.new(0.85, -80, 0.2, 0)
@@ -700,8 +729,8 @@ createButton(TabAnims, "🚀 Dáng Chạy Lơ Lửng (Fly V3)", function(state)
     end
 end)
 
--- TỐI ƯU CƯỜNG HÓA ANTI-LAG SIÊU MẠNH (BOOST MAX FPS)
-createButton(TabBoost, "⚡ TỐI ƯU CƯỜNG HÓA ANTI-LAG (BOOST MAX FPS)", function(state)
+-- SIÊU ANTI-LAG ÉP MAX FPS CƯỜNG HÓA
+createButton(TabBoost, "⚡ SIÊU ANTI-LAG CƯỜNG HÓA (MAX FPS 100%)", function(state)
     if state then
         Lighting.GlobalShadows = false
         Lighting.FogEnd = 9e9
@@ -724,7 +753,6 @@ createButton(TabBoost, "⚡ TỐI ƯU CƯỜNG HÓA ANTI-LAG (BOOST MAX FPS)", f
     end
 end)
 
--- TAB INFO MÔ TẢ TRƯƠNG TRỌNG KIÊN
 local InfoBg = Instance.new("Frame", TabInfo)
 InfoBg.Size = UDim2.new(1, 0, 1, 0)
 InfoBg.BackgroundColor3 = Color3.fromRGB(15, 18, 28)
@@ -740,7 +768,7 @@ InfoText.Size = UDim2.new(1, -16, 1, -16)
 InfoText.Position = UDim2.new(0, 8, 0, 8)
 InfoText.BackgroundTransparency = 1
 InfoText.Font = Enum.Font.GothamBold
-InfoText.Text = "👑 TÁC GIẢ SỞ HỮU: Trương Trọng Kiên\n🏫 Lớp: 9.4 - Trường THCS Nhuận Phú Tân\n\n✨ [Bản Cập Nhật Đặc Biệt VIP]:\n- Tích hợp ID Ảnh 117828154165313 độc quyền\n- Fix chuẩn Shift Lock Mobile quay góc cực mượt\n- Siêu Anti-Lag ép FPS lên tối đa cho điện thoại\n- Lưu 2 vị trí & Tách bảng Mini tiện lợi"
+InfoText.Text = "👑 TÁC GIẢ SỞ HỮU: Trương Trọng Kiên\n🏫 Lớp: 9.4 - Trường THCS Nhuận Phú Tân\n\n✨ [Bản Cập Nhật Siêu Cấp]:\n- Dấu ✕ góc phải dừng bay ngay lập tức\n- Thanh Tab ngang vuốt qua lại cực mượt\n- Thuật toán bay 165 tối ưu chống lag tuyệt đối"
 InfoText.TextColor3 = Color3.fromRGB(240, 245, 255)
 InfoText.TextSize = 10
 InfoText.TextWrapped = true
@@ -754,9 +782,9 @@ local function toggleMenu()
         MainFrame.Size = UDim2.new(0, 0, 0, 0)
         MainFrame.Rotation = -180
         TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 460, 0, 330),
+            Size = UDim2.new(0, 440, 0, 320),
             Rotation = 0,
-            Position = UDim2.new(0.5, -230, 0.5, -165)
+            Position = UDim2.new(0.5, -220, 0.5, -160)
         }):Play()
     else
         local tw = TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
