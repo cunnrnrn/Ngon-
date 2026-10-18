@@ -1,5 +1,6 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local CoreGui = game:GetService("CoreGui")
 local Lighting = game:GetService("Lighting")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
@@ -8,8 +9,13 @@ local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 local CUSTOM_IMAGE_ID = "rbxassetid://117828154165313"
 
-local ScreenGui = script.Parent
+if CoreGui:FindFirstChild("KienProVIPHub") then
+    CoreGui.KienProVIPHub:Destroy()
+end
+
+local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "KienProVIPHub"
+ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
