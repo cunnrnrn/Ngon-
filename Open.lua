@@ -59,7 +59,6 @@ local function notify(text)
     end)
 end
 
--- NÚT DỪNG BAY TỨC THÌ (GÓC TRÊN BÊN PHẢI)
 local StopFlyButton = Instance.new("TextButton", ScreenGui)
 StopFlyButton.Name = "StopFlyButton"
 StopFlyButton.BackgroundColor3 = Color3.fromRGB(230, 30, 50)
@@ -75,7 +74,6 @@ local stopStroke = Instance.new("UIStroke", StopFlyButton)
 stopStroke.Color = Color3.fromRGB(255, 255, 255)
 stopStroke.Thickness = 2
 
--- NÚT BẬT/TẮT MENU LƠ LỬNG
 local SlideArea = Instance.new("ImageButton", ScreenGui)
 SlideArea.Image = CUSTOM_IMAGE_ID
 SlideArea.BackgroundTransparency = 0.1
@@ -88,7 +86,6 @@ local slideStroke = Instance.new("UIStroke", SlideArea)
 slideStroke.Color = Color3.fromRGB(0, 240, 255)
 slideStroke.Thickness = 2
 
--- NÚT SHIFT LOCK MOBILE
 local ShiftLockButton = Instance.new("TextButton", ScreenGui)
 ShiftLockButton.BackgroundColor3 = Color3.fromRGB(18, 22, 32)
 ShiftLockButton.BackgroundTransparency = 0.2
@@ -104,7 +101,6 @@ local LockStroke = Instance.new("UIStroke", ShiftLockButton)
 LockStroke.Color = Color3.fromRGB(255, 60, 60)
 LockStroke.Thickness = 2
 
--- KHUNG MENU CHÍNH
 local MainFrame = Instance.new("Frame", ScreenGui)
 MainFrame.BackgroundColor3 = Color3.fromRGB(12, 15, 24)
 MainFrame.BackgroundTransparency = 0.15
@@ -165,7 +161,6 @@ CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseBtn.TextSize = 12
 Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
 
--- THANH TAB NẰM NGANG Ở TRÊN
 local TabBarScroller = Instance.new("ScrollingFrame", MainFrame)
 TabBarScroller.Position = UDim2.new(0, 12, 0, 48)
 TabBarScroller.Size = UDim2.new(1, -24, 0, 36)
@@ -371,7 +366,6 @@ local function addESPToPlayer(v)
     end)
 end
 
--- ĐÃ FIX LỖI CÚ PHÁP TỪ DÒNG NÀY (ĐÃ SỔ GỌN)
 createButton(TabUtility, "👁️ Định Vị Người Chơi (ESP)", function(state)
     espActive = state
     espFolder:ClearAllChildren()
@@ -557,68 +551,6 @@ Instance.new("UICorner", btnFlySaved).CornerRadius = UDim.new(0, 8)
 btnFlySaved.MouseButton1Click:Connect(function()
     local target = (selectedPos == 1) and savedPos1 or savedPos2
     if target then flyToCFrame(target) else notify("Chưa lưu Vị Trí " .. selectedPos .. "!") end
-end)
-
-local MiniFrame = Instance.new("Frame", ScreenGui)
-MiniFrame.Size = UDim2.new(0, 160, 0, 110)
-MiniFrame.Position = UDim2.new(0.85, -80, 0.2, 0)
-MiniFrame.BackgroundColor3 = Color3.fromRGB(15, 18, 28)
-MiniFrame.BackgroundTransparency = 0.2
-MiniFrame.Visible = false
-MiniFrame.Active = true
-MiniFrame.Draggable = true
-Instance.new("UICorner", MiniFrame).CornerRadius = UDim.new(0, 12)
-local miniStroke = Instance.new("UIStroke", MiniFrame)
-miniStroke.Color = Color3.fromRGB(0, 240, 255)
-miniStroke.Thickness = 2
-
-local miniTitle = Instance.new("TextLabel", MiniFrame)
-miniTitle.Size = UDim2.new(1, 0, 0, 24)
-miniTitle.BackgroundTransparency = 1
-miniTitle.Font = Enum.Font.GothamBold
-miniTitle.Text = "📌 MINI BASE TELEPORT"
-miniTitle.TextColor3 = Color3.fromRGB(255, 215, 0)
-miniTitle.TextSize = 10
-
-local mBtn1 = Instance.new("TextButton", MiniFrame)
-mBtn1.Position = UDim2.new(0, 8, 0, 30)
-mBtn1.Size = UDim2.new(1, -16, 0, 32)
-mBtn1.BackgroundColor3 = Color3.fromRGB(25, 35, 55)
-mBtn1.Font = Enum.Font.GothamBold
-mBtn1.Text = "🚀 BAY VỊ TRÍ 1"
-mBtn1.TextColor3 = Color3.fromRGB(255, 255, 255)
-mBtn1.TextSize = 9
-Instance.new("UICorner", mBtn1).CornerRadius = UDim.new(0, 6)
-
-local mBtn2 = Instance.new("TextButton", MiniFrame)
-mBtn2.Position = UDim2.new(0, 8, 0, 68)
-mBtn2.Size = UDim2.new(1, -16, 0, 32)
-mBtn2.BackgroundColor3 = Color3.fromRGB(25, 35, 55)
-mBtn2.Font = Enum.Font.GothamBold
-mBtn2.Text = "🚀 BAY VỊ TRÍ 2"
-mBtn2.TextColor3 = Color3.fromRGB(255, 255, 255)
-mBtn2.TextSize = 9
-Instance.new("UICorner", mBtn2).CornerRadius = UDim.new(0, 6)
-
-mBtn1.MouseButton1Click:Connect(function()
-    if savedPos1 then flyToCFrame(savedPos1) else notify("Chưa lưu Vị Trí 1!") end
-end)
-mBtn2.MouseButton1Click:Connect(function()
-    if savedPos2 then flyToCFrame(savedPos2) else notify("Chưa lưu Vị Trí 2!") end
-end)
-
-local btnDetach = Instance.new("TextButton", TabPos)
-btnDetach.Size = UDim2.new(1, 0, 0, 34)
-btnDetach.BackgroundColor3 = Color3.fromRGB(120, 40, 180)
-btnDetach.Font = Enum.Font.GothamBold
-btnDetach.Text = "📌 TÁCH BẢNG MINI BẬT NHANH 📌"
-btnDetach.TextColor3 = Color3.fromRGB(255, 255, 255)
-btnDetach.TextSize = 10
-Instance.new("UICorner", btnDetach).CornerRadius = UDim.new(0, 8)
-
-btnDetach.MouseButton1Click:Connect(function()
-    MiniFrame.Visible = not MiniFrame.Visible
-    notify(MiniFrame.Visible and "Đã hiện Bảng Mini độc lập!" or "Đã ẩn Bảng Mini")
 end)
 
 local selectedTarget = nil
