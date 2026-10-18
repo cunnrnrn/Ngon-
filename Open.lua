@@ -116,7 +116,7 @@ MainFrame.Size = UDim2.new(0, 440, 0, 320)
 MainFrame.Visible = false
 MainFrame.Active = true
 MainFrame.Draggable = true
-MainFrame.ClipsDescendants = true
+MainFrame.ClipsDescendants = true -- CẮT GỌN TUYỆT ĐỐI NỘI DUNG KHÔNG CHO TRÀN VIỀN
 
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 22)
 local MainStroke = Instance.new("UIStroke", MainFrame)
@@ -148,7 +148,6 @@ TitleFrame.BackgroundColor3 = Color3.fromRGB(18, 22, 34)
 TitleFrame.BackgroundTransparency = 0.35
 Instance.new("UICorner", TitleFrame).CornerRadius = UDim.new(0, 22)
 
--- FIX TRÀN VIỀN TIÊU ĐỀ
 local TitleLabel = Instance.new("TextLabel", TitleFrame)
 TitleLabel.Size = UDim2.new(1, -45, 1, 0)
 TitleLabel.Position = UDim2.new(0, 12, 0, 0)
@@ -169,14 +168,15 @@ CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseBtn.TextSize = 12
 Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
 
--- MỞ RỘNG CANVAS ĐỂ VUỐT 1 NGÓN TAY LÀ THẤY NGAY TAB INFO
+-- FIX CHIỀU RỘNG VÀ CẮT GỌN TAB ĐỂ KHÔNG BAO GIỜ BỊ LỐ RA NGOÀI
 local TabBarScroller = Instance.new("ScrollingFrame", MainFrame)
 TabBarScroller.Position = UDim2.new(0, 12, 0, 48)
 TabBarScroller.Size = UDim2.new(1, -24, 0, 36)
 TabBarScroller.BackgroundTransparency = 1
-TabBarScroller.CanvasSize = UDim2.new(0, 700, 0, 0)
+TabBarScroller.CanvasSize = UDim2.new(0, 650, 0, 0)
 TabBarScroller.ScrollBarThickness = 2
 TabBarScroller.ScrollingDirection = Enum.ScrollingDirection.X
+TabBarScroller.ClipsDescendants = true
 
 local TabBarLayout = Instance.new("UIListLayout", TabBarScroller)
 TabBarLayout.FillDirection = Enum.FillDirection.Horizontal
@@ -187,6 +187,7 @@ local ContentFrame = Instance.new("Frame", MainFrame)
 ContentFrame.Position = UDim2.new(0, 12, 0, 90)
 ContentFrame.Size = UDim2.new(1, -24, 1, -98)
 ContentFrame.BackgroundTransparency = 1
+ContentFrame.ClipsDescendants = true
 
 local tabs = {}
 local currentTab = nil
@@ -200,7 +201,7 @@ end
 
 local function createTab(name, icon)
     local tBtn = Instance.new("TextButton", TabBarScroller)
-    tBtn.Size = UDim2.new(0, 82, 1, 0)
+    tBtn.Size = UDim2.new(0, 84, 1, 0)
     tBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 44)
     tBtn.BackgroundTransparency = 0.4
     tBtn.Font = Enum.Font.GothamBold
@@ -226,7 +227,7 @@ local function createTab(name, icon)
         for _, otherBtn in ipairs(TabBarScroller:GetChildren()) do
             if otherBtn:IsA("TextButton") then
                 otherBtn.TextColor3 = Color3.fromRGB(160, 175, 200)
-                otherBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+                otherBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 44)
             end
         end
         tBtn.TextColor3 = Color3.fromRGB(0, 240, 255)
@@ -563,7 +564,7 @@ btnFlySaved.MouseButton1Click:Connect(function()
     if target then flyToCFrame(target) else notify("Chưa lưu Vị Trí " .. selectedPos .. "!") end
 end)
 
--- KHÔI PHỤC NÚT TÁCH BẢNG MINI TELEPORT ĐỘC LẬP
+-- NÚT TÁCH BẢNG MINI TELEPORT ĐỘC LẬP
 local MiniFrame = Instance.new("Frame", ScreenGui)
 MiniFrame.Size = UDim2.new(0, 160, 0, 110)
 MiniFrame.Position = UDim2.new(0.85, -80, 0.2, 0)
