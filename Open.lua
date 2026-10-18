@@ -149,17 +149,18 @@ TitleFrame.BackgroundTransparency = 0.35
 Instance.new("UICorner", TitleFrame).CornerRadius = UDim.new(0, 22)
 
 local TitleLabel = Instance.new("TextLabel", TitleFrame)
-TitleLabel.Size = UDim2.new(1, -80, 1, 0)
-TitleLabel.Position = UDim2.new(0, 16, 0, 0)
+TitleLabel.Size = UDim2.new(1, -50, 1, 0)
+TitleLabel.Position = UDim2.new(0, 12, 0, 0)
 TitleLabel.BackgroundTransparency = 1
 TitleLabel.Font = Enum.Font.GothamBold
-TitleLabel.Text = "👑 TRƯƠNG TRỌNG KIÊN - 9.4 NHUẬN PHÚ TÂN 👑"
+TitleLabel.Text = "👑 TRƯƠNG TRỌNG KIÊN - 9.4 👑"
 TitleLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
-TitleLabel.TextSize = 11
+TitleLabel.TextSize = 10
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+TitleLabel.TextTruncate = Enum.TextTruncate.AtEnd
 
 local CloseBtn = Instance.new("TextButton", TitleFrame)
-CloseBtn.Position = UDim2.new(1, -36, 0, 8)
+CloseBtn.Position = UDim2.new(1, -34, 0, 8)
 CloseBtn.Size = UDim2.new(0, 26, 0, 26)
 CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 40, 60)
 CloseBtn.Font = Enum.Font.GothamBold
@@ -172,8 +173,8 @@ local TabBarScroller = Instance.new("ScrollingFrame", MainFrame)
 TabBarScroller.Position = UDim2.new(0, 12, 0, 48)
 TabBarScroller.Size = UDim2.new(1, -24, 0, 36)
 TabBarScroller.BackgroundTransparency = 1
-TabBarScroller.CanvasSize = UDim2.new(0, 520, 0, 0)
-TabBarScroller.ScrollBarThickness = 0
+TabBarScroller.CanvasSize = UDim2.new(0, 620, 0, 0)
+TabBarScroller.ScrollBarThickness = 2
 TabBarScroller.ScrollingDirection = Enum.ScrollingDirection.X
 
 local TabBarLayout = Instance.new("UIListLayout", TabBarScroller)
@@ -224,7 +225,7 @@ local function createTab(name, icon)
         for _, otherBtn in ipairs(TabBarScroller:GetChildren()) do
             if otherBtn:IsA("TextButton") then
                 otherBtn.TextColor3 = Color3.fromRGB(160, 175, 200)
-                otherBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 44)
+                otherBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
             end
         end
         tBtn.TextColor3 = Color3.fromRGB(0, 240, 255)
@@ -561,6 +562,69 @@ btnFlySaved.MouseButton1Click:Connect(function()
     if target then flyToCFrame(target) else notify("Chưa lưu Vị Trí " .. selectedPos .. "!") end
 end)
 
+-- KHÔI PHỤC BẢNG MINI TELEPORT ĐỘC LẬP
+local MiniFrame = Instance.new("Frame", ScreenGui)
+MiniFrame.Size = UDim2.new(0, 160, 0, 110)
+MiniFrame.Position = UDim2.new(0.85, -80, 0.2, 0)
+MiniFrame.BackgroundColor3 = Color3.fromRGB(15, 18, 28)
+MiniFrame.BackgroundTransparency = 0.2
+MiniFrame.Visible = false
+MiniFrame.Active = true
+MiniFrame.Draggable = true
+Instance.new("UICorner", MiniFrame).CornerRadius = UDim.new(0, 12)
+local miniStroke = Instance.new("UIStroke", MiniFrame)
+miniStroke.Color = Color3.fromRGB(0, 240, 255)
+miniStroke.Thickness = 2
+
+local miniTitle = Instance.new("TextLabel", MiniFrame)
+miniTitle.Size = UDim2.new(1, 0, 0, 24)
+miniTitle.BackgroundTransparency = 1
+miniTitle.Font = Enum.Font.GothamBold
+miniTitle.Text = "📌 MINI BASE TELEPORT"
+miniTitle.TextColor3 = Color3.fromRGB(255, 215, 0)
+miniTitle.TextSize = 10
+
+local mBtn1 = Instance.new("TextButton", MiniFrame)
+mBtn1.Position = UDim2.new(0, 8, 0, 30)
+mBtn1.Size = UDim2.new(1, -16, 0, 32)
+mBtn1.BackgroundColor3 = Color3.fromRGB(25, 35, 55)
+mBtn1.Font = Enum.Font.GothamBold
+mBtn1.Text = "🚀 BAY VỊ TRÍ 1"
+mBtn1.TextColor3 = Color3.fromRGB(255, 255, 255)
+mBtn1.TextSize = 9
+Instance.new("UICorner", mBtn1).CornerRadius = UDim.new(0, 6)
+
+local mBtn2 = Instance.new("TextButton", MiniFrame)
+mBtn2.Position = UDim2.new(0, 8, 0, 68)
+mBtn2.Size = UDim2.new(1, -16, 0, 32)
+mBtn2.BackgroundColor3 = Color3.fromRGB(25, 35, 55)
+mBtn2.Font = Enum.Font.GothamBold
+mBtn2.Text = "🚀 BAY VỊ TRÍ 2"
+mBtn2.TextColor3 = Color3.fromRGB(255, 255, 255)
+mBtn2.TextSize = 9
+Instance.new("UICorner", mBtn2).CornerRadius = UDim.new(0, 6)
+
+mBtn1.MouseButton1Click:Connect(function()
+    if savedPos1 then flyToCFrame(savedPos1) else notify("Chưa lưu Vị Trí 1!") end
+end)
+mBtn2.MouseButton1Click:Connect(function()
+    if savedPos2 then flyToCFrame(savedPos2) else notify("Chưa lưu Vị Trí 2!") end
+end)
+
+local btnDetach = Instance.new("TextButton", TabPos)
+btnDetach.Size = UDim2.new(1, 0, 0, 34)
+btnDetach.BackgroundColor3 = Color3.fromRGB(120, 40, 180)
+btnDetach.Font = Enum.Font.GothamBold
+btnDetach.Text = "📌 TÁCH BẢNG MINI BẬT NHANH 📌"
+btnDetach.TextColor3 = Color3.fromRGB(255, 255, 255)
+btnDetach.TextSize = 10
+Instance.new("UICorner", btnDetach).CornerRadius = UDim.new(0, 8)
+
+btnDetach.MouseButton1Click:Connect(function()
+    MiniFrame.Visible = not MiniFrame.Visible
+    notify(MiniFrame.Visible and "Đã hiện Bảng Mini độc lập!" or "Đã ẩn Bảng Mini")
+end)
+
 local selectedTarget = nil
 local TpLabel = Instance.new("TextLabel", TabTeleport)
 TpLabel.Size = UDim2.new(1, 0, 0, 22)
@@ -732,12 +796,12 @@ CloseBtn.MouseButton1Click:Connect(toggleMenu)
 
 local startX = 0
 SlideArea.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.Touch || input.UserInputType == Enum.UserInputType.MouseButton1 then
         startX = input.Position.X
     end
 end)
 SlideArea.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.Touch || input.UserInputType == Enum.UserInputType.MouseButton1 then
         if input.Position.X - startX > 20 then
             if not isMenuOpen then toggleMenu() end
         end
