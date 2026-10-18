@@ -173,7 +173,7 @@ TabBarScroller.Size = UDim2.new(1, -24, 0, 36)
 TabBarScroller.BackgroundTransparency = 1
 TabBarScroller.CanvasSize = UDim2.new(0, 520, 0, 0)
 TabBarScroller.ScrollBarThickness = 0
-TabBarScroller.ScrollingDirection = Enum.ScrollingDirection.Horizontal
+TabBarScroller.ScrollingDirection = Enum.ScrollingDirection.X
 
 local TabBarLayout = Instance.new("UIListLayout", TabBarScroller)
 TabBarLayout.FillDirection = Enum.FillDirection.Horizontal
