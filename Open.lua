@@ -110,7 +110,8 @@ LockStroke.Thickness = 2
 local MainFrame = Instance.new("Frame", ScreenGui)
 MainFrame.BackgroundColor3 = Color3.fromRGB(12, 15, 24)
 MainFrame.BackgroundTransparency = 0.15
-MainFrame.Position = UDim2.new(0.5, -220, 0.5, -160)
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.Size = UDim2.new(0, 440, 0, 320)
 MainFrame.Visible = false
 MainFrame.Active = true
@@ -209,7 +210,8 @@ local function createTab(name, icon)
     local page = Instance.new("ScrollingFrame", ContentFrame)
     page.Size = UDim2.new(1, 0, 1, 0)
     page.BackgroundTransparency = 1
-    page.CanvasSize = UDim2.new(0, 0, 0, 280)
+    page.CanvasSize = UDim2.new(0, 0, 0, 0)
+    page.AutomaticCanvasSize = Enum.AutomaticSize.Y
     page.ScrollBarThickness = 2
     page.Visible = false
     
@@ -573,7 +575,8 @@ local PlayerListContainer = Instance.new("ScrollingFrame", TabTeleport)
 PlayerListContainer.Size = UDim2.new(1, 0, 0, 150)
 PlayerListContainer.BackgroundColor3 = Color3.fromRGB(14, 18, 28)
 PlayerListContainer.BackgroundTransparency = 0.3
-PlayerListContainer.CanvasSize = UDim2.new(0, 0, 0, 300)
+PlayerListContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
+PlayerListContainer.AutomaticCanvasSize = Enum.AutomaticSize.Y
 PlayerListContainer.ScrollBarThickness = 2
 Instance.new("UICorner", PlayerListContainer).CornerRadius = UDim.new(0, 8)
 
@@ -712,7 +715,7 @@ local function toggleMenu()
         TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
             Size = UDim2.new(0, 440, 0, 320),
             Rotation = 0,
-            Position = UDim2.new(0.5, -220, 0.5, -160)
+            Position = UDim2.new(0.5, 0, 0.5, 0)
         }):Play()
     else
         local tw = TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
