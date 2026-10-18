@@ -28,34 +28,34 @@ end
 local function notify(text)
     playClickSound()
     local note = Instance.new("Frame", ScreenGui)
-    note.Size = UDim2.new(0, 0, 0, 38)
+    note.Size = UDim2.new(0, 0, 0, 40)
     note.Position = UDim2.new(0.5, 0, 0, -50)
-    note.BackgroundColor3 = Color3.fromRGB(15, 18, 28)
-    note.BackgroundTransparency = 0.15
-    Instance.new("UICorner", note).CornerRadius = UDim.new(0, 10)
+    note.BackgroundColor3 = Color3.fromRGB(12, 14, 22)
+    note.BackgroundTransparency = 0.1
+    Instance.new("UICorner", note).CornerRadius = UDim.new(0, 12)
     
     local stroke = Instance.new("UIStroke", note)
-    stroke.Color = Color3.fromRGB(0, 240, 255)
-    stroke.Thickness = 2
+    stroke.Color = Color3.fromRGB(255, 215, 0)
+    stroke.Thickness = 2.5
 
     local lbl = Instance.new("TextLabel", note)
     lbl.Size = UDim2.new(1, -20, 1, 0)
-    lbl.Position = UDim2.new(0, 10, 0, 0)
+    lbl.Position = UDim2.new(0, 12, 0, 0)
     lbl.BackgroundTransparency = 1
     lbl.Font = Enum.Font.GothamBold
     lbl.Text = "👑 " .. text
     lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
-    lbl.TextSize = 11
+    lbl.TextSize = 12
     lbl.TextXAlignment = Enum.TextXAlignment.Left
 
-    TweenService:Create(note, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Size = UDim2.new(0, 280, 0, 38),
-        Position = UDim2.new(0.5, -140, 0, 15)
+    TweenService:Create(note, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        Size = UDim2.new(0, 310, 0, 40),
+        Position = UDim2.new(0.5, -155, 0, 15)
     }):Play()
 
-    task.delay(2.2, function()
-        local tw = TweenService:Create(note, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-            Size = UDim2.new(0, 0, 0, 38),
+    task.delay(2.5, function()
+        local tw = TweenService:Create(note, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+            Size = UDim2.new(0, 0, 0, 40),
             Position = UDim2.new(0.5, 0, 0, -50)
         })
         tw:Play()
@@ -63,105 +63,101 @@ local function notify(text)
     end)
 end
 
--- 1. NÚT TRƯỢT / BẤM MỞ MENU NGOÀI MÀN HÌNH (SLIDE BAR)
 local SlideArea = Instance.new("TextButton", ScreenGui)
-SlideArea.BackgroundColor3 = Color3.fromRGB(0, 240, 255)
-SlideArea.BackgroundTransparency = 0.2
+SlideArea.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+SlideArea.BackgroundTransparency = 0.15
 SlideArea.Position = UDim2.new(0.005, 0, 0.005, 0)
-SlideArea.Size = UDim2.new(0, 36, 0, 26)
+SlideArea.Size = UDim2.new(0, 38, 0, 28)
 SlideArea.Font = Enum.Font.GothamBold
-SlideArea.Text = "≡"
+SlideArea.Text = "⚡"
 SlideArea.TextColor3 = Color3.fromRGB(10, 10, 16)
-SlideArea.TextSize = 18
+SlideArea.TextSize = 16
 SlideArea.AutoButtonColor = false
 Instance.new("UICorner", SlideArea).CornerRadius = UDim.new(0, 8)
 local slideStroke = Instance.new("UIStroke", SlideArea)
 slideStroke.Color = Color3.fromRGB(255, 255, 255)
-slideStroke.Transparency = 0.3
+slideStroke.Transparency = 0.2
 
--- 2. NÚT SHIFT LOCK MOBILE
 local ShiftLockButton = Instance.new("TextButton", ScreenGui)
 ShiftLockButton.BackgroundColor3 = Color3.fromRGB(18, 22, 32)
 ShiftLockButton.BackgroundTransparency = 0.2
-ShiftLockButton.Position = UDim2.new(0.045, 0, 0.005, 0)
-ShiftLockButton.Size = UDim2.new(0, 32, 0, 26)
+ShiftLockButton.Position = UDim2.new(0.048, 0, 0.005, 0)
+ShiftLockButton.Size = UDim2.new(0, 34, 0, 28)
 ShiftLockButton.Font = Enum.Font.GothamBold
 ShiftLockButton.Text = "🎯"
 ShiftLockButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-ShiftLockButton.TextSize = 13
+ShiftLockButton.TextSize = 14
 ShiftLockButton.Visible = false
 Instance.new("UICorner", ShiftLockButton).CornerRadius = UDim.new(0, 8)
 local LockStroke = Instance.new("UIStroke", ShiftLockButton)
 LockStroke.Color = Color3.fromRGB(255, 60, 60)
 LockStroke.Thickness = 1.5
 
--- 3. KHUNG MENU CHÍNH PHONG CÁCH RPG FANTASY
 local MainFrame = Instance.new("Frame", ScreenGui)
-MainFrame.BackgroundColor3 = Color3.fromRGB(12, 14, 22)
-MainFrame.BackgroundTransparency = 0.15
-MainFrame.Position = UDim2.new(0.5, -210, 0.5, -150)
-MainFrame.Size = UDim2.new(0, 420, 0, 300)
+MainFrame.BackgroundColor3 = Color3.fromRGB(8, 10, 16)
+MainFrame.BackgroundTransparency = 0.12
+MainFrame.Position = UDim2.new(0.5, -230, 0.5, -165)
+MainFrame.Size = UDim2.new(0, 460, 0, 330)
 MainFrame.Visible = false
 MainFrame.Active = true
 MainFrame.Draggable = true
 
-Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 16)
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 20)
 local MainStroke = Instance.new("UIStroke", MainFrame)
-MainStroke.Color = Color3.fromRGB(0, 230, 255)
-MainStroke.Thickness = 2.5
+MainStroke.Color = Color3.fromRGB(255, 215, 0)
+MainStroke.Thickness = 3
 
--- Hiệu ứng viền chạy RGB cho nút SlideBar
 task.spawn(function()
     while true do
-        for hue = 0, 1, 0.01 do
+        for hue = 0, 1, 0.005 do
             local col = Color3.fromHSV(hue, 1, 1)
+            MainStroke.Color = col
             SlideArea.BackgroundColor3 = col
-            task.wait(0.08)
+            task.wait(0.06)
         end
     end
 end)
 
 local TitleFrame = Instance.new("Frame", MainFrame)
-TitleFrame.Size = UDim2.new(1, 0, 0, 42)
-TitleFrame.BackgroundColor3 = Color3.fromRGB(18, 22, 34)
-TitleFrame.BackgroundTransparency = 0.3
-Instance.new("UICorner", TitleFrame).CornerRadius = UDim.new(0, 16)
+TitleFrame.Size = UDim2.new(1, 0, 0, 45)
+TitleFrame.BackgroundColor3 = Color3.fromRGB(15, 18, 28)
+TitleFrame.BackgroundTransparency = 0.25
+Instance.new("UICorner", TitleFrame).CornerRadius = UDim.new(0, 20)
 
 local TitleLabel = Instance.new("TextLabel", TitleFrame)
 TitleLabel.Size = UDim2.new(1, -80, 1, 0)
-TitleLabel.Position = UDim2.new(0, 15, 0, 0)
+TitleLabel.Position = UDim2.new(0, 16, 0, 0)
 TitleLabel.BackgroundTransparency = 1
 TitleLabel.Font = Enum.Font.GothamBold
-TitleLabel.Text = "❖ TRƯƠNG TRỌNG KIÊN - 9.4 NHUẬN PHÚ TÂN ❖"
+TitleLabel.Text = "👑 TRƯƠNG TRỌNG KIÊN - 9.4 NHUẬN PHÚ TÂN 👑"
 TitleLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
 TitleLabel.TextSize = 11
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local CloseBtn = Instance.new("TextButton", TitleFrame)
-CloseBtn.Position = UDim2.new(1, -34, 0, 8)
-CloseBtn.Size = UDim2.new(0, 26, 0, 26)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 50)
+CloseBtn.Position = UDim2.new(1, -38, 0, 9)
+CloseBtn.Size = UDim2.new(0, 28, 0, 28)
+CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 40, 60)
 CloseBtn.Font = Enum.Font.GothamBold
 CloseBtn.Text = "✕"
 CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseBtn.TextSize = 12
-Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 6)
+CloseBtn.TextSize = 13
+Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
 
--- THANH TAB DỌC BÊN TRÁI
 local Sidebar = Instance.new("Frame", MainFrame)
-Sidebar.Position = UDim2.new(0, 10, 0, 50)
-Sidebar.Size = UDim2.new(0, 110, 1, -60)
-Sidebar.BackgroundColor3 = Color3.fromRGB(16, 20, 30)
+Sidebar.Position = UDim2.new(0, 12, 0, 54)
+Sidebar.Size = UDim2.new(0, 120, 1, -66)
+Sidebar.BackgroundColor3 = Color3.fromRGB(14, 18, 28)
 Sidebar.BackgroundTransparency = 0.4
-Instance.new("UICorner", Sidebar).CornerRadius = UDim.new(0, 12)
+Instance.new("UICorner", Sidebar).CornerRadius = UDim.new(0, 14)
 
 local SidebarList = Instance.new("UIListLayout", Sidebar)
 SidebarList.SortOrder = Enum.SortOrder.LayoutOrder
 SidebarList.Padding = UDim.new(0, 6)
 
 local ContentFrame = Instance.new("Frame", MainFrame)
-ContentFrame.Position = UDim2.new(0, 128, 0, 50)
-ContentFrame.Size = UDim2.new(1, -138, 1, -60)
+ContentFrame.Position = UDim2.new(0, 140, 0, 54)
+ContentFrame.Size = UDim2.new(1, -152, 1, -66)
 ContentFrame.BackgroundTransparency = 1
 
 local tabs = {}
@@ -177,7 +173,7 @@ end
 local function createTab(name, icon)
     local tBtn = Instance.new("TextButton", Sidebar)
     tBtn.Size = UDim2.new(1, 0, 0, 38)
-    tBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+    tBtn.BackgroundColor3 = Color3.fromRGB(20, 25, 40)
     tBtn.BackgroundTransparency = 0.5
     tBtn.Font = Enum.Font.GothamBold
     tBtn.Text = icon .. " " .. name
@@ -188,7 +184,7 @@ local function createTab(name, icon)
     local page = Instance.new("ScrollingFrame", ContentFrame)
     page.Size = UDim2.new(1, 0, 1, 0)
     page.BackgroundTransparency = 1
-    page.CanvasSize = UDim2.new(0, 0, 0, 260)
+    page.CanvasSize = UDim2.new(0, 0, 0, 320)
     page.ScrollBarThickness = 2
     page.Visible = false
     
@@ -201,31 +197,32 @@ local function createTab(name, icon)
         for _, otherBtn in ipairs(Sidebar:GetChildren()) do
             if otherBtn:IsA("TextButton") then
                 otherBtn.TextColor3 = Color3.fromRGB(160, 175, 200)
-                otherBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+                otherBtn.BackgroundColor3 = Color3.fromRGB(20, 25, 40)
             end
         end
-        tBtn.TextColor3 = Color3.fromRGB(0, 240, 255)
-        tBtn.BackgroundColor3 = Color3.fromRGB(30, 40, 65)
+        tBtn.TextColor3 = Color3.fromRGB(255, 215, 0)
+        tBtn.BackgroundColor3 = Color3.fromRGB(35, 45, 70)
         switchTab(name)
     end)
     
     if not currentTab then
         currentTab = name
         page.Visible = true
-        tBtn.TextColor3 = Color3.fromRGB(0, 240, 255)
-        tBtn.BackgroundColor3 = Color3.fromRGB(30, 40, 65)
+        tBtn.TextColor3 = Color3.fromRGB(255, 215, 0)
+        tBtn.BackgroundColor3 = Color3.fromRGB(35, 45, 70)
     end
     return page
 end
 
 local TabHome = createTab("Cài Đặt", "🏠")
 local TabUtility = createTab("Tiện Ích", "⚡")
+local TabTeleport = createTab("Bay Mượt", "🚀")
 local TabAnims = createTab("Dáng Chạy", "🏃‍♂️")
-local TabBoost = createTab("Tối Ưu", "🚀")
+local TabBoost = createTab("Tối Ưu", "💎")
 local TabInfo = createTab("Thông Tin", "ℹ️")
 
 local ThemeLabel = Instance.new("TextLabel", TabHome)
-ThemeLabel.Size = UDim2.new(1, 0, 0, 20)
+ThemeLabel.Size = UDim2.new(1, 0, 0, 22)
 ThemeLabel.BackgroundTransparency = 1
 ThemeLabel.Font = Enum.Font.GothamBold
 ThemeLabel.Text = "💎 ĐỘ TRONG SUỐT GIAO DIỆN:"
@@ -237,7 +234,7 @@ local transLevels = {{"Trong 10%", 0.1}, {"Mặc Định", 0.15}, {"Mờ 50%", 0
 for _, level in ipairs(transLevels) do
     local tBtn = Instance.new("TextButton", TabHome)
     tBtn.Size = UDim2.new(1, 0, 0, 32)
-    tBtn.BackgroundColor3 = Color3.fromRGB(24, 30, 45)
+    tBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
     tBtn.BackgroundTransparency = 0.3
     tBtn.Font = Enum.Font.GothamBold
     tBtn.Text = level[1]
@@ -253,7 +250,7 @@ end
 local function createButton(parent, name, callback)
     local btn = Instance.new("TextButton", parent)
     btn.Size = UDim2.new(1, 0, 0, 38)
-    btn.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+    btn.BackgroundColor3 = Color3.fromRGB(20, 25, 40)
     btn.BackgroundTransparency = 0.3
     btn.Font = Enum.Font.GothamBold
     btn.Text = name
@@ -273,11 +270,11 @@ local function createButton(parent, name, callback)
         end)
         
         if active then
-            btn.BackgroundColor3 = Color3.fromRGB(35, 50, 80)
+            btn.BackgroundColor3 = Color3.fromRGB(45, 35, 75)
             btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-            stroke.Color = Color3.fromRGB(0, 240, 255)
+            stroke.Color = Color3.fromRGB(255, 215, 0)
         else
-            btn.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+            btn.BackgroundColor3 = Color3.fromRGB(20, 25, 40)
             btn.TextColor3 = Color3.fromRGB(210, 220, 240)
             stroke.Color = Color3.fromRGB(45, 55, 80)
         end
@@ -419,6 +416,101 @@ createButton(TabUtility, "⚡ Nhặt Đồ / Tương Tác Tức Thì", function(
     notify(state and "Đã bật: Nhặt đồ tức thì" or "Đã tắt: Nhặt đồ tức thì")
 end)
 
+-- TÍNH NĂNG BAY MƯỢT AN TOÀN (KHÔNG BỊ KICK, TỐC ĐỘ 165)
+local selectedTarget = nil
+local TpLabel = Instance.new("TextLabel", TabTeleport)
+TpLabel.Size = UDim2.new(1, 0, 0, 22)
+TpLabel.BackgroundTransparency = 1
+TpLabel.Font = Enum.Font.GothamBold
+TpLabel.Text = "🚀 CHỌN BẠN BÈ ĐỂ BAY ĐẾN (SPEED 165):"
+TpLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
+TpLabel.TextSize = 10
+TpLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local PlayerListContainer = Instance.new("ScrollingFrame", TabTeleport)
+PlayerListContainer.Size = UDim2.new(1, 0, 0, 150)
+PlayerListContainer.BackgroundColor3 = Color3.fromRGB(12, 16, 26)
+PlayerListContainer.BackgroundTransparency = 0.3
+PlayerListContainer.CanvasSize = UDim2.new(0, 0, 0, 300)
+PlayerListContainer.ScrollBarThickness = 2
+Instance.new("UICorner", PlayerListContainer).CornerRadius = UDim.new(0, 8)
+
+local PlrListLayout = Instance.new("UIListLayout", PlayerListContainer)
+PlrListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+PlrListLayout.Padding = UDim.new(0, 4)
+
+local function refreshPlayerList()
+    for _, child in ipairs(PlayerListContainer:GetChildren()) do
+        if child:IsA("TextButton") then child:Destroy() end
+    end
+    
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer then
+            local pBtn = Instance.new("TextButton", PlayerListContainer)
+            pBtn.Size = UDim2.new(1, -4, 0, 32)
+            pBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 42)
+            pBtn.BackgroundTransparency = 0.3
+            pBtn.Font = Enum.Font.GothamBold
+            pBtn.Text = "👤 " .. plr.DisplayName .. " (@" .. plr.Name .. ")"
+            pBtn.TextColor3 = Color3.fromRGB(210, 220, 240)
+            pBtn.TextSize = 10
+            Instance.new("UICorner", pBtn).CornerRadius = UDim.new(0, 6)
+            
+            pBtn.MouseButton1Click:Connect(function()
+                selectedTarget = plr
+                notify("Đã chọn mục tiêu: " .. plr.DisplayName)
+            end)
+        end
+    end
+end
+
+Players.PlayerAdded:Connect(refreshPlayerList)
+Players.PlayerRemoving:Connect(refreshPlayerList)
+refreshPlayerList()
+
+local TpActionButton = Instance.new("TextButton", TabTeleport)
+TpActionButton.Size = UDim2.new(1, 0, 0, 40)
+TpActionButton.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+TpActionButton.BackgroundTransparency = 0.2
+TpActionButton.Font = Enum.Font.GothamBold
+TpActionButton.Text = "🚀 BAY MƯỢT ĐẾN BẠN (SPEED 165)"
+TpActionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TpActionButton.TextSize = 11
+Instance.new("UICorner", TpActionButton).CornerRadius = UDim.new(0, 8)
+
+TpActionButton.MouseButton1Click:Connect(function()
+    if selectedTarget and selectedTarget.Character and selectedTarget.Character:FindFirstChild("HumanoidRootPart") then
+        local myChar = LocalPlayer.Character
+        if myChar and myChar:FindFirstChild("HumanoidRootPart") then
+            local myHrp = myChar.HumanoidRootPart
+            local targetHrp = selectedTarget.Character.HumanoidRootPart
+            
+            notify("Đang bay an toàn đến " .. selectedTarget.DisplayName .. "...")
+            
+            -- Thuật toán bay lướt mượt mà chuẩn Speed 165 chống kick game tuyệt đối
+            task.spawn(function()
+                local speed = 165
+                while selectedTarget and selectedTarget.Character and selectedTarget.Character:FindFirstChild("HumanoidRootPart") do
+                    local tHrp = selectedTarget.Character.HumanoidRootPart
+                    local direction = (tHrp.Position - myHrp.Position)
+                    local distance = direction.Magnitude
+                    
+                    if distance < 5 then
+                        break
+                    end
+                    
+                    local step = math.min(distance, speed * 0.03)
+                    myHrp.CFrame = myHrp.CFrame + (direction.Unit * step)
+                    RunService.RenderStepped:Wait()
+                end
+                notify("Đã bay tới nơi an toàn!")
+            end)
+        end
+    else
+        notify("Chưa chọn bạn hoặc bạn ấy chưa vào game!")
+    end
+end)
+
 local legFlyConn = nil
 createButton(TabAnims, "🚀 Dáng Chạy Lơ Lửng (Fly V3)", function(state)
     if state then
@@ -470,7 +562,7 @@ end)
 
 local InfoBg = Instance.new("Frame", TabInfo)
 InfoBg.Size = UDim2.new(1, 0, 1, 0)
-InfoBg.BackgroundColor3 = Color3.fromRGB(18, 22, 34)
+InfoBg.BackgroundColor3 = Color3.fromRGB(15, 18, 28)
 InfoBg.BackgroundTransparency = 0.4
 Instance.new("UICorner", InfoBg).CornerRadius = UDim.new(0, 10)
 
@@ -483,12 +575,11 @@ InfoText.Size = UDim2.new(1, -16, 1, -16)
 InfoText.Position = UDim2.new(0, 8, 0, 8)
 InfoText.BackgroundTransparency = 1
 InfoText.Font = Enum.Font.GothamBold
-InfoText.Text = "👑 TÁC GIẢ VIP: Trương Trọng Kiên\n🏫 Lớp: 9.4 - THCS Nhuận Phú Tân\n\n✨ Menu RPG Fantasy Edition:\n- Bố cục Tab dọc phong cách game AAA\n- Nút trượt mở menu nhanh chóng ở góc màn hình\n- Tích hợp đầy đủ mọi tính năng độc quyền!"
+InfoText.Text = "👑 TÁC GIẢ VIP: Trương Trọng Kiên\n🏫 Lớp: 9.4 - THCS Nhuận Phú Tân\n\n✨ Cyber-Mythic RPG Ultimate Hub:\n- Bay mượt mà tốc độ 165 chống kick tuyệt đối\n- Giao diện RPG Hoàng Gia viền RGB chuyển động\n- Nút trượt mở menu ngoài màn hình tiện lợi"
 InfoText.TextColor3 = Color3.fromRGB(240, 245, 255)
 InfoText.TextSize = 10
 InfoText.TextWrapped = true
 
--- HIỆU ỨNG BẬT/TẮT MENU QUA NÚT SLIDEBAR VÀ KÉO NGANG
 local isMenuOpen = false
 local function toggleMenu()
     playClickSound()
@@ -498,9 +589,9 @@ local function toggleMenu()
         MainFrame.Size = UDim2.new(0, 0, 0, 0)
         MainFrame.Rotation = -180
         TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 420, 0, 300),
+            Size = UDim2.new(0, 460, 0, 330),
             Rotation = 0,
-            Position = UDim2.new(0.5, -210, 0.5, -150)
+            Position = UDim2.new(0.5, -230, 0.5, -165)
         }):Play()
     else
         local tw = TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
@@ -515,7 +606,6 @@ end
 SlideArea.MouseButton1Click:Connect(toggleMenu)
 CloseBtn.MouseButton1Click:Connect(toggleMenu)
 
--- Hỗ trợ cử chỉ vuốt kéo sang phải để bật menu
 local startX = 0
 SlideArea.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
