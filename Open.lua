@@ -1,21 +1,15 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local CoreGui = game:GetService("CoreGui")
 local Lighting = game:GetService("Lighting")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
+
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
-
 local CUSTOM_IMAGE_ID = "rbxassetid://117828154165313"
 
-if CoreGui:FindFirstChild("KienProVIPHub") then
-    CoreGui.KienProVIPHub:Destroy()
-end
-
-local ScreenGui = Instance.new("ScreenGui")
+local ScreenGui = script.Parent
 ScreenGui.Name = "KienProVIPHub"
-ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -65,6 +59,7 @@ local function notify(text)
     end)
 end
 
+-- 1. NÚT DỪNG BAY TỨC THÌ (GÓC TRÊN BÊN PHẢI)
 local StopFlyButton = Instance.new("TextButton", ScreenGui)
 StopFlyButton.Name = "StopFlyButton"
 StopFlyButton.BackgroundColor3 = Color3.fromRGB(230, 30, 50)
@@ -80,6 +75,7 @@ local stopStroke = Instance.new("UIStroke", StopFlyButton)
 stopStroke.Color = Color3.fromRGB(255, 255, 255)
 stopStroke.Thickness = 2
 
+-- 2. NÚT BẬT/TẮT MENU LƠ LỬNG
 local SlideArea = Instance.new("ImageButton", ScreenGui)
 SlideArea.Image = CUSTOM_IMAGE_ID
 SlideArea.BackgroundTransparency = 0.1
@@ -92,6 +88,7 @@ local slideStroke = Instance.new("UIStroke", SlideArea)
 slideStroke.Color = Color3.fromRGB(0, 240, 255)
 slideStroke.Thickness = 2
 
+-- 3. NÚT SHIFT LOCK MOBILE
 local ShiftLockButton = Instance.new("TextButton", ScreenGui)
 ShiftLockButton.BackgroundColor3 = Color3.fromRGB(18, 22, 32)
 ShiftLockButton.BackgroundTransparency = 0.2
@@ -107,6 +104,7 @@ local LockStroke = Instance.new("UIStroke", ShiftLockButton)
 LockStroke.Color = Color3.fromRGB(255, 60, 60)
 LockStroke.Thickness = 2
 
+-- 4. KHUNG MENU CHÍNH BO CONG MỀM MẠI (440 x 320)
 local MainFrame = Instance.new("Frame", ScreenGui)
 MainFrame.BackgroundColor3 = Color3.fromRGB(12, 15, 24)
 MainFrame.BackgroundTransparency = 0.15
@@ -167,6 +165,7 @@ CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseBtn.TextSize = 12
 Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
 
+-- THANH TAB NẰM NGANG Ở TRÊN VUỐT QUA LẠI MƯỢT MÀ
 local TabBarScroller = Instance.new("ScrollingFrame", MainFrame)
 TabBarScroller.Position = UDim2.new(0, 12, 0, 48)
 TabBarScroller.Size = UDim2.new(1, -24, 0, 36)
