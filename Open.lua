@@ -65,7 +65,6 @@ local function notify(text)
     end)
 end
 
--- 1. NÚT DỪNG BAY TỨC THÌ (GÓC CÙNG BÊN PHẢI NGOÀI MÀN HÌNH)
 local StopFlyButton = Instance.new("TextButton", ScreenGui)
 StopFlyButton.Name = "StopFlyButton"
 StopFlyButton.BackgroundColor3 = Color3.fromRGB(230, 30, 50)
@@ -81,7 +80,6 @@ local stopStroke = Instance.new("UIStroke", StopFlyButton)
 stopStroke.Color = Color3.fromRGB(255, 255, 255)
 stopStroke.Thickness = 2
 
--- 2. NÚT BẬT/TẮT MENU VỚI DỰNG ẢNH MỚI
 local SlideArea = Instance.new("ImageButton", ScreenGui)
 SlideArea.Image = CUSTOM_IMAGE_ID
 SlideArea.BackgroundTransparency = 0.1
@@ -94,7 +92,6 @@ local slideStroke = Instance.new("UIStroke", SlideArea)
 slideStroke.Color = Color3.fromRGB(0, 240, 255)
 slideStroke.Thickness = 2
 
--- 3. NÚT SHIFT LOCK MOBILE
 local ShiftLockButton = Instance.new("TextButton", ScreenGui)
 ShiftLockButton.BackgroundColor3 = Color3.fromRGB(18, 22, 32)
 ShiftLockButton.BackgroundTransparency = 0.2
@@ -110,7 +107,6 @@ local LockStroke = Instance.new("UIStroke", ShiftLockButton)
 LockStroke.Color = Color3.fromRGB(255, 60, 60)
 LockStroke.Thickness = 2
 
--- 4. KHUNG MENU MỀM MẠI PHONG CÁCH TỰ NHIÊN (440 x 320)
 local MainFrame = Instance.new("Frame", ScreenGui)
 MainFrame.BackgroundColor3 = Color3.fromRGB(12, 15, 24)
 MainFrame.BackgroundTransparency = 0.15
@@ -171,7 +167,6 @@ CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseBtn.TextSize = 12
 Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
 
--- THANH TAB NẰM NGANG Ở TRÊN KÉO QUA KÉO LẠI CỰC MƯỢT
 local TabBarScroller = Instance.new("ScrollingFrame", MainFrame)
 TabBarScroller.Position = UDim2.new(0, 12, 0, 48)
 TabBarScroller.Size = UDim2.new(1, -24, 0, 36)
@@ -380,7 +375,7 @@ end
 createButton(TabUtility, "👁️ Định Vị Người Chơi (ESP)", function(state)
     espActive = state
     espFolder:ClearAllChildren()
-    if state me then
+    if state then
         for _, v in ipairs(Players:GetPlayers()) do
             addESPToPlayer(v)
         end
@@ -390,7 +385,6 @@ createButton(TabUtility, "👁️ Định Vị Người Chơi (ESP)", function(s
     end
 end)
 
--- SHIFT LOCK MOBILE CHUẨN XÁC
 local shiftLockEnabled = false
 local isLocked = false
 local slConn = nil
@@ -448,7 +442,6 @@ createButton(TabUtility, "⚡ Nhặt Đồ / Tương Tác Tức Thì", function(
     notify(state and "Đã bật: Nhặt đồ tức thì" or "Đã tắt: Nhặt đồ tức thì")
 end)
 
--- CƠ CHẾ BAY CHỐNG LAG VÀ DỪNG BẰNG NÚT DẤU X TỨC THÌ
 local savedPos1 = nil
 local savedPos2 = nil
 local selectedPos = 1
@@ -566,7 +559,6 @@ btnFlySaved.MouseButton1Click:Connect(function()
     if target then flyToCFrame(target) else notify("Chưa lưu Vị Trí " .. selectedPos .. "!") end
 end)
 
--- BẢNG MINI
 local MiniFrame = Instance.new("Frame", ScreenGui)
 MiniFrame.Size = UDim2.new(0, 160, 0, 110)
 MiniFrame.Position = UDim2.new(0.85, -80, 0.2, 0)
@@ -629,7 +621,6 @@ btnDetach.MouseButton1Click:Connect(function()
     notify(MiniFrame.Visible and "Đã hiện Bảng Mini độc lập!" or "Đã ẩn Bảng Mini")
 end)
 
--- BAY ĐẾN BẠN BÈ
 local selectedTarget = nil
 local TpLabel = Instance.new("TextLabel", TabTeleport)
 TpLabel.Size = UDim2.new(1, 0, 0, 22)
@@ -729,7 +720,6 @@ createButton(TabAnims, "🚀 Dáng Chạy Lơ Lửng (Fly V3)", function(state)
     end
 end)
 
--- SIÊU ANTI-LAG ÉP MAX FPS CƯỜNG HÓA
 createButton(TabBoost, "⚡ SIÊU ANTI-LAG CƯỜNG HÓA (MAX FPS 100%)", function(state)
     if state then
         Lighting.GlobalShadows = false
