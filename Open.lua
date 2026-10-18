@@ -148,16 +148,16 @@ TitleFrame.BackgroundColor3 = Color3.fromRGB(18, 22, 34)
 TitleFrame.BackgroundTransparency = 0.35
 Instance.new("UICorner", TitleFrame).CornerRadius = UDim.new(0, 22)
 
+-- FIX TRÀN VIỀN TIÊU ĐỀ
 local TitleLabel = Instance.new("TextLabel", TitleFrame)
-TitleLabel.Size = UDim2.new(1, -50, 1, 0)
+TitleLabel.Size = UDim2.new(1, -45, 1, 0)
 TitleLabel.Position = UDim2.new(0, 12, 0, 0)
 TitleLabel.BackgroundTransparency = 1
 TitleLabel.Font = Enum.Font.GothamBold
-TitleLabel.Text = "👑 TRƯƠNG TRỌNG KIÊN - 9.4 👑"
+TitleLabel.Text = "👑 KIÊN 9.4 - HUB PRO MAX 👑"
 TitleLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
 TitleLabel.TextSize = 10
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-TitleLabel.TextTruncate = Enum.TextTruncate.AtEnd
 
 local CloseBtn = Instance.new("TextButton", TitleFrame)
 CloseBtn.Position = UDim2.new(1, -34, 0, 8)
@@ -169,11 +169,12 @@ CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseBtn.TextSize = 12
 Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
 
+-- MỞ RỘNG CANVAS ĐỂ VUỐT 1 NGÓN TAY LÀ THẤY NGAY TAB INFO
 local TabBarScroller = Instance.new("ScrollingFrame", MainFrame)
 TabBarScroller.Position = UDim2.new(0, 12, 0, 48)
 TabBarScroller.Size = UDim2.new(1, -24, 0, 36)
 TabBarScroller.BackgroundTransparency = 1
-TabBarScroller.CanvasSize = UDim2.new(0, 620, 0, 0)
+TabBarScroller.CanvasSize = UDim2.new(0, 700, 0, 0)
 TabBarScroller.ScrollBarThickness = 2
 TabBarScroller.ScrollingDirection = Enum.ScrollingDirection.X
 
@@ -562,7 +563,7 @@ btnFlySaved.MouseButton1Click:Connect(function()
     if target then flyToCFrame(target) else notify("Chưa lưu Vị Trí " .. selectedPos .. "!") end
 end)
 
--- KHÔI PHỤC BẢNG MINI TELEPORT ĐỘC LẬP
+-- KHÔI PHỤC NÚT TÁCH BẢNG MINI TELEPORT ĐỘC LẬP
 local MiniFrame = Instance.new("Frame", ScreenGui)
 MiniFrame.Size = UDim2.new(0, 160, 0, 110)
 MiniFrame.Position = UDim2.new(0.85, -80, 0.2, 0)
@@ -796,12 +797,12 @@ CloseBtn.MouseButton1Click:Connect(toggleMenu)
 
 local startX = 0
 SlideArea.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.Touch || input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
         startX = input.Position.X
     end
 end)
 SlideArea.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.Touch || input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
         if input.Position.X - startX > 20 then
             if not isMenuOpen then toggleMenu() end
         end
