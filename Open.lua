@@ -1,6 +1,6 @@
 --[[
-    Script Name: kiên 94 Hub Pro Max (Cement Fit Lag & Smart Blacklist Edition)
-    Features: Ultra Speed Auto Soul + Smart Blacklist + Cement Fit Lag + Camera Lock + Anti-Player 10m
+    Script Name: kiên 94 Hub Pro Max (Ultimate Red VIP Edition)
+    Features: Red Neon Glassmorphism GUI + Transparent Map Fit Lag (Keeps Collisions & Souls) + Smart Blacklist + Camera Lock
 ]]
 
 local Players = game:GetService("Players")
@@ -42,17 +42,17 @@ ScreenGui.Parent = playerGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Nút Bật/Tắt Menu nằm ở góc trái trên cùng màn hình
+-- Nút Bật/Tắt Menu (Tone màu Đỏ VIP) ở góc trái trên cùng
 local ToggleMenuBtn = Instance.new("TextButton")
 ToggleMenuBtn.Name = "ToggleMenuBtn"
 ToggleMenuBtn.Parent = ScreenGui
-ToggleMenuBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-ToggleMenuBtn.BackgroundTransparency = 0.25
+ToggleMenuBtn.BackgroundColor3 = Color3.fromRGB(35, 10, 10)
+ToggleMenuBtn.BackgroundTransparency = 0.2
 ToggleMenuBtn.Position = UDim2.new(0, 15, 0, 15)
-ToggleMenuBtn.Size = UDim2.new(0, 115, 0, 38)
+ToggleMenuBtn.Size = UDim2.new(0, 125, 0, 40)
 ToggleMenuBtn.Font = Enum.Font.GothamBold
-ToggleMenuBtn.Text = "kiên 94 Hub"
-ToggleMenuBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleMenuBtn.Text = "🔥 kiên 94 Hub"
+ToggleMenuBtn.TextColor3 = Color3.fromRGB(255, 80, 80)
 ToggleMenuBtn.TextSize = 13
 ToggleMenuBtn.ZIndex = 10
 
@@ -61,34 +61,34 @@ TBtnCorner.CornerRadius = UDim.new(0, 10)
 TBtnCorner.Parent = ToggleMenuBtn
 
 local TBtnStroke = Instance.new("UIStroke")
-TBtnStroke.Color = Color3.fromRGB(80, 200, 255)
-TBtnStroke.Transparency = 0.3
-TBtnStroke.Thickness = 1.8
+TBtnStroke.Color = Color3.fromRGB(255, 50, 50)
+TBtnStroke.Transparency = 0.2
+TBtnStroke.Thickness = 2
 TBtnStroke.Parent = ToggleMenuBtn
 
--- Khung chính Menu
+-- Khung chính Menu (Glassmorphism Đỏ Ruby cực đẹp)
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
-MainFrame.BackgroundTransparency = 0.3
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 12, 12)
+MainFrame.BackgroundTransparency = 0.25
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.Size = UDim2.new(0, 0, 0, 0)
 MainFrame.Active = true
 MainFrame.Draggable = true
 MainFrame.Visible = false
-MainFrame.Rotation = -60
+MainFrame.Rotation = -90
 MainFrame.ZIndex = 5
 
 local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 16)
+UICorner.CornerRadius = UDim.new(0, 18)
 UICorner.Parent = MainFrame
 
 local UIStroke = Instance.new("UIStroke")
-UIStroke.Color = Color3.fromRGB(255, 255, 255)
-UIStroke.Transparency = 0.4
-UIStroke.Thickness = 1.8
+UIStroke.Color = Color3.fromRGB(255, 60, 60)
+UIStroke.Transparency = 0.3
+UIStroke.Thickness = 2
 UIStroke.Parent = MainFrame
 
 -- Tiêu đề Menu
@@ -98,8 +98,8 @@ Title.BackgroundTransparency = 1
 Title.Position = UDim2.new(0, 0, 0, 10)
 Title.Size = UDim2.new(1, 0, 0, 28)
 Title.Font = Enum.Font.GothamBold
-Title.Text = "⚡ kiên 94 Hub Pro Max ⚡"
-Title.TextColor3 = Color3.fromRGB(100, 220, 255)
+Title.Text = "👑 KIÊN 94 HUB PRO MAX 👑"
+Title.TextColor3 = Color3.fromRGB(255, 90, 90)
 Title.TextSize = 14
 Title.ZIndex = 6
 
@@ -113,7 +113,7 @@ TabBar.ZIndex = 6
 
 local Tab1Btn = Instance.new("TextButton")
 Tab1Btn.Parent = TabBar
-Tab1Btn.BackgroundColor3 = Color3.fromRGB(50, 150, 255)
+Tab1Btn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
 Tab1Btn.Size = UDim2.new(0.32, 0, 1, 0)
 Tab1Btn.Font = Enum.Font.GothamBold
 Tab1Btn.Text = "Auto Soul"
@@ -124,25 +124,25 @@ local T1C = Instance.new("UICorner") T1C.CornerRadius = UDim.new(0, 6) T1C.Paren
 
 local Tab2Btn = Instance.new("TextButton")
 Tab2Btn.Parent = TabBar
-Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20)
 Tab2Btn.Position = UDim2.new(0.34, 0, 0, 0)
 Tab2Btn.Size = UDim2.new(0.32, 0, 1, 0)
 Tab2Btn.Font = Enum.Font.GothamBold
 Tab2Btn.Text = "Hop Server"
-Tab2Btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+Tab2Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 Tab2Btn.TextSize = 10
 Tab2Btn.ZIndex = 6
 local T2C = Instance.new("UICorner") T2C.CornerRadius = UDim.new(0, 6) T2C.Parent = Tab2Btn
 
 local Tab3Btn = Instance.new("TextButton")
 Tab3Btn.Parent = TabBar
-Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20)
 Tab3Btn.Position = UDim2.new(0.68, 0, 0, 0)
 Tab3Btn.Size = UDim2.new(0.32, 0, 1, 0)
 Tab3Btn.Font = Enum.Font.GothamBold
-Tab3Btn.Text = "Fit Lag Xi Măng"
-Tab3Btn.TextColor3 = Color3.fromRGB(200, 200, 200)
-Tab3Btn.TextSize = 9
+Tab3Btn.Text = "Fit Lag Map"
+Tab3Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
+Tab3Btn.TextSize = 10
 Tab3Btn.ZIndex = 6
 local T3C = Instance.new("UICorner") T3C.CornerRadius = UDim.new(0, 6) T3C.Parent = Tab3Btn
 
@@ -156,7 +156,7 @@ Tab1Container.ZIndex = 6
 
 local AutoSoulBtn = Instance.new("TextButton")
 AutoSoulBtn.Parent = Tab1Container
-AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 AutoSoulBtn.BackgroundTransparency = 0.2
 AutoSoulBtn.Size = UDim2.new(1, 0, 0, 45)
 AutoSoulBtn.Font = Enum.Font.GothamBold
@@ -172,8 +172,8 @@ SoulStatus.BackgroundTransparency = 1
 SoulStatus.Position = UDim2.new(0, 0, 0.5, 0)
 SoulStatus.Size = UDim2.new(1, 0, 0.4, 0)
 SoulStatus.Font = Enum.Font.Gotham
-SoulStatus.Text = "Trạng thái: Lọc danh sách đen thông minh 100%."
-SoulStatus.TextColor3 = Color3.fromRGB(180, 180, 180)
+SoulStatus.Text = "Trạng thái: Camera cố định, quét linh hồn thông minh."
+SoulStatus.TextColor3 = Color3.fromRGB(220, 180, 180)
 SoulStatus.TextSize = 11
 SoulStatus.TextWrapped = true
 SoulStatus.TextYAlignment = Enum.TextYAlignment.Top
@@ -190,7 +190,7 @@ Tab2Container.ZIndex = 6
 
 local HopServerBtn = Instance.new("TextButton")
 HopServerBtn.Parent = Tab2Container
-HopServerBtn.BackgroundColor3 = Color3.fromRGB(40, 120, 200)
+HopServerBtn.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
 HopServerBtn.BackgroundTransparency = 0.2
 HopServerBtn.Size = UDim2.new(1, 0, 0, 45)
 HopServerBtn.Font = Enum.Font.GothamBold
@@ -207,13 +207,13 @@ HopDesc.Position = UDim2.new(0, 0, 0.5, 0)
 HopDesc.Size = UDim2.new(1, 0, 0.4, 0)
 HopDesc.Font = Enum.Font.Gotham
 HopDesc.Text = "Tự động tìm server trống để farm linh hồn độc quyền."
-HopDesc.TextColor3 = Color3.fromRGB(180, 180, 180)
+HopDesc.TextColor3 = Color3.fromRGB(220, 180, 180)
 HopDesc.TextSize = 11
 HopDesc.TextWrapped = true
 HopDesc.TextYAlignment = Enum.TextYAlignment.Top
 HopDesc.ZIndex = 6
 
--- Container Tab 3 (Fit Lag Xi Măng)
+-- Container Tab 3 (Fit Lag Xóa Map Trong Suốt)
 local Tab3Container = Instance.new("Frame")
 Tab3Container.Parent = MainFrame
 Tab3Container.BackgroundTransparency = 1
@@ -224,11 +224,11 @@ Tab3Container.ZIndex = 6
 
 local FitLagBtn = Instance.new("TextButton")
 FitLagBtn.Parent = Tab3Container
-FitLagBtn.BackgroundColor3 = Color3.fromRGB(50, 150, 100)
+FitLagBtn.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
 FitLagBtn.BackgroundTransparency = 0.2
 FitLagBtn.Size = UDim2.new(1, 0, 0, 45)
 FitLagBtn.Font = Enum.Font.GothamBold
-FitLagBtn.Text = "Fit Lag Đồ Họa Xi Măng: OFF"
+FitLagBtn.Text = "Fit Lag Xóa Map Trong Suốt: OFF"
 FitLagBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 FitLagBtn.TextSize = 11
 FitLagBtn.ZIndex = 6
@@ -240,8 +240,8 @@ FitLagDesc.BackgroundTransparency = 1
 FitLagDesc.Position = UDim2.new(0, 0, 0.5, 0)
 FitLagDesc.Size = UDim2.new(1, 0, 0.4, 0)
 FitLagDesc.Font = Enum.Font.Gotham
-FitLagDesc.Text = "Chuyển toàn bộ map sang chất liệu nhựa mịn/xi măng, xóa sạch hiệu ứng nặng."
-FitLagDesc.TextColor3 = Color3.fromRGB(180, 180, 180)
+FitLagDesc.Text = "Làm trong suốt map tải tài nguyên (vẫn đứng bình thường, giữ nguyên linh hồn)."
+FitLagDesc.TextColor3 = Color3.fromRGB(220, 180, 180)
 FitLagDesc.TextSize = 11
 FitLagDesc.TextWrapped = true
 FitLagDesc.TextYAlignment = Enum.TextYAlignment.Top
@@ -250,43 +250,53 @@ FitLagDesc.ZIndex = 6
 -- Chuyển Tab Logic
 Tab1Btn.MouseButton1Click:Connect(function()
     Tab1Container.Visible = true Tab2Container.Visible = false Tab3Container.Visible = false
-    Tab1Btn.BackgroundColor3 = Color3.fromRGB(50, 150, 255) Tab1Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45) Tab2Btn.TextColor3 = Color3.fromRGB(200, 200, 200)
-    Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45) Tab3Btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Tab1Btn.BackgroundColor3 = Color3.fromRGB(200, 40, 40) Tab1Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab2Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
+    Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab3Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 end)
 
 Tab2Btn.MouseButton1Click:Connect(function()
     Tab1Container.Visible = false Tab2Container.Visible = true Tab3Container.Visible = false
-    Tab2Btn.BackgroundColor3 = Color3.fromRGB(50, 150, 255) Tab2Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Tab1Btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45) Tab1Btn.TextColor3 = Color3.fromRGB(200, 200, 200)
-    Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45) Tab3Btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Tab2Btn.BackgroundColor3 = Color3.fromRGB(200, 40, 40) Tab2Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Tab1Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab1Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
+    Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab3Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 end)
 
 Tab3Btn.MouseButton1Click:Connect(function()
     Tab1Container.Visible = false Tab2Container.Visible = false Tab3Container.Visible = true
-    Tab3Btn.BackgroundColor3 = Color3.fromRGB(50, 150, 255) Tab3Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Tab1Btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45) Tab1Btn.TextColor3 = Color3.fromRGB(200, 200, 200)
-    Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45) Tab2Btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Tab3Btn.BackgroundColor3 = Color3.fromRGB(200, 40, 40) Tab3Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Tab1Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab1Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
+    Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab2Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 end)
 
--- Hiệu ứng mở/đóng menu xoay tròn bung ra siêu đẹp
+-- HIỆU ỨNG MỞ MENU SIÊU CẤP VIP PRO (Neon Glow, Scale & Spin mượt mà)
 local menuOpen = false
 ToggleMenuBtn.MouseButton1Click:Connect(function()
     menuOpen = not menuOpen
     if menuOpen then
         MainFrame.Visible = true
         MainFrame.Size = UDim2.new(0, 0, 0, 0)
-        MainFrame.Rotation = -60
+        MainFrame.Rotation = -180
         
-        TweenService:Create(MainFrame, TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 280, 0, 230),
+        -- Hiệu ứng bung nở đỉnh cao
+        TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, 290, 0, 240),
             Rotation = 0,
             Position = UDim2.new(0.5, 0, 0.5, 0)
         }):Play()
+
+        -- Hiệu ứng nhịp đập cho nút bấm
+        TweenService:Create(ToggleMenuBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, 130, 0, 42)
+        }):Play()
+        task.wait(0.15)
+        TweenService:Create(ToggleMenuBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, 125, 0, 40)
+        }):Play()
     else
-        local tw = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+        local tw = TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
             Size = UDim2.new(0, 0, 0, 0),
-            Rotation = 60
+            Rotation = 180
         })
         tw:Play()
         tw.Completed:Connect(function()
@@ -301,9 +311,9 @@ AutoSoulBtn.MouseButton1Click:Connect(function()
     if getgenv().kienConfig.AutoSoul then
         AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(50, 200, 90)
         AutoSoulBtn.Text = "Auto Soul (Smart Blacklist): ON"
-        SoulStatus.Text = "Trạng thái: Đang quét & lọc danh sách đen..."
+        SoulStatus.Text = "Trạng thái: Đang chạy ẩn danh (Camera cố định)..."
     else
-        AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+        AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
         AutoSoulBtn.Text = "Auto Soul (Smart Blacklist): OFF"
         SoulStatus.Text = "Trạng thái: Đã dừng hoạt động."
         camera.CameraType = Enum.CameraType.Custom
@@ -334,12 +344,12 @@ HopServerBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- Xử lý Fit Lag Đồ Họa Xi Măng
+-- Xử lý Fit Lag Xóa Map Trong Suốt (Giữ va chạm đứng được & Giữ nguyên linh hồn)
 FitLagBtn.MouseButton1Click:Connect(function()
     getgenv().kienConfig.FitLag = not getgenv().kienConfig.FitLag
     if getgenv().kienConfig.FitLag then
         FitLagBtn.BackgroundColor3 = Color3.fromRGB(50, 200, 90)
-        FitLagBtn.Text = "Fit Lag Đồ Họa Xi Măng: ON"
+        FitLagBtn.Text = "Fit Lag Xóa Map Trong Suốt: ON"
         pcall(function()
             Lighting.GlobalShadows = false
             Lighting.Brightness = 1
@@ -350,19 +360,26 @@ FitLagBtn.MouseButton1Click:Connect(function()
                 Terrain.WaterWaveSize = 0 
                 Terrain.WaterTransparency = 1
             end
-            -- Chuyển toàn bộ map sang đồ họa xi măng / nhựa mịn (SmoothPlastic)
+            -- Làm trong suốt map tải tài nguyên (giữ nguyên linh hồn, giữ nguyên va chạm để đứng bình thường)
             for _, v in pairs(workspace:GetDescendants()) do
-                if v:IsA("BasePart") then 
-                    v.Material = Enum.Material.SmoothPlastic
-                    v.Reflectance = 0
+                if v:IsA("BasePart") then
+                    -- Kiểm tra không làm ảnh hưởng đến linh hồn và nhân vật
+                    local isSoul = (v.Name == "GraveyardSoul" or v.Name:lower():find("soul"))
+                    local isPlayerPart = v:IsDescendantOf(player.Character or workspace)
+                    
+                    if not isSoul and not isPlayerPart then
+                        v.Transparency = 0.75 -- Làm mờ/trong suốt map để giảm tải
+                        v.Material = Enum.Material.SmoothPlastic
+                        v.Reflectance = 0
+                    end
                 elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") then 
                     v.Enabled = false 
                 end
             end
         end)
     else
-        FitLagBtn.BackgroundColor3 = Color3.fromRGB(50, 150, 100)
-        FitLagBtn.Text = "Fit Lag Đồ Họa Xi Măng: OFF"
+        FitLagBtn.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+        FitLagBtn.Text = "Fit Lag Xóa Map Trong Suốt: OFF"
     end
 end)
 
@@ -370,7 +387,7 @@ end)
 task.spawn(function()
     local lockedCameraCF = nil
     local isLockedCam = false
-    local blacklist = {} -- Danh sách đen lưu các linh hồn đã nhặt hoặc biến mất
+    local blacklist = {} -- Danh sách đen lưu linh hồn đã nhặt hoặc biến mất
 
     while true do
         task.wait(getgenv().kienConfig.Delay)
@@ -393,7 +410,7 @@ task.spawn(function()
                     local bestTarget = nil
                     local shortestDist = math.huge
 
-                    -- Dọn dẹp danh sách đen định kỳ nếu quá tải hoặc linh hồn đã thực sự bị xóa khỏi game
+                    -- Dọn dẹp danh sách đen định kỳ các linh hồn đã biến mất khỏi map
                     for obj, _ in pairs(blacklist) do
                         if not obj or not obj.Parent then
                             blacklist[obj] = nil
@@ -404,7 +421,6 @@ task.spawn(function()
                     for _, obj in pairs(workspace:GetDescendants()) do
                         if not getgenv().kienConfig.AutoSoul then break end
                         
-                        -- Chỉ xét các đối tượng linh hồn và KHÔNG nằm trong danh sách đen
                         if (obj.Name == "GraveyardSoul" or obj.Name:lower():find("soul")) and not blacklist[obj] then
                             local isPlayerRelated = false
                             local ancestor = obj.Parent
@@ -453,7 +469,7 @@ task.spawn(function()
                     end
 
                     if bestTarget then
-                        -- Đưa ngay lập tức linh hồn này vào danh sách đen để tuyệt đối không tele lại lần nữa
+                        -- Thêm ngay vào danh sách đen để không bao giờ tele lại cục đã nhặt/biến mất
                         blacklist[bestTarget.instance] = true
 
                         -- Teleport đến linh hồn
@@ -471,8 +487,7 @@ task.spawn(function()
                         }
                         remote:FireServer(unpack(args))
                     else
-                        -- Nếu quét hết map không còn linh hồn hợp lệ, reset nhẹ blacklist để quét vòng mới
-                        task.wait(0.2)
+                        task.wait(0.1)
                     end
                 end)
             else
