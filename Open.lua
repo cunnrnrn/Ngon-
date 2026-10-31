@@ -1,6 +1,6 @@
 --[[
-    Script Name: kiên 94 Hub Pro Max (Part 1 - Dragon Edition)
-    Features: Dragon 'K' Logo + Red Neon Glassmorphism UI + Multi-Fire Auto Soul + Smart Blacklist
+    Script Name: √12kientomato Hub Pro Max (Part 1 - Dragon Edition)
+    Features: Dragon 'K' Logo + Fast Teleport Auto Soul + Camera Lock + Super Fit Lag
 ]]
 
 local Players = game:GetService("Players")
@@ -17,7 +17,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 local camera = workspace.CurrentCamera
 local remote = ReplicatedStorage:WaitForChild("RideADinoNet", 5)
 
--- Anti-AFK chống văng game khi treo máy
+-- Anti-AFK
 local antiAfkConn = player.Idled:Connect(function()
     VirtualUser:CaptureController()
     VirtualUser:ClickButton2(Vector2.new())
@@ -26,11 +26,9 @@ end)
 getgenv().kienConfig = {
     AutoSoul = false,
     FitLag = false,
-    AutoTeleportBack = true,
     Delay = 0.01,
     SafeDistance = 10,
-    SavedPosition = nil,
-    SoulCount = 0
+    OriginCFrame = nil
 }
 
 -- Xóa GUI cũ nếu có
@@ -44,7 +42,7 @@ ScreenGui.Parent = playerGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Nút Bật/Tắt Menu cố định ở góc trái trên cùng với LOGO CHỮ K HÌNH CON RỒNG SIÊU ĐẸP
+-- Nút Bật/Tắt Menu cố định góc trái trên cùng (LOGO CHỮ K HÌNH CON RỒNG)
 local ToggleMenuBtn = Instance.new("TextButton")
 ToggleMenuBtn.Name = "ToggleMenuBtn"
 ToggleMenuBtn.Parent = ScreenGui
@@ -68,7 +66,7 @@ TBtnStroke.Transparency = 0.1
 TBtnStroke.Thickness = 2.5
 TBtnStroke.Parent = ToggleMenuBtn
 
--- Khung chính Menu (Glassmorphism Đỏ Ruby Vực Sâu)
+-- Khung chính Menu
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
@@ -93,7 +91,7 @@ UIStroke.Transparency = 0.2
 UIStroke.Thickness = 2.2
 UIStroke.Parent = MainFrame
 
--- Tiêu đề Menu & Nút điều khiển phụ (Thu gọn + Xóa vĩnh viễn)
+-- Tiêu đề Menu & Nút điều khiển phụ
 local Title = Instance.new("TextLabel")
 Title.Parent = MainFrame
 Title.BackgroundTransparency = 1
@@ -105,7 +103,7 @@ Title.TextColor3 = Color3.fromRGB(255, 80, 80)
 Title.TextSize = 12
 Title.ZIndex = 6
 
--- Nút Thu Gọn Menu (- Minify)
+-- Nút Thu Gọn Menu
 local MinimizeBtn = Instance.new("TextButton")
 MinimizeBtn.Parent = MainFrame
 MinimizeBtn.BackgroundColor3 = Color3.fromRGB(180, 100, 20)
@@ -133,7 +131,7 @@ DestroyBtn.TextSize = 11
 DestroyBtn.ZIndex = 6
 local DesCorner = Instance.new("UICorner") DesCorner.CornerRadius = UDim.new(0, 6) DesCorner.Parent = DestroyBtn
 
--- Thanh Tab chuyển đổi
+-- Thanh Tab
 local TabBar = Instance.new("Frame")
 TabBar.Parent = MainFrame
 TabBar.BackgroundTransparency = 1
@@ -176,7 +174,7 @@ Tab3Btn.TextSize = 9
 Tab3Btn.ZIndex = 6
 local T3C = Instance.new("UICorner") T3C.CornerRadius = UDim.new(0, 6) T3C.Parent = Tab3Btn
 --[[
-    Script Name: kiên 94 Hub Pro Max (Part 2 - Execution Engine)
+    Script Name: √12kientomato Hub Pro Max (Part 2 - Execution Engine)
 ]]
 
 -- Container Tab 1 (Auto Soul)
@@ -191,49 +189,23 @@ local AutoSoulBtn = Instance.new("TextButton")
 AutoSoulBtn.Parent = Tab1Container
 AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 AutoSoulBtn.BackgroundTransparency = 0.2
-AutoSoulBtn.Size = UDim2.new(1, 0, 0, 36)
+AutoSoulBtn.Size = UDim2.new(1, 0, 0, 48)
 AutoSoulBtn.Font = Enum.Font.GothamBold
-AutoSoulBtn.Text = "Auto Soul Multi-Fire (x5): OFF"
+AutoSoulBtn.Text = "Auto Soul (Siêu Tốc Ẩn Danh): OFF"
 AutoSoulBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 AutoSoulBtn.TextSize = 11
 AutoSoulBtn.ZIndex = 6
 local ASCorner = Instance.new("UICorner") ASCorner.CornerRadius = UDim.new(0, 8) ASCorner.Parent = AutoSoulBtn
 
-local SavePosBtn = Instance.new("TextButton")
-SavePosBtn.Parent = Tab1Container
-SavePosBtn.BackgroundColor3 = Color3.fromRGB(200, 120, 30)
-SavePosBtn.BackgroundTransparency = 0.2
-SavePosBtn.Position = UDim2.new(0, 0, 0.24, 0)
-SavePosBtn.Size = UDim2.new(1, 0, 0, 32)
-SavePosBtn.Font = Enum.Font.GothamBold
-SavePosBtn.Text = "Lưu Vị Trí Hiện Tại (0/1000)"
-SavePosBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-SavePosBtn.TextSize = 11
-SavePosBtn.ZIndex = 6
-local SPC = Instance.new("UICorner") SPC.CornerRadius = UDim.new(0, 6) SPC.Parent = SavePosBtn
-
-local ToggleTeleBackBtn = Instance.new("TextButton")
-ToggleTeleBackBtn.Parent = Tab1Container
-ToggleTeleBackBtn.BackgroundColor3 = Color3.fromRGB(40, 100, 180)
-ToggleTeleBackBtn.BackgroundTransparency = 0.2
-ToggleTeleBackBtn.Position = UDim2.new(0, 0, 0.46, 0)
-ToggleTeleBackBtn.Size = UDim2.new(1, 0, 0, 32)
-ToggleTeleBackBtn.Font = Enum.Font.GothamBold
-ToggleTeleBackBtn.Text = "Auto Về Vị Trí (Đủ 1000): BẬT"
-ToggleTeleBackBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ToggleTeleBackBtn.TextSize = 11
-ToggleTeleBackBtn.ZIndex = 6
-local TTBC = Instance.new("UICorner") TTBC.CornerRadius = UDim.new(0, 6) TTBC.Parent = ToggleTeleBackBtn
-
 local SoulStatus = Instance.new("TextLabel")
 SoulStatus.Parent = Tab1Container
 SoulStatus.BackgroundTransparency = 1
-SoulStatus.Position = UDim2.new(0, 0, 0.72, 0)
-SoulStatus.Size = UDim2.new(1, 0, 0.25, 0)
+SoulStatus.Position = UDim2.new(0, 0, 0.45, 0)
+SoulStatus.Size = UDim2.new(1, 0, 0.5, 0)
 SoulStatus.Font = Enum.Font.Gotham
-SoulStatus.Text = "Trạng thái: Sẵn sàng Multi-Fire nhặt nhanh..."
+SoulStatus.Text = "Trạng thái: Tự ghi nhớ vị trí, nhặt siêu tốc, tắt tự về chỗ cũ."
 SoulStatus.TextColor3 = Color3.fromRGB(220, 180, 180)
-SoulStatus.TextSize = 10
+SoulStatus.TextSize = 11
 SoulStatus.TextWrapped = true
 SoulStatus.TextYAlignment = Enum.TextYAlignment.Top
 SoulStatus.ZIndex = 6
@@ -299,7 +271,7 @@ FitLagDesc.BackgroundTransparency = 1
 FitLagDesc.Position = UDim2.new(0, 0, 0.5, 0)
 FitLagDesc.Size = UDim2.new(1, 0, 0.4, 0)
 FitLagDesc.Font = Enum.Font.Gotham
-FitLagDesc.Text = "Xóa hiệu ứng, sương mù, trong suốt map mượt mà (giữ nguyên linh hồn & đứng bình thường)."
+FitLagDesc.Text = "Xóa hiệu ứng, làm mờ map (giữ nguyên linh hồn & đứng bình thường)."
 FitLagDesc.TextColor3 = Color3.fromRGB(220, 180, 180)
 FitLagDesc.TextSize = 10
 FitLagDesc.TextWrapped = true
@@ -328,7 +300,7 @@ Tab3Btn.MouseButton1Click:Connect(function()
     Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 15, 15) Tab2Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 end)
 
--- HIỆU ỨNG MỞ MENU RỒNG ĐỎ VIP
+-- Hiệu ứng mở menu
 local menuOpen = false
 ToggleMenuBtn.MouseButton1Click:Connect(function()
     menuOpen = not menuOpen
@@ -338,7 +310,7 @@ ToggleMenuBtn.MouseButton1Click:Connect(function()
         MainFrame.Rotation = -180
         
         TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 290, 0, 260),
+            Size = UDim2.new(0, 290, 0, 230),
             Rotation = 0,
             Position = UDim2.new(0.5, 0, 0.5, 0)
         }):Play()
@@ -354,7 +326,7 @@ ToggleMenuBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- Nút Thu Gọn Menu (Minimize / Unminimize)
+-- Nút Thu Gọn Menu
 local isMinimized = false
 MinimizeBtn.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
@@ -365,11 +337,11 @@ MinimizeBtn.MouseButton1Click:Connect(function()
     MinimizeBtn.Text = isMinimized and "Hiện" or "Ẩn"
     
     TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        Size = isMinimized and UDim2.new(0, 290, 0, 50) or UDim2.new(0, 290, 0, 260)
+        Size = isMinimized and UDim2.new(0, 290, 0, 50) or UDim2.new(0, 290, 0, 230)
     }):Play()
 end)
 
--- Nút Xóa Vĩnh Viễn Script (Kill Switch - Hủy toàn bộ hoạt động, giải phóng RAM, xóa GUI)
+-- Nút Xóa Vĩnh Viễn Script
 DestroyBtn.MouseButton1Click:Connect(function()
     pcall(function()
         getgenv().kienConfig.AutoSoul = false
@@ -380,42 +352,30 @@ DestroyBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- Lưu Vị Trí
-SavePosBtn.MouseButton1Click:Connect(function()
-    local char = player.Character
-    if char and char:FindFirstChild("HumanoidRootPart") then
-        getgenv().kienConfig.SavedPosition = char.HumanoidRootPart.CFrame
-        SavePosBtn.TextColor3 = Color3.fromRGB(50, 255, 50)
-        SavePosBtn.Text = string.format("Đã lưu vị trí (%d/1000)", getgenv().kienConfig.SoulCount)
-        task.delay(1.5, function() 
-            SavePosBtn.TextColor3 = Color3.fromRGB(255, 255, 255) 
-            SavePosBtn.Text = string.format("Lưu Vị Trí Hiện Tại (%d/1000)", getgenv().kienConfig.SoulCount)
-        end)
-    end
-end)
-
-ToggleTeleBackBtn.MouseButton1Click:Connect(function()
-    getgenv().kienConfig.AutoTeleportBack = not getgenv().kienConfig.AutoTeleportBack
-    if getgenv().kienConfig.AutoTeleportBack then
-        ToggleTeleBackBtn.BackgroundColor3 = Color3.fromRGB(40, 100, 180)
-        ToggleTeleBackBtn.Text = "Auto Về Vị Trí (Đủ 1000): BẬT"
-    else
-        ToggleTeleBackBtn.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
-        ToggleTeleBackBtn.Text = "Auto Về Vị Trí (Đủ 1000): TẮT"
-    end
-end)
-
+-- Xử lý Auto Soul
 AutoSoulBtn.MouseButton1Click:Connect(function()
     getgenv().kienConfig.AutoSoul = not getgenv().kienConfig.AutoSoul
+    local char = player.Character
+    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+
     if getgenv().kienConfig.AutoSoul then
+        if hrp then
+            getgenv().kienConfig.OriginCFrame = hrp.CFrame
+        end
         AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(50, 200, 90)
-        AutoSoulBtn.Text = "Auto Soul Multi-Fire (x5): ON"
-        SoulStatus.Text = "Trạng thái: Đang nhặt siêu tốc Multi-Fire..."
+        AutoSoulBtn.Text = "Auto Soul (Siêu Tốc Ẩn Danh): ON"
+        SoulStatus.Text = "Trạng thái: Đang nhặt linh hồn siêu tốc..."
     else
         AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-        AutoSoulBtn.Text = "Auto Soul Multi-Fire (x5): OFF"
-        SoulStatus.Text = "Trạng thái: Đã dừng hoạt động."
+        AutoSoulBtn.Text = "Auto Soul (Siêu Tốc Ẩn Danh): OFF"
+        SoulStatus.Text = "Trạng thái: Đã tắt, đang về chỗ cũ..."
         camera.CameraType = Enum.CameraType.Custom
+
+        if hrp and getgenv().kienConfig.OriginCFrame then
+            hrp.CFrame = getgenv().kienConfig.OriginCFrame
+            task.wait(0.2)
+            SoulStatus.Text = "Trạng thái: Đã về lại chỗ cũ an toàn."
+        end
     end
 end)
 
@@ -453,7 +413,7 @@ FitLagBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- Vòng lặp Fit Lag An Toàn (Không bị xì nhạc / tràn bộ nhớ)
+-- Vòng lặp Fit Lag
 task.spawn(function()
     while true do
         task.wait(2)
@@ -489,7 +449,7 @@ task.spawn(function()
     end
 end)
 
--- Vòng lặp Auto Farm Multi-Fire + Smart Blacklist + Camera Lock (Tối ưu hóa chống kẹt/lag)
+-- Vòng lặp Auto Farm Siêu Tốc + Khóa Camera + Smart Blacklist
 task.spawn(function()
     local lockedCameraCF = nil
     local isLockedCam = false
@@ -502,15 +462,6 @@ task.spawn(function()
             local hrp = character.HumanoidRootPart
 
             if getgenv().kienConfig.AutoSoul and remote then
-                if getgenv().kienConfig.AutoTeleportBack and getgenv().kienConfig.SoulCount >= 1000 and getgenv().kienConfig.SavedPosition then
-                    SoulStatus.Text = "Đã đủ 1000 linh hồn! Đang tele về vị trí lưu..."
-                    hrp.CFrame = getgenv().kienConfig.SavedPosition
-                    task.wait(1.5)
-                    getgenv().kienConfig.SoulCount = 0
-                    SavePosBtn.Text = "Lưu Vị Trí Hiện Tại (0/1000)"
-                    return
-                end
-
                 if not isLockedCam then
                     lockedCameraCF = camera.CFrame
                     isLockedCam = true
@@ -582,6 +533,8 @@ task.spawn(function()
 
                     if bestTarget then
                         blacklist[bestTarget.instance] = true
+                        
+                        -- Dịch chuyển siêu tốc tới sát linh hồn để nhặt
                         hrp.CFrame = CFrame.new(bestTarget.position + Vector3.new(0, 2, 0))
                         
                         local args = {
@@ -596,9 +549,6 @@ task.spawn(function()
                         for i = 1, 5 do
                             remote:FireServer(unpack(args))
                         end
-
-                        getgenv().kienConfig.SoulCount = getgenv().kienConfig.SoulCount + 1
-                        SavePosBtn.Text = string.format("Lưu Vị Trí Hiện Tại (%d/1000)", getgenv().kienConfig.SoulCount)
                     else
                         task.wait(0.1)
                     end
