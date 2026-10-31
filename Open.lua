@@ -1,6 +1,6 @@
 --[[
-    Script Name: kiên 94 Hub Pro Max (Dynamic Streaming Fit Lag Edition)
-    Features: Red Neon Glassmorphism GUI + Real-time Streaming Map Cleaner + Smart Blacklist + Camera Lock
+    Script Name: kiên 94 Hub Pro Max (Multi-Fire & 1000 Soul Auto Return Edition)
+    Features: Multi-Fire Soul Remote (x5 Speed) + Auto Teleport Back at 1000 Souls + Super Fit Lag + Camera Lock
 ]]
 
 local Players = game:GetService("Players")
@@ -10,7 +10,6 @@ local VirtualUser = game:GetService("VirtualUser")
 local TweenService = game:GetService("TweenService")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
-local RunService = game:GetService("RunService")
 local Terrain = workspace:FindFirstChildOfClass("Terrain")
 
 local player = Players.LocalPlayer
@@ -27,8 +26,11 @@ end)
 getgenv().kienConfig = {
     AutoSoul = false,
     FitLag = false,
-    Delay = 0.015,
-    SafeDistance = 10
+    AutoTeleportBack = true,
+    Delay = 0.01,
+    SafeDistance = 10,
+    SavedPosition = nil,
+    SoulCount = 0
 }
 
 -- Xóa GUI cũ nếu có
@@ -107,7 +109,7 @@ Title.ZIndex = 6
 local TabBar = Instance.new("Frame")
 TabBar.Parent = MainFrame
 TabBar.BackgroundTransparency = 1
-TabBar.Position = UDim2.new(0.05, 0, 0.16, 0)
+TabBar.Position = UDim2.new(0.05, 0, 0.15, 0)
 TabBar.Size = UDim2.new(0.9, 0, 0, 28)
 TabBar.ZIndex = 6
 
@@ -140,9 +142,9 @@ Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20)
 Tab3Btn.Position = UDim2.new(0.68, 0, 0, 0)
 Tab3Btn.Size = UDim2.new(0.32, 0, 1, 0)
 Tab3Btn.Font = Enum.Font.GothamBold
-Tab3Btn.Text = "Fit Lag Map"
+Tab3Btn.Text = "Super Fit Lag"
 Tab3Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
-Tab3Btn.TextSize = 10
+Tab3Btn.TextSize = 9
 Tab3Btn.ZIndex = 6
 local T3C = Instance.new("UICorner") T3C.CornerRadius = UDim.new(0, 6) T3C.Parent = Tab3Btn
 
@@ -150,31 +152,59 @@ local T3C = Instance.new("UICorner") T3C.CornerRadius = UDim.new(0, 6) T3C.Paren
 local Tab1Container = Instance.new("Frame")
 Tab1Container.Parent = MainFrame
 Tab1Container.BackgroundTransparency = 1
-Tab1Container.Position = UDim2.new(0.05, 0, 0.28, 0)
-Tab1Container.Size = UDim2.new(0.9, 0, 0.68, 0)
+Tab1Container.Position = UDim2.new(0.05, 0, 0.27, 0)
+Tab1Container.Size = UDim2.new(0.9, 0, 0.7, 0)
 Tab1Container.ZIndex = 6
 
 local AutoSoulBtn = Instance.new("TextButton")
 AutoSoulBtn.Parent = Tab1Container
 AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 AutoSoulBtn.BackgroundTransparency = 0.2
-AutoSoulBtn.Size = UDim2.new(1, 0, 0, 45)
+AutoSoulBtn.Size = UDim2.new(1, 0, 0, 36)
 AutoSoulBtn.Font = Enum.Font.GothamBold
-AutoSoulBtn.Text = "Auto Soul (Smart Blacklist): OFF"
+AutoSoulBtn.Text = "Auto Soul Multi-Fire (x5): OFF"
 AutoSoulBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 AutoSoulBtn.TextSize = 11
 AutoSoulBtn.ZIndex = 6
 local ASCorner = Instance.new("UICorner") ASCorner.CornerRadius = UDim.new(0, 8) ASCorner.Parent = AutoSoulBtn
 
+-- Nút Lưu Vị Trí
+local SavePosBtn = Instance.new("TextButton")
+SavePosBtn.Parent = Tab1Container
+SavePosBtn.BackgroundColor3 = Color3.fromRGB(200, 120, 30)
+SavePosBtn.BackgroundTransparency = 0.2
+SavePosBtn.Position = UDim2.new(0, 0, 0.24, 0)
+SavePosBtn.Size = UDim2.new(1, 0, 0, 32)
+SavePosBtn.Font = Enum.Font.GothamBold
+SavePosBtn.Text = "Lưu Vị Trí Hiện Tại (0/1000)"
+SavePosBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+SavePosBtn.TextSize = 11
+SavePosBtn.ZIndex = 6
+local SPC = Instance.new("UICorner") SPC.CornerRadius = UDim.new(0, 6) SPC.Parent = SavePosBtn
+
+-- Nút Bật/Tắt Auto Về Vị Trí Khi Đủ 1000
+local ToggleTeleBackBtn = Instance.new("TextButton")
+ToggleTeleBackBtn.Parent = Tab1Container
+ToggleTeleBackBtn.BackgroundColor3 = Color3.fromRGB(40, 100, 180)
+ToggleTeleBackBtn.BackgroundTransparency = 0.2
+ToggleTeleBackBtn.Position = UDim2.new(0, 0, 0.46, 0)
+ToggleTeleBackBtn.Size = UDim2.new(1, 0, 0, 32)
+ToggleTeleBackBtn.Font = Enum.Font.GothamBold
+ToggleTeleBackBtn.Text = "Auto Về Vị Trí (Đủ 1000): BẬT"
+ToggleTeleBackBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleTeleBackBtn.TextSize = 11
+ToggleTeleBackBtn.ZIndex = 6
+local TTBC = Instance.new("UICorner") TTBC.CornerRadius = UDim.new(0, 6) TTBC.Parent = ToggleTeleBackBtn
+
 local SoulStatus = Instance.new("TextLabel")
 SoulStatus.Parent = Tab1Container
 SoulStatus.BackgroundTransparency = 1
-SoulStatus.Position = UDim2.new(0, 0, 0.5, 0)
-SoulStatus.Size = UDim2.new(1, 0, 0.4, 0)
+SoulStatus.Position = UDim2.new(0, 0, 0.72, 0)
+SoulStatus.Size = UDim2.new(1, 0, 0.25, 0)
 SoulStatus.Font = Enum.Font.Gotham
-SoulStatus.Text = "Trạng thái: Camera cố định, quét linh hồn thông minh."
+SoulStatus.Text = "Trạng thái: Sẵn sàng Multi-Fire nhặt nhanh..."
 SoulStatus.TextColor3 = Color3.fromRGB(220, 180, 180)
-SoulStatus.TextSize = 11
+SoulStatus.TextSize = 10
 SoulStatus.TextWrapped = true
 SoulStatus.TextYAlignment = Enum.TextYAlignment.Top
 SoulStatus.ZIndex = 6
@@ -183,8 +213,8 @@ SoulStatus.ZIndex = 6
 local Tab2Container = Instance.new("Frame")
 Tab2Container.Parent = MainFrame
 Tab2Container.BackgroundTransparency = 1
-Tab2Container.Position = UDim2.new(0.05, 0, 0.28, 0)
-Tab2Container.Size = UDim2.new(0.9, 0, 0.68, 0)
+Tab2Container.Position = UDim2.new(0.05, 0, 0.27, 0)
+Tab2Container.Size = UDim2.new(0.9, 0, 0.7, 0)
 Tab2Container.Visible = false
 Tab2Container.ZIndex = 6
 
@@ -213,12 +243,12 @@ HopDesc.TextWrapped = true
 HopDesc.TextYAlignment = Enum.TextYAlignment.Top
 HopDesc.ZIndex = 6
 
--- Container Tab 3 (Fit Lag Xóa Map Trong Suốt)
+-- Container Tab 3 (Super Fit Lag Siêu Mạnh)
 local Tab3Container = Instance.new("Frame")
 Tab3Container.Parent = MainFrame
 Tab3Container.BackgroundTransparency = 1
-Tab3Container.Position = UDim2.new(0.05, 0, 0.28, 0)
-Tab3Container.Size = UDim2.new(0.9, 0, 0.68, 0)
+Tab3Container.Position = UDim2.new(0.05, 0, 0.27, 0)
+Tab3Container.Size = UDim2.new(0.9, 0, 0.7, 0)
 Tab3Container.Visible = false
 Tab3Container.ZIndex = 6
 
@@ -228,7 +258,7 @@ FitLagBtn.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
 FitLagBtn.BackgroundTransparency = 0.2
 FitLagBtn.Size = UDim2.new(1, 0, 0, 45)
 FitLagBtn.Font = Enum.Font.GothamBold
-FitLagBtn.Text = "Fit Lag Xóa Map Trong Suốt: OFF"
+FitLagBtn.Text = "Super Fit Lag Mạnh Nhất: OFF"
 FitLagBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 FitLagBtn.TextSize = 11
 FitLagBtn.ZIndex = 6
@@ -240,9 +270,9 @@ FitLagDesc.BackgroundTransparency = 1
 FitLagDesc.Position = UDim2.new(0, 0, 0.5, 0)
 FitLagDesc.Size = UDim2.new(1, 0, 0.4, 0)
 FitLagDesc.Font = Enum.Font.Gotham
-FitLagDesc.Text = "Tự động làm trong suốt map liên tục theo thời gian thực (giữ nguyên linh hồn và đứng được)."
+FitLagDesc.Text = "Xóa toàn bộ hiệu ứng, sương mù, bóng đổ, làm mờ map liên tục theo thời gian thực (giữ nguyên linh hồn & đứng bình thường)."
 FitLagDesc.TextColor3 = Color3.fromRGB(220, 180, 180)
-FitLagDesc.TextSize = 11
+FitLagDesc.TextSize = 10
 FitLagDesc.TextWrapped = true
 FitLagDesc.TextYAlignment = Enum.TextYAlignment.Top
 FitLagDesc.ZIndex = 6
@@ -269,7 +299,7 @@ Tab3Btn.MouseButton1Click:Connect(function()
     Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab2Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 end)
 
--- HIỆU ỨNG MỞ MENU SIÊU CẤP VIP PRO (Neon Glow, Scale & Spin mượt mà)
+-- Hiệu ứng mở menu
 local menuOpen = false
 ToggleMenuBtn.MouseButton1Click:Connect(function()
     menuOpen = not menuOpen
@@ -279,17 +309,9 @@ ToggleMenuBtn.MouseButton1Click:Connect(function()
         MainFrame.Rotation = -180
         
         TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 290, 0, 240),
+            Size = UDim2.new(0, 290, 0, 260),
             Rotation = 0,
             Position = UDim2.new(0.5, 0, 0.5, 0)
-        }):Play()
-
-        TweenService:Create(ToggleMenuBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 130, 0, 42)
-        }):Play()
-        task.wait(0.15)
-        TweenService:Create(ToggleMenuBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 125, 0, 40)
         }):Play()
     else
         local tw = TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
@@ -303,16 +325,42 @@ ToggleMenuBtn.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Lưu Vị Trí
+SavePosBtn.MouseButton1Click:Connect(function()
+    local char = player.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        getgenv().kienConfig.SavedPosition = char.HumanoidRootPart.CFrame
+        SavePosBtn.TextColor3 = Color3.fromRGB(50, 255, 50)
+        SavePosBtn.Text = string.format("Đã lưu vị trí (%d/1000)", getgenv().kienConfig.SoulCount)
+        task.delay(1.5, function() 
+            SavePosBtn.TextColor3 = Color3.fromRGB(255, 255, 255) 
+            SavePosBtn.Text = string.format("Lưu Vị Trí Hiện Tại (%d/1000)", getgenv().kienConfig.SoulCount)
+        end)
+    end
+end)
+
+-- Nút Bật/Tắt Auto Tele Về Vị Trí Khi Đủ 1000
+ToggleTeleBackBtn.MouseButton1Click:Connect(function()
+    getgenv().kienConfig.AutoTeleportBack = not getgenv().kienConfig.AutoTeleportBack
+    if getgenv().kienConfig.AutoTeleportBack then
+        ToggleTeleBackBtn.BackgroundColor3 = Color3.fromRGB(40, 100, 180)
+        ToggleTeleBackBtn.Text = "Auto Về Vị Trí (Đủ 1000): BẬT"
+    else
+        ToggleTeleBackBtn.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
+        ToggleTeleBackBtn.Text = "Auto Về Vị Trí (Đủ 1000): TẮT"
+    end
+end)
+
 -- Xử lý Auto Soul
 AutoSoulBtn.MouseButton1Click:Connect(function()
     getgenv().kienConfig.AutoSoul = not getgenv().kienConfig.AutoSoul
     if getgenv().kienConfig.AutoSoul then
         AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(50, 200, 90)
-        AutoSoulBtn.Text = "Auto Soul (Smart Blacklist): ON"
-        SoulStatus.Text = "Trạng thái: Đang chạy ẩn danh (Camera cố định)..."
+        AutoSoulBtn.Text = "Auto Soul Multi-Fire (x5): ON"
+        SoulStatus.Text = "Trạng thái: Đang nhặt siêu tốc Multi-Fire..."
     else
         AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-        AutoSoulBtn.Text = "Auto Soul (Smart Blacklist): OFF"
+        AutoSoulBtn.Text = "Auto Soul Multi-Fire (x5): OFF"
         SoulStatus.Text = "Trạng thái: Đã dừng hoạt động."
         camera.CameraType = Enum.CameraType.Custom
     end
@@ -342,19 +390,19 @@ HopServerBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- Xử lý Fit Lag Xóa Map Trong Suốt (Chạy liên tục theo thời gian thực chống StreamingEnabled tải lại map)
+-- Xử lý Super Fit Lag
 FitLagBtn.MouseButton1Click:Connect(function()
     getgenv().kienConfig.FitLag = not getgenv().kienConfig.FitLag
     if getgenv().kienConfig.FitLag then
         FitLagBtn.BackgroundColor3 = Color3.fromRGB(50, 200, 90)
-        FitLagBtn.Text = "Fit Lag Xóa Map Trong Suốt: ON"
+        FitLagBtn.Text = "Super Fit Lag Mạnh Nhất: ON"
     else
         FitLagBtn.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
-        FitLagBtn.Text = "Fit Lag Xóa Map Trong Suốt: OFF"
+        FitLagBtn.Text = "Super Fit Lag Mạnh Nhất: OFF"
     end
 end)
 
--- Vòng lặp Real-time Fit Lag (Tự động xóa/làm trong suốt mọi map mới tải ra liên tục)
+-- Vòng lặp Real-time Super Fit Lag liên tục theo thời gian thực
 task.spawn(function()
     while true do
         task.wait(1)
@@ -362,6 +410,7 @@ task.spawn(function()
             pcall(function()
                 Lighting.GlobalShadows = false
                 Lighting.Brightness = 1
+                Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
                 for _, v in pairs(Lighting:GetChildren()) do 
                     if v:IsA("PostEffect") or v:IsA("Sky") or v:IsA("Atmosphere") then v.Enabled = false end 
                 end
@@ -380,7 +429,7 @@ task.spawn(function()
                             v.Material = Enum.Material.SmoothPlastic
                             v.Reflectance = 0
                         end
-                    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") then 
+                    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then 
                         v.Enabled = false 
                     end
                 end
@@ -389,11 +438,11 @@ task.spawn(function()
     end
 end)
 
--- Vòng lặp Auto Farm thông minh với Smart Blacklist & Khóa Camera
+-- Vòng lặp Auto Farm Multi-Fire (x5 Remote) + Tự động tele về khi đủ 1000 điểm
 task.spawn(function()
     local lockedCameraCF = nil
     local isLockedCam = false
-    local blacklist = {} -- Danh sách đen lưu linh hồn đã nhặt hoặc biến mất
+    local blacklist = {}
 
     while true do
         task.wait(getgenv().kienConfig.Delay)
@@ -402,6 +451,16 @@ task.spawn(function()
             local hrp = character.HumanoidRootPart
 
             if getgenv().kienConfig.AutoSoul and remote then
+                -- Kiểm tra đủ 1000 linh hồn để tự động tele về vị trí đã lưu
+                if getgenv().kienConfig.AutoTeleportBack and getgenv().kienConfig.SoulCount >= 1000 and getgenv().kienConfig.SavedPosition then
+                    SoulStatus.Text = "Đã đủ 1000 linh hồn! Đang tele về vị trí lưu..."
+                    hrp.CFrame = getgenv().kienConfig.SavedPosition
+                    task.wait(1.5)
+                    getgenv().kienConfig.SoulCount = 0
+                    SavePosBtn.Text = "Lưu Vị Trí Hiện Tại (0/1000)"
+                    return
+                end
+
                 if not isLockedCam then
                     lockedCameraCF = camera.CFrame
                     isLockedCam = true
@@ -416,14 +475,12 @@ task.spawn(function()
                     local bestTarget = nil
                     local shortestDist = math.huge
 
-                    -- Dọn dẹp danh sách đen định kỳ các linh hồn đã biến mất khỏi map
                     for obj, _ in pairs(blacklist) do
                         if not obj or not obj.Parent then
                             blacklist[obj] = nil
                         end
                     end
 
-                    -- Quét toàn bộ map tìm linh hồn
                     for _, obj in pairs(workspace:GetDescendants()) do
                         if not getgenv().kienConfig.AutoSoul then break end
                         
@@ -450,7 +507,6 @@ task.spawn(function()
                                 end
 
                                 if pos then
-                                    -- Kiểm tra né người chơi khác (bán kính 10m)
                                     local tooCloseToOtherPlayer = false
                                     for _, otherPlayer in pairs(Players:GetPlayers()) do
                                         if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
@@ -475,13 +531,10 @@ task.spawn(function()
                     end
 
                     if bestTarget then
-                        -- Thêm ngay vào danh sách đen để không bao giờ tele lại cục đã nhặt/biến mất
                         blacklist[bestTarget.instance] = true
-
-                        -- Teleport đến linh hồn
                         hrp.CFrame = CFrame.new(bestTarget.position + Vector3.new(0, 2, 0))
                         
-                        -- Gửi lệnh nhặt lên server
+                        -- MULTI-FIRE REMOTE: Gửi liên tiếp 5 lệnh nhặt trong chớp mắt
                         local args = {
                             "GraveyardSoul",
                             {
@@ -491,7 +544,12 @@ task.spawn(function()
                                 slot = 129
                             }
                         }
-                        remote:FireServer(unpack(args))
+                        for i = 1, 5 do
+                            remote:FireServer(unpack(args))
+                        end
+
+                        getgenv().kienConfig.SoulCount = getgenv().kienConfig.SoulCount + 1
+                        SavePosBtn.Text = string.format("Lưu Vị Trí Hiện Tại (%d/1000)", getgenv().kienConfig.SoulCount)
                     else
                         task.wait(0.1)
                     end
