@@ -1,6 +1,6 @@
 --[[
-    Script Name: kiên 94 Hub Pro Max (Ultimate Red VIP Edition)
-    Features: Red Neon Glassmorphism GUI + Transparent Map Fit Lag (Keeps Collisions & Souls) + Smart Blacklist + Camera Lock
+    Script Name: kiên 94 Hub Pro Max (Fixed Transparent Map Edition)
+    Features: Red Neon Glassmorphism GUI + Full Transparent Map Fit Lag (Keeps Collisions & Souls) + Smart Blacklist + Camera Lock
 ]]
 
 local Players = game:GetService("Players")
@@ -278,14 +278,12 @@ ToggleMenuBtn.MouseButton1Click:Connect(function()
         MainFrame.Size = UDim2.new(0, 0, 0, 0)
         MainFrame.Rotation = -180
         
-        -- Hiệu ứng bung nở đỉnh cao
         TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
             Size = UDim2.new(0, 290, 0, 240),
             Rotation = 0,
             Position = UDim2.new(0.5, 0, 0.5, 0)
         }):Play()
 
-        -- Hiệu ứng nhịp đập cho nút bấm
         TweenService:Create(ToggleMenuBtn, TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
             Size = UDim2.new(0, 130, 0, 42)
         }):Play()
@@ -344,7 +342,7 @@ HopServerBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- Xử lý Fit Lag Xóa Map Trong Suốt (Giữ va chạm đứng được & Giữ nguyên linh hồn)
+-- Xử lý Fit Lag Xóa Map Trong Suốt (Quét toàn bộ workspace làm trong suốt map, giữ va chạm và giữ nguyên linh hồn)
 FitLagBtn.MouseButton1Click:Connect(function()
     getgenv().kienConfig.FitLag = not getgenv().kienConfig.FitLag
     if getgenv().kienConfig.FitLag then
@@ -360,26 +358,43 @@ FitLagBtn.MouseButton1Click:Connect(function()
                 Terrain.WaterWaveSize = 0 
                 Terrain.WaterTransparency = 1
             end
-            -- Làm trong suốt map tải tài nguyên (giữ nguyên linh hồn, giữ nguyên va chạm để đứng bình thường)
-            for _, v in pairs(workspace:GetDescendants()) do
-                if v:IsA("BasePart") then
-                    -- Kiểm tra không làm ảnh hưởng đến linh hồn và nhân vật
-                    local isSoul = (v.Name == "GraveyardSoul" or v.Name:lower():find("soul"))
-                    local isPlayerPart = v:IsDescendantOf(player.Character or workspace)
-                    
-                    if not isSoul and not isPlayerPart then
-                        v.Transparency = 0.75 -- Làm mờ/trong suốt map để giảm tải
-                        v.Material = Enum.Material.SmoothPlastic
-                        v.Reflectance = 0
+            
+            -- Hàm đệ quy quét toàn bộ thư mục/model để làm trong suốt map nhưng giữ nguyên va chạm & linh hồn
+            local function makeTransparent(parent)
+                for _, v in pairs(parent:GetChildren()) do
+                    if v:IsA("BasePart") then
+                        local isSoul = (v.Name == "GraveyardSoul" or v.Name:lower():find("soul"))
+                        local isPlayerPart = v:IsDescendantOf(player.Character or workspace)
+                        
+                        if not isSoul and not isPlayerPart then
+                            v.Transparency = 0.85 -- Làm mờ map tải tài nguyên gần như vô hình nhưng vẫn đứng được
+                            v.Material = Enum.Material.SmoothPlastic
+                            v.Reflectance = 0
+                        end
+                    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") then 
+                        v.Enabled = false 
                     end
-                elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") then 
-                    v.Enabled = false 
+                    
+                    -- Tiếp tục quét sâu vào bên trong các Model hoặc Folder con
+                    if #v:GetChildren() > 0 then
+                        makeTransparent(v)
+                    end
                 end
             end
+            
+            makeTransparent(workspace)
         end)
     else
         FitLagBtn.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
         FitLagBtn.Text = "Fit Lag Xóa Map Trong Suốt: OFF"
+        -- Khôi phục lại trạng thái map ban đầu nếu tắt
+        pcall(function()
+            for _, v in pairs(workspace:GetDescendants()) do
+                if v:IsA("BasePart") and not v:IsDescendantOf(player.Character or workspace) then
+                    v.Transparency = 0
+                end
+            end
+        end)
     end
 end)
 
