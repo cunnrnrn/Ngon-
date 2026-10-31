@@ -1,6 +1,6 @@
 --[[
-    Script Name: kiên 94 Hub Pro Max (Multi-Fire & 1000 Soul Auto Return Edition)
-    Features: Multi-Fire Soul Remote (x5 Speed) + Auto Teleport Back at 1000 Souls + Super Fit Lag + Camera Lock
+    Script Name: kiên 94 Hub Pro Max (Part 1 - Dragon Edition)
+    Features: Dragon 'K' Logo + Red Neon Glassmorphism UI + Multi-Fire Auto Soul + Smart Blacklist
 ]]
 
 local Players = game:GetService("Players")
@@ -18,7 +18,7 @@ local camera = workspace.CurrentCamera
 local remote = ReplicatedStorage:WaitForChild("RideADinoNet", 5)
 
 -- Anti-AFK chống văng game khi treo máy
-player.Idled:Connect(function()
+local antiAfkConn = player.Idled:Connect(function()
     VirtualUser:CaptureController()
     VirtualUser:ClickButton2(Vector2.new())
 end)
@@ -44,36 +44,36 @@ ScreenGui.Parent = playerGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Nút Bật/Tắt Menu (Tone màu Đỏ VIP) ở góc trái trên cùng
+-- Nút Bật/Tắt Menu cố định ở góc trái trên cùng với LOGO CHỮ K HÌNH CON RỒNG SIÊU ĐẸP
 local ToggleMenuBtn = Instance.new("TextButton")
 ToggleMenuBtn.Name = "ToggleMenuBtn"
 ToggleMenuBtn.Parent = ScreenGui
-ToggleMenuBtn.BackgroundColor3 = Color3.fromRGB(35, 10, 10)
-ToggleMenuBtn.BackgroundTransparency = 0.2
+ToggleMenuBtn.BackgroundColor3 = Color3.fromRGB(30, 8, 8)
+ToggleMenuBtn.BackgroundTransparency = 0.15
 ToggleMenuBtn.Position = UDim2.new(0, 15, 0, 15)
-ToggleMenuBtn.Size = UDim2.new(0, 125, 0, 40)
+ToggleMenuBtn.Size = UDim2.new(0, 135, 0, 42)
 ToggleMenuBtn.Font = Enum.Font.GothamBold
-ToggleMenuBtn.Text = "🔥 kiên 94 Hub"
-ToggleMenuBtn.TextColor3 = Color3.fromRGB(255, 80, 80)
+ToggleMenuBtn.Text = "🐉 [ K ] DRAGON"
+ToggleMenuBtn.TextColor3 = Color3.fromRGB(255, 60, 60)
 ToggleMenuBtn.TextSize = 13
 ToggleMenuBtn.ZIndex = 10
 
 local TBtnCorner = Instance.new("UICorner")
-TBtnCorner.CornerRadius = UDim.new(0, 10)
+TBtnCorner.CornerRadius = UDim.new(0, 12)
 TBtnCorner.Parent = ToggleMenuBtn
 
 local TBtnStroke = Instance.new("UIStroke")
-TBtnStroke.Color = Color3.fromRGB(255, 50, 50)
-TBtnStroke.Transparency = 0.2
-TBtnStroke.Thickness = 2
+TBtnStroke.Color = Color3.fromRGB(255, 30, 30)
+TBtnStroke.Transparency = 0.1
+TBtnStroke.Thickness = 2.5
 TBtnStroke.Parent = ToggleMenuBtn
 
--- Khung chính Menu (Glassmorphism Đỏ Ruby cực đẹp)
+-- Khung chính Menu (Glassmorphism Đỏ Ruby Vực Sâu)
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(25, 12, 12)
-MainFrame.BackgroundTransparency = 0.25
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 8, 8)
+MainFrame.BackgroundTransparency = 0.2
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.Size = UDim2.new(0, 0, 0, 0)
@@ -88,28 +88,56 @@ UICorner.CornerRadius = UDim.new(0, 18)
 UICorner.Parent = MainFrame
 
 local UIStroke = Instance.new("UIStroke")
-UIStroke.Color = Color3.fromRGB(255, 60, 60)
-UIStroke.Transparency = 0.3
-UIStroke.Thickness = 2
+UIStroke.Color = Color3.fromRGB(255, 50, 50)
+UIStroke.Transparency = 0.2
+UIStroke.Thickness = 2.2
 UIStroke.Parent = MainFrame
 
--- Tiêu đề Menu
+-- Tiêu đề Menu & Nút điều khiển phụ (Thu gọn + Xóa vĩnh viễn)
 local Title = Instance.new("TextLabel")
 Title.Parent = MainFrame
 Title.BackgroundTransparency = 1
-Title.Position = UDim2.new(0, 0, 0, 10)
-Title.Size = UDim2.new(1, 0, 0, 28)
+Title.Position = UDim2.new(0, 0, 0, 8)
+Title.Size = UDim2.new(0.65, 0, 0, 28)
 Title.Font = Enum.Font.GothamBold
-Title.Text = "👑 KIÊN 94 HUB PRO MAX 👑"
-Title.TextColor3 = Color3.fromRGB(255, 90, 90)
-Title.TextSize = 14
+Title.Text = "⚡ KIÊN 94 DRAGON HUB ⚡"
+Title.TextColor3 = Color3.fromRGB(255, 80, 80)
+Title.TextSize = 12
 Title.ZIndex = 6
+
+-- Nút Thu Gọn Menu (- Minify)
+local MinimizeBtn = Instance.new("TextButton")
+MinimizeBtn.Parent = MainFrame
+MinimizeBtn.BackgroundColor3 = Color3.fromRGB(180, 100, 20)
+MinimizeBtn.BackgroundTransparency = 0.2
+MinimizeBtn.Position = UDim2.new(0.67, 0, 0, 8)
+MinimizeBtn.Size = UDim2.new(0, 48, 0, 26)
+MinimizeBtn.Font = Enum.Font.GothamBold
+MinimizeBtn.Text = "Ẩn"
+MinimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+MinimizeBtn.TextSize = 11
+MinimizeBtn.ZIndex = 6
+local MinCorner = Instance.new("UICorner") MinCorner.CornerRadius = UDim.new(0, 6) MinCorner.Parent = MinimizeBtn
+
+-- Nút Xóa Vĩnh Viễn Script (Kill Switch)
+local DestroyBtn = Instance.new("TextButton")
+DestroyBtn.Parent = MainFrame
+DestroyBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
+DestroyBtn.BackgroundTransparency = 0.2
+DestroyBtn.Position = UDim2.new(0.84, 0, 0, 8)
+DestroyBtn.Size = UDim2.new(0, 38, 0, 26)
+DestroyBtn.Font = Enum.Font.GothamBold
+DestroyBtn.Text = "Xóa"
+DestroyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+DestroyBtn.TextSize = 11
+DestroyBtn.ZIndex = 6
+local DesCorner = Instance.new("UICorner") DesCorner.CornerRadius = UDim.new(0, 6) DesCorner.Parent = DestroyBtn
 
 -- Thanh Tab chuyển đổi
 local TabBar = Instance.new("Frame")
 TabBar.Parent = MainFrame
 TabBar.BackgroundTransparency = 1
-TabBar.Position = UDim2.new(0.05, 0, 0.15, 0)
+TabBar.Position = UDim2.new(0.05, 0, 0.16, 0)
 TabBar.Size = UDim2.new(0.9, 0, 0, 28)
 TabBar.ZIndex = 6
 
@@ -126,7 +154,7 @@ local T1C = Instance.new("UICorner") T1C.CornerRadius = UDim.new(0, 6) T1C.Paren
 
 local Tab2Btn = Instance.new("TextButton")
 Tab2Btn.Parent = TabBar
-Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20)
+Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 15, 15)
 Tab2Btn.Position = UDim2.new(0.34, 0, 0, 0)
 Tab2Btn.Size = UDim2.new(0.32, 0, 1, 0)
 Tab2Btn.Font = Enum.Font.GothamBold
@@ -138,7 +166,7 @@ local T2C = Instance.new("UICorner") T2C.CornerRadius = UDim.new(0, 6) T2C.Paren
 
 local Tab3Btn = Instance.new("TextButton")
 Tab3Btn.Parent = TabBar
-Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20)
+Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 15, 15)
 Tab3Btn.Position = UDim2.new(0.68, 0, 0, 0)
 Tab3Btn.Size = UDim2.new(0.32, 0, 1, 0)
 Tab3Btn.Font = Enum.Font.GothamBold
@@ -147,6 +175,9 @@ Tab3Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 Tab3Btn.TextSize = 9
 Tab3Btn.ZIndex = 6
 local T3C = Instance.new("UICorner") T3C.CornerRadius = UDim.new(0, 6) T3C.Parent = Tab3Btn
+--[[
+    Script Name: kiên 94 Hub Pro Max (Part 2 - Execution Engine)
+]]
 
 -- Container Tab 1 (Auto Soul)
 local Tab1Container = Instance.new("Frame")
@@ -168,7 +199,6 @@ AutoSoulBtn.TextSize = 11
 AutoSoulBtn.ZIndex = 6
 local ASCorner = Instance.new("UICorner") ASCorner.CornerRadius = UDim.new(0, 8) ASCorner.Parent = AutoSoulBtn
 
--- Nút Lưu Vị Trí
 local SavePosBtn = Instance.new("TextButton")
 SavePosBtn.Parent = Tab1Container
 SavePosBtn.BackgroundColor3 = Color3.fromRGB(200, 120, 30)
@@ -182,7 +212,6 @@ SavePosBtn.TextSize = 11
 SavePosBtn.ZIndex = 6
 local SPC = Instance.new("UICorner") SPC.CornerRadius = UDim.new(0, 6) SPC.Parent = SavePosBtn
 
--- Nút Bật/Tắt Auto Về Vị Trí Khi Đủ 1000
 local ToggleTeleBackBtn = Instance.new("TextButton")
 ToggleTeleBackBtn.Parent = Tab1Container
 ToggleTeleBackBtn.BackgroundColor3 = Color3.fromRGB(40, 100, 180)
@@ -243,7 +272,7 @@ HopDesc.TextWrapped = true
 HopDesc.TextYAlignment = Enum.TextYAlignment.Top
 HopDesc.ZIndex = 6
 
--- Container Tab 3 (Super Fit Lag Siêu Mạnh)
+-- Container Tab 3 (Super Fit Lag)
 local Tab3Container = Instance.new("Frame")
 Tab3Container.Parent = MainFrame
 Tab3Container.BackgroundTransparency = 1
@@ -270,7 +299,7 @@ FitLagDesc.BackgroundTransparency = 1
 FitLagDesc.Position = UDim2.new(0, 0, 0.5, 0)
 FitLagDesc.Size = UDim2.new(1, 0, 0.4, 0)
 FitLagDesc.Font = Enum.Font.Gotham
-FitLagDesc.Text = "Xóa toàn bộ hiệu ứng, sương mù, bóng đổ, làm mờ map liên tục theo thời gian thực (giữ nguyên linh hồn & đứng bình thường)."
+FitLagDesc.Text = "Xóa hiệu ứng, sương mù, trong suốt map mượt mà (giữ nguyên linh hồn & đứng bình thường)."
 FitLagDesc.TextColor3 = Color3.fromRGB(220, 180, 180)
 FitLagDesc.TextSize = 10
 FitLagDesc.TextWrapped = true
@@ -281,25 +310,25 @@ FitLagDesc.ZIndex = 6
 Tab1Btn.MouseButton1Click:Connect(function()
     Tab1Container.Visible = true Tab2Container.Visible = false Tab3Container.Visible = false
     Tab1Btn.BackgroundColor3 = Color3.fromRGB(200, 40, 40) Tab1Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab2Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
-    Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab3Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
+    Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 15, 15) Tab2Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
+    Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 15, 15) Tab3Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 end)
 
 Tab2Btn.MouseButton1Click:Connect(function()
     Tab1Container.Visible = false Tab2Container.Visible = true Tab3Container.Visible = false
     Tab2Btn.BackgroundColor3 = Color3.fromRGB(200, 40, 40) Tab2Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Tab1Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab1Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
-    Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab3Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
+    Tab1Btn.BackgroundColor3 = Color3.fromRGB(45, 15, 15) Tab1Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
+    Tab3Btn.BackgroundColor3 = Color3.fromRGB(45, 15, 15) Tab3Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 end)
 
 Tab3Btn.MouseButton1Click:Connect(function()
     Tab1Container.Visible = false Tab2Container.Visible = false Tab3Container.Visible = true
     Tab3Btn.BackgroundColor3 = Color3.fromRGB(200, 40, 40) Tab3Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Tab1Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab1Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
-    Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 20, 20) Tab2Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
+    Tab1Btn.BackgroundColor3 = Color3.fromRGB(45, 15, 15) Tab1Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
+    Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 15, 15) Tab2Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 end)
 
--- Hiệu ứng mở menu
+-- HIỆU ỨNG MỞ MENU RỒNG ĐỎ VIP
 local menuOpen = false
 ToggleMenuBtn.MouseButton1Click:Connect(function()
     menuOpen = not menuOpen
@@ -325,6 +354,32 @@ ToggleMenuBtn.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Nút Thu Gọn Menu (Minimize / Unminimize)
+local isMinimized = false
+MinimizeBtn.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized
+    Tab1Container.Visible = not isMinimized
+    Tab2Container.Visible = false
+    Tab3Container.Visible = false
+    TabBar.Visible = not isMinimized
+    MinimizeBtn.Text = isMinimized and "Hiện" or "Ẩn"
+    
+    TweenService:Create(MainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Size = isMinimized and UDim2.new(0, 290, 0, 50) or UDim2.new(0, 290, 0, 260)
+    }):Play()
+end)
+
+-- Nút Xóa Vĩnh Viễn Script (Kill Switch - Hủy toàn bộ hoạt động, giải phóng RAM, xóa GUI)
+DestroyBtn.MouseButton1Click:Connect(function()
+    pcall(function()
+        getgenv().kienConfig.AutoSoul = false
+        getgenv().kienConfig.FitLag = false
+        if antiAfkConn then antiAfkConn:Disconnect() end
+        camera.CameraType = Enum.CameraType.Custom
+        ScreenGui:Destroy()
+    end)
+end)
+
 -- Lưu Vị Trí
 SavePosBtn.MouseButton1Click:Connect(function()
     local char = player.Character
@@ -339,7 +394,6 @@ SavePosBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- Nút Bật/Tắt Auto Tele Về Vị Trí Khi Đủ 1000
 ToggleTeleBackBtn.MouseButton1Click:Connect(function()
     getgenv().kienConfig.AutoTeleportBack = not getgenv().kienConfig.AutoTeleportBack
     if getgenv().kienConfig.AutoTeleportBack then
@@ -351,7 +405,6 @@ ToggleTeleBackBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- Xử lý Auto Soul
 AutoSoulBtn.MouseButton1Click:Connect(function()
     getgenv().kienConfig.AutoSoul = not getgenv().kienConfig.AutoSoul
     if getgenv().kienConfig.AutoSoul then
@@ -366,7 +419,6 @@ AutoSoulBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- Xử lý Hop Server
 HopServerBtn.MouseButton1Click:Connect(function()
     HopDesc.Text = "Đang quét tìm server ít người..."
     pcall(function()
@@ -390,7 +442,6 @@ HopServerBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- Xử lý Super Fit Lag
 FitLagBtn.MouseButton1Click:Connect(function()
     getgenv().kienConfig.FitLag = not getgenv().kienConfig.FitLag
     if getgenv().kienConfig.FitLag then
@@ -402,10 +453,10 @@ FitLagBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- Vòng lặp Real-time Super Fit Lag liên tục theo thời gian thực
+-- Vòng lặp Fit Lag An Toàn (Không bị xì nhạc / tràn bộ nhớ)
 task.spawn(function()
     while true do
-        task.wait(1)
+        task.wait(2)
         if getgenv().kienConfig.FitLag then
             pcall(function()
                 Lighting.GlobalShadows = false
@@ -438,7 +489,7 @@ task.spawn(function()
     end
 end)
 
--- Vòng lặp Auto Farm Multi-Fire (x5 Remote) + Tự động tele về khi đủ 1000 điểm
+-- Vòng lặp Auto Farm Multi-Fire + Smart Blacklist + Camera Lock (Tối ưu hóa chống kẹt/lag)
 task.spawn(function()
     local lockedCameraCF = nil
     local isLockedCam = false
@@ -451,7 +502,6 @@ task.spawn(function()
             local hrp = character.HumanoidRootPart
 
             if getgenv().kienConfig.AutoSoul and remote then
-                -- Kiểm tra đủ 1000 linh hồn để tự động tele về vị trí đã lưu
                 if getgenv().kienConfig.AutoTeleportBack and getgenv().kienConfig.SoulCount >= 1000 and getgenv().kienConfig.SavedPosition then
                     SoulStatus.Text = "Đã đủ 1000 linh hồn! Đang tele về vị trí lưu..."
                     hrp.CFrame = getgenv().kienConfig.SavedPosition
@@ -534,7 +584,6 @@ task.spawn(function()
                         blacklist[bestTarget.instance] = true
                         hrp.CFrame = CFrame.new(bestTarget.position + Vector3.new(0, 2, 0))
                         
-                        -- MULTI-FIRE REMOTE: Gửi liên tiếp 5 lệnh nhặt trong chớp mắt
                         local args = {
                             "GraveyardSoul",
                             {
