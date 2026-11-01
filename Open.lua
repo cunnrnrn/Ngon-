@@ -30,7 +30,8 @@ getgenv().kienConfig = {
     AutoReturnHome = true,
     FitLag = false,
     RequiredSouls = 500,
-    TeleportCount = 0
+    TeleportCount = 0,
+    StartCFrame = nil
 }
 
 player.Idled:Connect(function()
@@ -48,10 +49,11 @@ gui.IgnoreGuiInset = true
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 gui.Parent = playerGui
 
+-- NÚT K ĐẶT GẦN VÙNG DELTA KHI XOAY NGANG (GÓC DƯỚI BÊN TRÁI)
 local openBtn = Instance.new("TextButton")
 openBtn.Name = "OpenButton"
 openBtn.Size = UDim2.fromOffset(42, 42)
-openBtn.Position = UDim2.new(0.05, 0, 0.8, 0)
+openBtn.Position = UDim2.new(0.02, 0, 0.75, 0)
 openBtn.BackgroundColor3 = Color3.fromRGB(10, 10, 14)
 openBtn.Text = "K"
 openBtn.TextColor3 = Color3.fromRGB(255, 48, 75)
@@ -153,7 +155,7 @@ local subTitle = Instance.new("TextLabel")
 subTitle.Position = UDim2.new(0, 12, 0, 24)
 subTitle.Size = UDim2.new(0, 300, 0, 14)
 subTitle.BackgroundTransparency = 1
-subTitle.Text = "BLACK NEBULA  •  INSTANT BLACKLIST ENGINE"
+subTitle.Text = "BLACK NEBULA  •  ULTIMATE AUTO LOOP ENGINE"
 subTitle.TextColor3 = Color3.fromRGB(145, 145, 160)
 subTitle.TextXAlignment = Enum.TextXAlignment.Left
 subTitle.Font = Enum.Font.GothamMedium
@@ -221,6 +223,8 @@ local mainGui = playerGui:WaitForChild("KEY_Lop94")
 local mainFrame = mainGui:WaitForChild("Main")
 local sidebar = mainFrame:WaitForChild("Sidebar")
 local contentArea = mainFrame:WaitForChild("ContentArea")
+
+local camera = workspace.CurrentCamera
 
 local function createTabFrame(name)
     local scroll = Instance.new("ScrollingFrame")
@@ -352,22 +356,40 @@ addTabButton("📌 THÔNG TIN", tabInfoFrame, 3)
 local counterLabel = Instance.new("TextLabel")
 counterLabel.Size = UDim2.new(1, -4, 0, 28)
 counterLabel.BackgroundColor3 = Color3.fromRGB(20, 8, 8)
-counterLabel.Text = "Số lần Teleport linh hồn: 0 / 500"
+counterLabel.Text = "Số lần Teleport nhặt soul: 0 / 500"
 counterLabel.TextColor3 = Color3.fromRGB(255, 220, 100)
 counterLabel.Font = Enum.Font.GothamBold
 counterLabel.TextSize = 10
 counterLabel.Parent = tabFarmFrame
 local clCorner = Instance.new("UICorner") clCorner.CornerRadius = UDim.new(0, 6) clCorner.Parent = counterLabel
 
-addToggle(tabFarmFrame, "Auto Radar Teleport Soul", "Teleport tức thì & cho vào danh sách đen ngay.", false, function(v)
+local isLockCam = false
+local lockedCamCFrame = nil
+
+addToggle(tabFarmFrame, "Auto Radar Teleport Soul", "Khóa Cam cố định, Teleport nhặt & trả về vị trí cũ.", false, function(v)
     getgenv().kienConfig.AutoSoul = v
+    local char = player.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        if v then
+            -- Lưu lại vị trí bắt đầu bật script để quay về khi tắt
+            getgenv().kienConfig.StartCFrame = char.HumanoidRootPart.CFrame
+            lockedCamCFrame = camera.CFrame
+            isLockCam = true
+        else
+            -- Quay về vị trí ban đầu lúc bật script khi bấm TẮT
+            isLockCam = false
+            if getgenv().kienConfig.StartCFrame then
+                char.HumanoidRootPart.CFrame = getgenv().kienConfig.StartCFrame
+            end
+        end
+    end
 end)
 
-addToggle(tabFarmFrame, "Về Nhà Khi Đủ 500 Lần Tele", "Đủ 500 lần tele nhặt soul sẽ tự về nhà.", true, function(v)
+addToggle(tabFarmFrame, "Về Nhà Khi Đủ 500 Lần Tele", "Đủ 500 lần tele sẽ về nhà rồi tiếp tục lặp lại.", true, function(v)
     getgenv().kienConfig.AutoReturnHome = v
 end)
 
-addToggle(tabLagFrame, "Super Fit Lag Mạnh Nhất", "Xóa hiệu ứng đồ họa nhẹ máy Realme.", false, function(v)
+addToggle(tabLagFrame, "Super Fit Lag Max Pro", "Tối ưu hóa tối đa đồ họa siêu mượt cho Realme.", false, function(v)
     getgenv().kienConfig.FitLag = v
 end)
 
@@ -391,9 +413,22 @@ addButton(tabInfoFrame, "Tọa Độ Nhà", "CFrame.new(-0.19, 22.22, -2791.91)"
 
 switchTab("⚡ FARM", tabFarmFrame)
 
+-- KHÓA CAMERA CỐ ĐỊNH NHƯNG VẪN CHO VUỐT XOAY
 task.spawn(function()
     while true do
-        task.wait(2)
+        task.wait()
+        if isLockCam and lockedCamCFrame then
+            pcall(function()
+                camera.CFrame = CFrame.new(lockedCamCFrame.Position) * (camera.CFrame - camera.CFrame.Position)
+            end)
+        end
+    end
+end)
+
+-- SUPER FIT LAG MẠNH NHẤT
+task.spawn(function()
+    while true do
+        task.wait(1.5)
         if getgenv().kienConfig.FitLag then
             pcall(function()
                 Lighting.GlobalShadows = false
@@ -402,21 +437,30 @@ task.spawn(function()
                 for _, v in pairs(Lighting:GetChildren()) do 
                     if v:IsA("PostEffect") or v:IsA("Sky") or v:IsA("Atmosphere") then v.Enabled = false end 
                 end
-                if Terrain then Terrain.WaterWaveSize = 0 Terrain.WaterTransparency = 1 end
+                if Terrain then 
+                    Terrain.WaterWaveSize = 0 
+                    Terrain.WaterTransparency = 1 
+                end
                 
                 for _, v in pairs(workspace:GetDescendants()) do
                     if v:IsA("BasePart") then
                         local isSoul = (v.Name == "GraveyardSoul" or v.Name:lower():find("soul"))
                         local isPlayerPart = v:IsDescendantOf(player.Character or workspace)
-                        if not isSoul and not isPlayerPart then v.Transparency = 0.85 v.Material = Enum.Material.SmoothPlastic v.Reflectance = 0 end
-                    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then v.Enabled = false end
+                        if not isSoul and not isPlayerPart then 
+                            v.Transparency = 0.9 
+                            v.Material = Enum.Material.SmoothPlastic 
+                            v.Reflectance = 0 
+                        end
+                    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") or v:IsA("Decal") then 
+                        v:Destroy()
+                    end
                 end
             end)
         end
     end
 end)
 
--- VÒNG LẶP TELEPORT TỨC THÌ + BLACKLIST TỨC THÌ KHI VỪA TELE TỚI
+-- VÒNG LẶP TELEPORT TỨC THÌ + BLACKLIST VĨNH VIỄN + VÒNG LẶP VÔ TẬN 500/500
 task.spawn(function()
     local blacklist = {}
 
@@ -428,17 +472,14 @@ task.spawn(function()
 
             if getgenv().kienConfig.AutoSoul then
                 pcall(function()
+                    -- Khi đếm đủ 500 lần tele
                     if getgenv().kienConfig.AutoReturnHome and getgenv().kienConfig.TeleportCount >= getgenv().kienConfig.RequiredSouls then
                         hrp.CFrame = getgenv().HOME_CFRAME
-                        counterLabel.Text = "ĐÃ ĐỦ 500 LẦN TELE! ĐÃ VỀ NHÀ."
-                        task.wait(5)
+                        counterLabel.Text = "ĐÃ ĐỦ 500 LẦN! TỰ VỀ NHÀ & LẶP LẠI VÒNG MỚI..."
+                        task.wait(3)
+                        -- Reset đếm về 0 để lặp vô tận
+                        getgenv().kienConfig.TeleportCount = 0
                         return
-                    end
-
-                    for obj, _ in pairs(blacklist) do
-                        if not obj or not obj.Parent then
-                            blacklist[obj] = nil
-                        end
                     end
 
                     local bestTarget = nil
@@ -447,7 +488,8 @@ task.spawn(function()
                     for _, obj in pairs(workspace:GetDescendants()) do
                         if not getgenv().kienConfig.AutoSoul then break end
                         
-                        if (obj.Name == "GraveyardSoul" or obj.Name:lower():find("soul")) and not blacklist[obj] then
+                        -- Chỉ chọn linh hồn TỒN TẠI THỰC TẾ và CHƯA NẰM TRONG BLACKLIST
+                        if (obj.Name == "GraveyardSoul" or obj.Name:lower():find("soul")) and not blacklist[obj] and obj.Parent then
                             local isPlayerRelated = false
                             local ancestor = obj.Parent
                             while ancestor and ancestor ~= workspace do
@@ -465,7 +507,8 @@ task.spawn(function()
                                     if p then pos = p.Position end
                                 end
 
-                                if pos then
+                                -- Kiểm tra vị trí hợp lệ không bị rơi vào khoảng không
+                                if pos and pos.Y > -500 then
                                     local dist = (hrp.Position - pos).Magnitude
                                     if dist < shortestDist then
                                         shortestDist = dist
@@ -477,10 +520,10 @@ task.spawn(function()
                     end
 
                     if bestTarget and bestTarget.position then
-                        -- ĐƯA NGAY VÀO BLACKLIST TỨC THÌ TRƯỚC KHI TELE ĐỂ KHÔNG BAO GIỜ QUAY LẠI NỮA
+                        -- ĐƯA NGAY LẬP TỨC VÀO BLACKLIST ĐỂ BỎ QUA KHÔNG TELE LẠI
                         blacklist[bestTarget.instance] = true
 
-                        -- TELEPORT TỨC THÌ ĐẾN VỊ TRÍ SOUL
+                        -- TELEPORT TỨC THÌ ĐẾN SOUL
                         hrp.CFrame = CFrame.new(bestTarget.position + Vector3.new(0, 1.5, 0))
                         
                         if getgenv().kienRemote then
@@ -502,11 +545,8 @@ task.spawn(function()
                         end
                         
                         getgenv().kienConfig.TeleportCount = getgenv().kienConfig.TeleportCount + 1
-                        counterLabel.Text = "Số lần Teleport linh hồn: " .. tostring(getgenv().kienConfig.TeleportCount) .. " / 500"
-                        task.wait(0.02)
-                    else
-                        blacklist = {}
-                        task.wait(0.1)
+                        counterLabel.Text = "Số lần Teleport nhặt soul: " .. tostring(getgenv().kienConfig.TeleportCount) .. " / 500"
+                        task.wait(0.01)
                     end
                 end)
             else
