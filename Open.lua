@@ -173,6 +173,7 @@ closeBtn.Parent = top
 local cbCorner = Instance.new("UICorner") cbCorner.CornerRadius = UDim.new(0, 6) cbCorner.Parent = closeBtn
 
 local sidebar = Instance.new("Frame")
+sidebar.Name = "Sidebar"
 sidebar.Position = UDim2.new(0, 0, 0, 45)
 sidebar.Size = UDim2.new(0, 120, 1, -45)
 sidebar.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
@@ -218,7 +219,7 @@ local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local mainGui = playerGui:WaitForChild("KEY_Lop94")
 local mainFrame = mainGui:WaitForChild("Main")
-local sidebar = mainFrame:WaitForChild("Frame")
+local sidebar = mainFrame:WaitForChild("Sidebar")
 local contentArea = mainFrame:WaitForChild("ContentArea")
 
 local function createTabFrame(name)
@@ -358,11 +359,11 @@ counterLabel.TextSize = 10
 counterLabel.Parent = tabFarmFrame
 local clCorner = Instance.new("UICorner") clCorner.CornerRadius = UDim.new(0, 6) clCorner.Parent = counterLabel
 
-addToggle(tabFarmFrame, "Auto Radar Teleport Soul", "Quét radar liên tục & tele tức thì nhặt linh hồn.", false, function(v)
+addToggle(tabFarmFrame, "Auto Radar Teleport Soul", "Quét radar & bỏ qua linh hồn đã nhặt.", false, function(v)
     getgenv().kienConfig.AutoSoul = v
 end)
 
-addToggle(tabFarmFrame, "Về Nhà Khi Đủ 500 Lần Tele", "Chạy đủ 500 lần tele nhặt soul sẽ tự về tọa độ nhà.", true, function(v)
+addToggle(tabFarmFrame, "Về Nhà Khi Đủ 500 Lần Tele", "Chạy đủ 500 lần tele nhặt soul sẽ tự về nhà.", true, function(v)
     getgenv().kienConfig.AutoReturnHome = v
 end)
 
@@ -415,7 +416,10 @@ task.spawn(function()
     end
 end)
 
+-- VÒNG LẶP TELEPORT TỨC THÌ CÓ BLACKLIST (DANH SÁCH ĐEN BỎ QUA SOUL ĐÃ NHẶT)
 task.spawn(function()
+    local blacklist = {}
+
     while true do
         task.wait(0.001)
         local character = player.Character
@@ -426,9 +430,16 @@ task.spawn(function()
                 pcall(function()
                     if getgenv().kienConfig.AutoReturnHome and getgenv().kienConfig.TeleportCount >= getgenv().kienConfig.RequiredSouls then
                         hrp.CFrame = getgenv().HOME_CFRAME
-                        counterLabel.Text = "ĐÃ ĐỦ 500 LẦN TELE! ĐÃ VỀ NHÀ."
+                        counterLabel.Text = "ĐẢ ĐỦ 500 LẦN TELE! ĐÃ VỀ NHÀ."
                         task.wait(5)
                         return
+                    end
+
+                    -- Tự dọn dẹp danh sách đen nếu linh hồn không còn tồn tại trên map
+                    for obj, _ in pairs(blacklist) do
+                        if not obj or not obj.Parent then
+                            blacklist[obj] = nil
+                        end
                     end
 
                     local bestTarget = nil
@@ -437,7 +448,8 @@ task.spawn(function()
                     for _, obj in pairs(workspace:GetDescendants()) do
                         if not getgenv().kienConfig.AutoSoul then break end
                         
-                        if obj.Name == "GraveyardSoul" or obj.Name:lower():find("soul") then
+                        -- Kiểm tra nếu đúng tên linh hồn VÀ CHƯA CÓ TRONG DANH SÁCH ĐEN
+                        if (obj.Name == "GraveyardSoul" or obj.Name:lower():find("soul")) and not blacklist[obj] then
                             local isPlayerRelated = false
                             local ancestor = obj.Parent
                             while ancestor and ancestor ~= workspace do
@@ -467,6 +479,10 @@ task.spawn(function()
                     end
 
                     if bestTarget and bestTarget.position then
+                        -- LƯU LINH HỒN NÀY VÀO BLACKLIST ĐỂ BỎ QUA LẦN SAU
+                        blacklist[bestTarget.instance] = true
+
+                        -- TELEPORT TỨC THÌ ĐẾN VỊ TRÍ SOUL
                         hrp.CFrame = CFrame.new(bestTarget.position + Vector3.new(0, 1.5, 0))
                         
                         if getgenv().kienRemote then
@@ -490,9 +506,14 @@ task.spawn(function()
                         getgenv().kienConfig.TeleportCount = getgenv().kienConfig.TeleportCount + 1
                         counterLabel.Text = "Số lần Teleport linh hồn: " .. tostring(getgenv().kienConfig.TeleportCount) .. " / 500"
                         task.wait(0.05)
+                    else
+                        -- Nếu không còn linh hồn mới chưa nhặt, reset danh sách đen để quét lại lượt mới
+                        blacklist = {}
+                        task.wait(0.1)
                     end
                 end)
             else
+                blacklist = {}
                 task.wait(0.1)
             end
         end
