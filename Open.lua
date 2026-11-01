@@ -1,8 +1,6 @@
 --[[
-    ================================================
     KEY | KIÊN LỚP 94 — TRƯỜNG THCS NGUYỄN VĂN BÁNH
-    BLACK NEBULA — PART 1: UI & CONFIG
-    ================================================
+    BLACK NEBULA — ULTIMATE FIXED ALL-IN-ONE EDITION
 ]]
 
 local Players = game:GetService("Players")
@@ -18,14 +16,14 @@ local Terrain = workspace:FindFirstChildOfClass("Terrain")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Remote Event RideADinoNet
-getgenv().kienRemote = nil
+-- Kết nối Remote Event
+local remote = nil
 pcall(function()
-    getgenv().kienRemote = ReplicatedStorage:FindFirstChild("RideADinoNet")
-    if not getgenv().kienRemote then
+    remote = ReplicatedStorage:FindFirstChild("RideADinoNet")
+    if not remote then
         for _, v in pairs(ReplicatedStorage:GetDescendants()) do
             if v:IsA("RemoteEvent") then
-                getgenv().kienRemote = v
+                remote = v
                 break
             end
         end
@@ -33,7 +31,7 @@ pcall(function()
 end)
 
 -- Tọa độ nhà cố định
-getgenv().HOME_CFRAME = CFrame.new(-0.19, 22.22, -2791.91)
+local HOME_CFRAME = CFrame.new(-0.19, 22.22, -2791.91)
 
 getgenv().kienConfig = {
     AutoSoul = false,
@@ -49,6 +47,7 @@ player.Idled:Connect(function()
     VirtualUser:ClickButton2(Vector2.new())
 end)
 
+-- Xóa GUI cũ
 local old = playerGui:FindFirstChild("KEY_Lop94")
 if old then old:Destroy() end
 
@@ -208,7 +207,7 @@ local sidebar = create("Frame", {
     BorderSizePixel = 0,
 }, main)
 
-local navLayout = create("UIListLayout", {Padding = UDim.new(0, 7), SortOrder = Enum.SortOrder.LayoutOrder}, sidebar)
+create("UIListLayout", {Padding = UDim.new(0, 7), SortOrder = Enum.SortOrder.LayoutOrder}, sidebar)
 create("UIPadding", {PaddingTop = UDim.new(0, 17), PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12)}, sidebar)
 
 local content = create("Frame", {
@@ -240,6 +239,7 @@ local pageHint = create("TextLabel", {
 }, content)
 
 local pageBody = create("ScrollingFrame", {
+    Name = "ScrollingFrame",
     Position = UDim2.new(0, 15, 0, 75),
     Size = UDim2.new(1, -30, 1, -88),
     BackgroundTransparency = 1,
@@ -269,7 +269,7 @@ round(toast, 10)
 stroke(toast, C.Red, 1)
 
 local toastVersion = 0
-getgenv().notify = function(message)
+local function notify(message)
     toastVersion += 1
     local version = toastVersion
     toast.Text = message
@@ -285,24 +285,7 @@ getgenv().notify = function(message)
     end)
 end
 
-print(">>> [PART 1 LOADED SUCCESS] <<<")
---[[
-    ================================================
-    KEY | KIÊN LỚP 94 — TRƯỜNG THCS NGUYỄN VĂN BÁNH
-    BLACK NEBULA — PART 2: RADAR & AUTO SOUL LOOP
-    ================================================
-]]
-
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Lighting = game:GetService("Lighting")
-local TeleportService = game:GetService("TeleportService")
-local HttpService = game:GetService("HttpService")
-local Terrain = workspace:FindFirstChildOfClass("Terrain")
-
-local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-
+-- PAGES DATA
 local pages = {
     FARM = {
         title = "AUTO FARM / RADAR SOUL",
@@ -335,32 +318,42 @@ local states = {}
 local currentPage = "FARM"
 
 local function clearBody()
-    local pageBody = playerGui.KEY_Lop94.Main.Frame.ScrollingFrame
     for _, child in ipairs(pageBody:GetChildren()) do
-        if child:IsA("GuiObject") and not child:IsA("UIListLayout") then child:Destroy() end
+        if child:IsA("GuiObject") and child ~= bodyLayout then child:Destroy() end
     end
 end
 
 local function makeCard(titleText, descText, height)
-    local pageBody = playerGui.KEY_Lop94.Main.Frame.ScrollingFrame
-    local card = Instance.new("Frame")
-    card.Size = UDim2.new(1, -4, 0, height or 68)
-    card.BackgroundColor3 = Color3.fromRGB(24, 24, 32)
-    card.BorderSizePixel = 0
-    card.Parent = pageBody
-    
-    local c = Instance.new("UICorner") c.CornerRadius = UDim.new(0, 12) c.Parent = card
-    local s = Instance.new("UIStroke") s.Color = Color3.fromRGB(120, 20, 40) s.Thickness = 1 s.Transparency = 0.35 s.Parent = card
+    local card = create("Frame", {
+        Size = UDim2.new(1, -4, 0, height or 68),
+        BackgroundColor3 = C.Card,
+        BorderSizePixel = 0,
+    }, pageBody)
+    round(card, 12)
+    stroke(card, C.RedDark, 1, 0.35)
 
-    local t1 = Instance.new("TextLabel")
-    t1.Position = UDim2.new(0, 14, 0, 11) t1.Size = UDim2.new(1, -28, 0, 20)
-    t1.BackgroundTransparency = 1 t1.Text = titleText t1.TextColor3 = Color3.fromRGB(245, 245, 250)
-    t1.TextXAlignment = Enum.TextXAlignment.Left t1.Font = Enum.Font.GothamBold t1.TextSize = 12 t1.Parent = card
+    create("TextLabel", {
+        Position = UDim2.new(0, 14, 0, 11),
+        Size = UDim2.new(1, -28, 0, 20),
+        BackgroundTransparency = 1,
+        Text = titleText,
+        TextColor3 = C.White,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Font = Enum.Font.GothamBold,
+        TextSize = 12,
+    }, card)
 
-    local t2 = Instance.new("TextLabel")
-    t2.Position = UDim2.new(0, 14, 0, 34) t2.Size = UDim2.new(1, -28, 0, 22)
-    t2.BackgroundTransparency = 1 t2.Text = descText t2.TextColor3 = Color3.fromRGB(145, 145, 160)
-    t2.TextXAlignment = Enum.TextXAlignment.Left t2.Font = Enum.Font.Gotham t2.TextSize = 10 t2.TextWrapped = true t2.Parent = card
+    create("TextLabel", {
+        Position = UDim2.new(0, 14, 0, 34),
+        Size = UDim2.new(1, -28, 0, 22),
+        BackgroundTransparency = 1,
+        Text = descText,
+        TextColor3 = C.Muted,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Font = Enum.Font.Gotham,
+        TextSize = 10,
+        TextWrapped = true,
+    }, card)
 
     return card
 end
@@ -370,25 +363,31 @@ local function addToggle(item)
     local key = currentPage .. "_" .. item.title
     if states[key] == nil then states[key] = item.default end
 
-    local switch = Instance.new("TextButton")
-    switch.AnchorPoint = Vector2.new(1, 0.5) switch.Position = UDim2.new(1, -13, 0.5, 0)
-    switch.Size = UDim2.fromOffset(42, 23)
-    switch.BackgroundColor3 = states[key] and Color3.fromRGB(255, 48, 75) or Color3.fromRGB(55, 55, 66)
-    switch.Text = "" switch.AutoButtonColor = false switch.Parent = card
-    local sc = Instance.new("UICorner") sc.CornerRadius = UDim.new(0, 12) sc.Parent = switch
+    local switch = create("TextButton", {
+        AnchorPoint = Vector2.new(1, 0.5),
+        Position = UDim2.new(1, -13, 0.5, 0),
+        Size = UDim2.fromOffset(42, 23),
+        BackgroundColor3 = states[key] and C.Red or Color3.fromRGB(55, 55, 66),
+        Text = "",
+        AutoButtonColor = false,
+    }, card)
+    round(switch, 12)
 
-    local knob = Instance.new("Frame")
-    knob.Position = states[key] and UDim2.new(1, -20, 0.5, -8) or UDim2.new(0, 4, 0.5, -8)
-    knob.Size = UDim2.fromOffset(16, 16) knob.BackgroundColor3 = Color3.fromRGB(245, 245, 250) knob.BorderSizePixel = 0 knob.Parent = switch
-    local kc = Instance.new("UICorner") kc.CornerRadius = UDim.new(0, 8) kc.Parent = knob
+    local knob = create("Frame", {
+        Position = states[key] and UDim2.new(1, -20, 0.5, -8) or UDim2.new(0, 4, 0.5, -8),
+        Size = UDim2.fromOffset(16, 16),
+        BackgroundColor3 = C.White,
+        BorderSizePixel = 0,
+    }, switch)
+    round(knob, 8)
 
     switch.Activated:Connect(function()
         states[key] = not states[key]
         local enabled = states[key]
-        switch.BackgroundColor3 = enabled and Color3.fromRGB(255, 48, 75) or Color3.fromRGB(55, 55, 66)
-        knob.Position = enabled and UDim2.new(1, -20, 0.5, -8) or UDim2.new(0, 4, 0.5, -8)
+        tween(switch, 0.18, {BackgroundColor3 = enabled and C.Red or Color3.fromRGB(55, 55, 66)})
+        tween(knob, 0.18, {Position = enabled and UDim2.new(1, -20, 0.5, -8) or UDim2.new(0, 4, 0.5, -8)})
         
-        if getgenv().notify then getgenv().notify(item.title .. (enabled and " : ON" or " : OFF")) end
+        notify(item.title .. (enabled and " : ON" or " : OFF"))
 
         if item.title:find("Auto Soul") then getgenv().kienConfig.AutoSoul = enabled
         elseif item.title:find("Tự Động Về Nhà") then getgenv().kienConfig.AutoReturnHome = enabled
@@ -400,20 +399,31 @@ local function renderPage(name)
     currentPage = name
     local data = pages[name]
     if not data then return end
+
+    pageTitle.Text = data.title
+    pageHint.Text = data.hint
     clearBody()
 
     for _, item in ipairs(data.items) do
-        if item.kind == "toggle" then addToggle(item)
+        if item.kind == "toggle" then
+            addToggle(item)
         elseif item.kind == "button" then
             local card = makeCard(item.title, item.desc, 76)
-            local action = Instance.new("TextButton")
-            action.AnchorPoint = Vector2.new(1, 0.5) action.Position = UDim2.new(1, -12, 0.5, 0)
-            action.Size = UDim2.fromOffset(78, 28) action.BackgroundColor3 = Color3.fromRGB(120, 20, 40)
-            action.Text = "THỰC HIỆN" action.TextColor3 = Color3.fromRGB(245, 245, 250) action.Font = Enum.Font.GothamBold action.TextSize = 9 action.Parent = card
-            local ac = Instance.new("UICorner") ac.CornerRadius = UDim.new(0, 8) ac.Parent = action
+            local action = create("TextButton", {
+                AnchorPoint = Vector2.new(1, 0.5),
+                Position = UDim2.new(1, -12, 0.5, 0),
+                Size = UDim2.fromOffset(78, 28),
+                BackgroundColor3 = C.RedDark,
+                Text = "THỰC HIỆN",
+                TextColor3 = C.White,
+                Font = Enum.Font.GothamBold,
+                TextSize = 9,
+                AutoButtonColor = false,
+            }, card)
+            round(action, 8)
             action.Activated:Connect(function()
                 if item.actionType == "hop" then
-                    if getgenv().notify then getgenv().notify("Đang quét server ít người...") end
+                    notify("Đang quét server ít người...")
                     pcall(function()
                         local servers = {}
                         local req = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
@@ -424,25 +434,90 @@ local function renderPage(name)
                                 end
                             end
                         end
-                        if #servers > 0 then TeleportService:TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], player) end
+                        if #servers > 0 then
+                            TeleportService:TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], player)
+                        else
+                            notify("Không tìm thấy server phù hợp!")
+                        end
                     end)
                 end
             end)
-        else makeCard(item.title, item.desc, 68) end
+        else
+            makeCard(item.title, item.desc, 68)
+        end
     end
 end
 
--- Bật/Tắt Menu
-local mainGui = playerGui.KEY_Lop94
-local openBtn = mainGui.OpenButton
-local mainFrame = mainGui.Main
+local navItems = {"FARM", "VISUAL", "INFO"}
+local navButtons = {}
 
-openBtn.Activated:Connect(function() mainFrame.Visible = not mainFrame.Visible end)
-mainFrame.Frame.TextButton.Activated:Connect(function() mainFrame.Visible = false end)
+for index, name in ipairs(navItems) do
+    local labelName = name == "FARM" and "AUTO FARM" or (name == "VISUAL" and "FIT LAG" or "INFO")
+    local button = create("TextButton", {
+        Name = name,
+        LayoutOrder = index,
+        Size = UDim2.new(1, 0, 0, 38),
+        BackgroundColor3 = name == "FARM" and C.RedDark or C.Panel,
+        Text = "   " .. labelName,
+        TextColor3 = name == "FARM" and C.White or C.Muted,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Font = Enum.Font.GothamBold,
+        TextSize = 11,
+        AutoButtonColor = false,
+    }, sidebar)
+    round(button, 9)
+    navButtons[name] = button
 
-renderPage("FARM")
+    button.Activated:Connect(function()
+        for _, other in pairs(navButtons) do
+            tween(other, 0.15, {BackgroundColor3 = C.Panel})
+            other.TextColor3 = C.Muted
+        end
+        tween(button, 0.15, {BackgroundColor3 = C.RedDark})
+        button.TextColor3 = C.White
+        renderPage(name)
+    end)
+end
 
--- ĐỌC LINH HỒN MÀN HÌNH
+-- OPEN / CLOSE
+local function setOpen(visible)
+    if visible then
+        main.Visible = true
+        main.Size = UDim2.fromOffset(610, 390)
+        tween(main, 0.22, {Size = UDim2.fromOffset(650, 420)})
+    else
+        tween(main, 0.18, {Size = UDim2.fromOffset(610, 390)})
+        task.delay(0.19, function() main.Visible = false end)
+    end
+end
+
+openButton.Activated:Connect(function() setOpen(not main.Visible) end)
+close.Activated:Connect(function() setOpen(false) end)
+
+-- DRAG WINDOW
+local dragging, dragStart, startPosition = false, nil, nil
+top.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPosition = main.Position
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        main.Position = UDim2.new(startPosition.X.Scale, startPosition.X.Offset + delta.X, startPosition.Y.Scale, startPosition.Y.Offset + delta.Y)
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
+
+-- ĐỌC SỐ HỒN MÀN HÌNH
 local function getScreenSoulCount()
     local count = 0
     pcall(function()
@@ -499,12 +574,11 @@ task.spawn(function()
 
             if getgenv().kienConfig.AutoSoul then
                 pcall(function()
-                    -- Tự động về nhà khi đủ 500 hồn
                     if getgenv().kienConfig.AutoReturnHome then
                         local currentSouls = getScreenSoulCount()
                         if currentSouls >= getgenv().kienConfig.RequiredSouls then
-                            hrp.CFrame = getgenv().HOME_CFRAME
-                            if getgenv().notify then getgenv().notify("Đã đủ 500 hồn! Tự động về nhà an toàn.") end
+                            hrp.CFrame = HOME_CFRAME
+                            notify("Đã đủ 500 hồn! Tự động về nhà an toàn.")
                             task.wait(4)
                             return
                         end
@@ -513,7 +587,6 @@ task.spawn(function()
                     local bestTarget = nil
                     local shortestDist = math.huge
 
-                    -- RADAR QUÉT TOÀN MAP
                     for _, obj in pairs(workspace:GetDescendants()) do
                         if not getgenv().kienConfig.AutoSoul then break end
                         
@@ -547,10 +620,9 @@ task.spawn(function()
                     end
 
                     if bestTarget and bestTarget.position then
-                        -- Bay trực tiếp đến vị trí linh hồn
                         hrp.CFrame = CFrame.new(bestTarget.position + Vector3.new(0, 1.5, 0))
                         
-                        if getgenv().kienRemote then
+                        if remote then
                             local vecPos = (typeof(vector) == "table" and vector.create) and vector.create(bestTarget.position.X, bestTarget.position.Y, bestTarget.position.Z) or Vector3.new(bestTarget.position.X, bestTarget.position.Y, bestTarget.position.Z)
                             
                             local args = {
@@ -564,7 +636,7 @@ task.spawn(function()
                             }
                             
                             for i = 1, 3 do
-                                getgenv().kienRemote:FireServer(unpack(args))
+                                remote:FireServer(unpack(args))
                             end
                         end
                         
@@ -576,4 +648,5 @@ task.spawn(function()
     end
 end)
 
-if getgenv().notify then getgenv().notify("KIÊN LỚP 94 — SẴN SÀNG QUÉT RADAR SOUL") end
+renderPage("FARM")
+notify("KIÊN LỚP 94 — SẴN SÀNG QUÉT RADAR SOUL")
