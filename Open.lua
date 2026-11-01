@@ -1,8 +1,3 @@
---[[
-    KEY | KIÊN LỚP 94 — TRƯỜNG THCS NGUYỄN VĂN BÁNH
-    BLACK NEBULA — ULTIMATE FIXED ALL-IN-ONE EDITION
-]]
-
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -11,534 +6,390 @@ local Lighting = game:GetService("Lighting")
 local VirtualUser = game:GetService("VirtualUser")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
-local Terrain = workspace:FindFirstChildOfClass("Terrain")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Kết nối Remote Event
-local remote = nil
+getgenv().kienRemote = nil
 pcall(function()
-    remote = ReplicatedStorage:FindFirstChild("RideADinoNet")
-    if not remote then
+    getgenv().kienRemote = ReplicatedStorage:FindFirstChild("RideADinoNet")
+    if not getgenv().kienRemote then
         for _, v in pairs(ReplicatedStorage:GetDescendants()) do
             if v:IsA("RemoteEvent") then
-                remote = v
+                getgenv().kienRemote = v
                 break
             end
         end
     end
 end)
 
--- Tọa độ nhà cố định
-local HOME_CFRAME = CFrame.new(-0.19, 22.22, -2791.91)
+getgenv().HOME_CFRAME = CFrame.new(-0.19, 22.22, -2791.91)
 
 getgenv().kienConfig = {
     AutoSoul = false,
     AutoReturnHome = true,
     FitLag = false,
     RequiredSouls = 500,
-    SessionSouls = 0
+    TeleportCount = 0
 }
 
--- Anti-AFK
 player.Idled:Connect(function()
     VirtualUser:CaptureController()
     VirtualUser:ClickButton2(Vector2.new())
 end)
 
--- Xóa GUI cũ
 local old = playerGui:FindFirstChild("KEY_Lop94")
 if old then old:Destroy() end
 
-local C = {
-    Background = Color3.fromRGB(10, 10, 14),
-    Panel = Color3.fromRGB(17, 17, 23),
-    Card = Color3.fromRGB(24, 24, 32),
-    Red = Color3.fromRGB(255, 48, 75),
-    RedDark = Color3.fromRGB(120, 20, 40),
-    White = Color3.fromRGB(245, 245, 250),
-    Muted = Color3.fromRGB(145, 145, 160),
-    Green = Color3.fromRGB(70, 230, 155),
-}
+local gui = Instance.new("ScreenGui")
+gui.Name = "KEY_Lop94"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+gui.Parent = playerGui
 
-local function create(class, props, parent)
-    local obj = Instance.new(class)
-    for k, v in pairs(props or {}) do obj[k] = v end
-    obj.Parent = parent
-    return obj
-end
+local openBtn = Instance.new("TextButton")
+openBtn.Name = "OpenButton"
+openBtn.Size = UDim2.fromOffset(42, 42)
+openBtn.Position = UDim2.new(0.05, 0, 0.8, 0)
+openBtn.BackgroundColor3 = Color3.fromRGB(10, 10, 14)
+openBtn.Text = "K"
+openBtn.TextColor3 = Color3.fromRGB(255, 48, 75)
+openBtn.TextSize = 20
+openBtn.Font = Enum.Font.GothamBlack
+openBtn.AutoButtonColor = false
+openBtn.ZIndex = 100
+openBtn.Parent = gui
 
-local function round(parent, radius)
-    create("UICorner", {CornerRadius = UDim.new(0, radius or 10)}, parent)
-end
+local obCorner = Instance.new("UICorner") obCorner.CornerRadius = UDim.new(0, 10) obCorner.Parent = openBtn
+local obStroke = Instance.new("UIStroke") obStroke.Color = Color3.fromRGB(255, 48, 75) obStroke.Thickness = 2 obStroke.Parent = openBtn
 
-local function stroke(parent, color, thickness, transparency)
-    return create("UIStroke", {
-        Color = color or C.Red,
-        Thickness = thickness or 1,
-        Transparency = transparency or 0,
-    }, parent)
-end
-
-local function tween(obj, duration, props)
-    local t = TweenService:Create(obj, TweenInfo.new(duration, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), props)
-    t:Play()
-    return t
-end
-
-local gui = create("ScreenGui", {
-    Name = "KEY_Lop94",
-    ResetOnSpawn = false,
-    IgnoreGuiInset = true,
-    ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-}, playerGui)
-
--- FLOATING BUTTON K
-local openButton = create("TextButton", {
-    Name = "OpenButton",
-    Size = UDim2.fromOffset(58, 58),
-    Position = UDim2.new(0, 18, 0.5, -29),
-    BackgroundColor3 = C.Background,
-    Text = "K",
-    TextColor3 = C.Red,
-    TextSize = 27,
-    Font = Enum.Font.GothamBlack,
-    AutoButtonColor = false,
-}, gui)
-round(openButton, 18)
-stroke(openButton, C.Red, 2)
-
--- MAIN FRAME
-local main = create("Frame", {
-    Name = "Main",
-    AnchorPoint = Vector2.new(0.5, 0.5),
-    Position = UDim2.new(0.5, 0, 0.5, 0),
-    Size = UDim2.fromOffset(650, 420),
-    BackgroundColor3 = C.Background,
-    BorderSizePixel = 0,
-    Visible = false,
-    ClipsDescendants = true,
-}, gui)
-round(main, 16)
-stroke(main, C.Red, 1.5)
-
-local scale = create("UIScale", {Scale = 1}, main)
-local function updateScale()
-    local camera = workspace.CurrentCamera
-    if not camera then return end
-    scale.Scale = math.min(camera.ViewportSize.X / 690, camera.ViewportSize.Y / 460, 1)
-end
-updateScale()
-if workspace.CurrentCamera then
-    workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateScale)
-end
-
--- TOP BAR
-local top = create("Frame", {
-    Size = UDim2.new(1, 0, 0, 64),
-    BackgroundColor3 = C.Panel,
-    BorderSizePixel = 0,
-}, main)
-
-create("Frame", {
-    Position = UDim2.new(0, 0, 1, -2),
-    Size = UDim2.new(1, 0, 0, 2),
-    BackgroundColor3 = C.Red,
-    BorderSizePixel = 0,
-}, top)
-
-local logo = create("Frame", {
-    Position = UDim2.new(0, 17, 0.5, -19),
-    Size = UDim2.fromOffset(38, 38),
-    BackgroundColor3 = C.RedDark,
-}, top)
-round(logo, 12)
-stroke(logo, C.Red, 1)
-
-create("TextLabel", {
-    Size = UDim2.fromScale(1, 1),
-    BackgroundTransparency = 1,
-    Text = "K",
-    TextColor3 = C.White,
-    Font = Enum.Font.GothamBlack,
-    TextSize = 23,
-}, logo)
-
-create("TextLabel", {
-    Position = UDim2.new(0, 65, 0, 8),
-    Size = UDim2.new(0, 450, 0, 25),
-    BackgroundTransparency = 1,
-    Text = "KIÊN LỚP 94 — THCS NGUYỄN VĂN BÁNH",
-    TextColor3 = C.White,
-    TextXAlignment = Enum.TextXAlignment.Left,
-    Font = Enum.Font.GothamBlack,
-    TextSize = 15,
-}, top)
-
-create("TextLabel", {
-    Position = UDim2.new(0, 66, 0, 35),
-    Size = UDim2.new(0, 350, 0, 17),
-    BackgroundTransparency = 1,
-    Text = "BLACK NEBULA  •  RADAR AUTO SOUL ENGINE",
-    TextColor3 = C.Muted,
-    TextXAlignment = Enum.TextXAlignment.Left,
-    Font = Enum.Font.GothamMedium,
-    TextSize = 9,
-}, top)
-
-local close = create("TextButton", {
-    Position = UDim2.new(1, -45, 0, 15),
-    Size = UDim2.fromOffset(30, 30),
-    BackgroundColor3 = C.Card,
-    Text = "×",
-    TextColor3 = C.Red,
-    TextSize = 23,
-    Font = Enum.Font.GothamBold,
-    AutoButtonColor = false,
-}, top)
-round(close, 9)
-
--- SIDEBAR & CONTENT
-local sidebar = create("Frame", {
-    Position = UDim2.new(0, 0, 0, 66),
-    Size = UDim2.new(0, 155, 1, -66),
-    BackgroundColor3 = C.Panel,
-    BorderSizePixel = 0,
-}, main)
-
-create("UIListLayout", {Padding = UDim.new(0, 7), SortOrder = Enum.SortOrder.LayoutOrder}, sidebar)
-create("UIPadding", {PaddingTop = UDim.new(0, 17), PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12)}, sidebar)
-
-local content = create("Frame", {
-    Position = UDim2.new(0, 155, 0, 66),
-    Size = UDim2.new(1, -155, 1, -66),
-    BackgroundTransparency = 1,
-}, main)
-
-local pageTitle = create("TextLabel", {
-    Position = UDim2.new(0, 20, 0, 15),
-    Size = UDim2.new(1, -40, 0, 30),
-    BackgroundTransparency = 1,
-    Text = "AUTO FARM / RADAR SOUL",
-    TextColor3 = C.White,
-    TextXAlignment = Enum.TextXAlignment.Left,
-    Font = Enum.Font.GothamBold,
-    TextSize = 17,
-}, content)
-
-local pageHint = create("TextLabel", {
-    Position = UDim2.new(0, 20, 0, 44),
-    Size = UDim2.new(1, -40, 0, 20),
-    BackgroundTransparency = 1,
-    Text = "Quét Radar toàn map & tự về nhà khi đủ 500",
-    TextColor3 = C.Muted,
-    TextXAlignment = Enum.TextXAlignment.Left,
-    Font = Enum.Font.Gotham,
-    TextSize = 11,
-}, content)
-
-local pageBody = create("ScrollingFrame", {
-    Name = "ScrollingFrame",
-    Position = UDim2.new(0, 15, 0, 75),
-    Size = UDim2.new(1, -30, 1, -88),
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    ScrollBarThickness = 3,
-    ScrollBarImageColor3 = C.Red,
-    CanvasSize = UDim2.new(0, 0, 0, 0),
-    AutomaticCanvasSize = Enum.AutomaticSize.Y,
-}, content)
-
-local bodyLayout = create("UIListLayout", {Padding = UDim.new(0, 10), SortOrder = Enum.SortOrder.LayoutOrder}, pageBody)
-
--- TOAST NOTIFY
-local toast = create("TextLabel", {
-    AnchorPoint = Vector2.new(0.5, 1),
-    Position = UDim2.new(0.5, 0, 1, -12),
-    Size = UDim2.fromOffset(270, 38),
-    BackgroundColor3 = C.Card,
-    TextColor3 = C.White,
-    Text = "",
-    TextSize = 12,
-    Font = Enum.Font.GothamMedium,
-    Visible = false,
-    ZIndex = 10,
-}, main)
-round(toast, 10)
-stroke(toast, C.Red, 1)
-
-local toastVersion = 0
-local function notify(message)
-    toastVersion += 1
-    local version = toastVersion
-    toast.Text = message
-    toast.Visible = true
-    toast.TextTransparency = 1
-    tween(toast, 0.2, {TextTransparency = 0})
-    task.delay(1.8, function()
-        if toastVersion == version then
-            tween(toast, 0.2, {TextTransparency = 1})
-            task.wait(0.22)
-            if toastVersion == version then toast.Visible = false end
-        end
-    end)
-end
-
--- PAGES DATA
-local pages = {
-    FARM = {
-        title = "AUTO FARM / RADAR SOUL",
-        hint = "Quét Radar toàn map nhặt linh hồn liên tục không dừng",
-        items = {
-            {kind = "toggle", title = "Auto Soul (Radar Quét Toàn Map)", desc = "Tự động quét Radar và bay nhặt liên tục mọi linh hồn.", default = false},
-            {kind = "toggle", title = "Tự Động Về Nhà Khi Đủ 500 Hồn", desc = "Đủ 500 hồn tự động tele về vị trí nhà.", default = true},
-        },
-    },
-    VISUAL = {
-        title = "VISUAL / FIT LAG",
-        hint = "Tối ưu hóa đồ họa cực nhẹ cho Realme",
-        items = {
-            {kind = "toggle", title = "Super Fit Lag Mạnh Nhất", desc = "Giảm tải đồ họa tối đa giúp mượt game.", default = false},
-            {kind = "button", title = "Đổi Server Ít Người (1 Mình)", desc = "Tìm và đổi sang server vắng người.", actionType = "hop"},
-        },
-    },
-    INFO = {
-        title = "INFO / CÁ NHÂN",
-        hint = "Thông tin thương hiệu",
-        items = {
-            {kind = "info", title = "HỌC SINH", desc = "Trương Trọng Kiên • Lớp 9"},
-            {kind = "info", title = "TRƯỜNG", desc = "THCS Nguyễn Văn Bánh"},
-            {kind = "info", title = "TỌA ĐỘ NHÀ", desc = "CFrame.new(-0.19, 22.22, -2791.91)"},
-        },
-    },
-}
-
-local states = {}
-local currentPage = "FARM"
-
-local function clearBody()
-    for _, child in ipairs(pageBody:GetChildren()) do
-        if child:IsA("GuiObject") and child ~= bodyLayout then child:Destroy() end
+local btnDragging, btnDragStart, btnStartPos = false, nil, nil
+openBtn.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        btnDragging = true btnDragStart = input.Position btnStartPos = openBtn.Position
     end
-end
-
-local function makeCard(titleText, descText, height)
-    local card = create("Frame", {
-        Size = UDim2.new(1, -4, 0, height or 68),
-        BackgroundColor3 = C.Card,
-        BorderSizePixel = 0,
-    }, pageBody)
-    round(card, 12)
-    stroke(card, C.RedDark, 1, 0.35)
-
-    create("TextLabel", {
-        Position = UDim2.new(0, 14, 0, 11),
-        Size = UDim2.new(1, -28, 0, 20),
-        BackgroundTransparency = 1,
-        Text = titleText,
-        TextColor3 = C.White,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        Font = Enum.Font.GothamBold,
-        TextSize = 12,
-    }, card)
-
-    create("TextLabel", {
-        Position = UDim2.new(0, 14, 0, 34),
-        Size = UDim2.new(1, -28, 0, 22),
-        BackgroundTransparency = 1,
-        Text = descText,
-        TextColor3 = C.Muted,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        Font = Enum.Font.Gotham,
-        TextSize = 10,
-        TextWrapped = true,
-    }, card)
-
-    return card
-end
-
-local function addToggle(item)
-    local card = makeCard(item.title, item.desc, 72)
-    local key = currentPage .. "_" .. item.title
-    if states[key] == nil then states[key] = item.default end
-
-    local switch = create("TextButton", {
-        AnchorPoint = Vector2.new(1, 0.5),
-        Position = UDim2.new(1, -13, 0.5, 0),
-        Size = UDim2.fromOffset(42, 23),
-        BackgroundColor3 = states[key] and C.Red or Color3.fromRGB(55, 55, 66),
-        Text = "",
-        AutoButtonColor = false,
-    }, card)
-    round(switch, 12)
-
-    local knob = create("Frame", {
-        Position = states[key] and UDim2.new(1, -20, 0.5, -8) or UDim2.new(0, 4, 0.5, -8),
-        Size = UDim2.fromOffset(16, 16),
-        BackgroundColor3 = C.White,
-        BorderSizePixel = 0,
-    }, switch)
-    round(knob, 8)
-
-    switch.Activated:Connect(function()
-        states[key] = not states[key]
-        local enabled = states[key]
-        tween(switch, 0.18, {BackgroundColor3 = enabled and C.Red or Color3.fromRGB(55, 55, 66)})
-        tween(knob, 0.18, {Position = enabled and UDim2.new(1, -20, 0.5, -8) or UDim2.new(0, 4, 0.5, -8)})
-        
-        notify(item.title .. (enabled and " : ON" or " : OFF"))
-
-        if item.title:find("Auto Soul") then getgenv().kienConfig.AutoSoul = enabled
-        elseif item.title:find("Tự Động Về Nhà") then getgenv().kienConfig.AutoReturnHome = enabled
-        elseif item.title:find("Fit Lag") then getgenv().kienConfig.FitLag = enabled end
-    end)
-end
-
-local function renderPage(name)
-    currentPage = name
-    local data = pages[name]
-    if not data then return end
-
-    pageTitle.Text = data.title
-    pageHint.Text = data.hint
-    clearBody()
-
-    for _, item in ipairs(data.items) do
-        if item.kind == "toggle" then
-            addToggle(item)
-        elseif item.kind == "button" then
-            local card = makeCard(item.title, item.desc, 76)
-            local action = create("TextButton", {
-                AnchorPoint = Vector2.new(1, 0.5),
-                Position = UDim2.new(1, -12, 0.5, 0),
-                Size = UDim2.fromOffset(78, 28),
-                BackgroundColor3 = C.RedDark,
-                Text = "THỰC HIỆN",
-                TextColor3 = C.White,
-                Font = Enum.Font.GothamBold,
-                TextSize = 9,
-                AutoButtonColor = false,
-            }, card)
-            round(action, 8)
-            action.Activated:Connect(function()
-                if item.actionType == "hop" then
-                    notify("Đang quét server ít người...")
-                    pcall(function()
-                        local servers = {}
-                        local req = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
-                        if req and req.data then
-                            for _, s in pairs(req.data) do
-                                if type(s) == "table" and s.playing and s.maxPlayers and s.id then
-                                    if s.playing < s.maxPlayers and s.id ~= game.JobId then table.insert(servers, s.id) end
-                                end
-                            end
-                        end
-                        if #servers > 0 then
-                            TeleportService:TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], player)
-                        else
-                            notify("Không tìm thấy server phù hợp!")
-                        end
-                    end)
-                end
-            end)
-        else
-            makeCard(item.title, item.desc, 68)
-        end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if btnDragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - btnDragStart
+        openBtn.Position = UDim2.new(btnStartPos.X.Scale, btnStartPos.X.Offset + delta.X, btnStartPos.Y.Scale, btnStartPos.Y.Offset + delta.Y)
     end
-end
+end)
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then btnDragging = false end
+end)
 
-local navItems = {"FARM", "VISUAL", "INFO"}
-local navButtons = {}
+local main = Instance.new("Frame")
+main.Name = "Main"
+main.AnchorPoint = Vector2.new(0.5, 0.5)
+main.Position = UDim2.new(0.5, 0, 0.5, 0)
+main.Size = UDim2.fromOffset(480, 300)
+main.BackgroundColor3 = Color3.fromRGB(10, 10, 14)
+main.BorderSizePixel = 0
+main.Visible = false
+main.ClipsDescendants = true
+main.Parent = gui
 
-for index, name in ipairs(navItems) do
-    local labelName = name == "FARM" and "AUTO FARM" or (name == "VISUAL" and "FIT LAG" or "INFO")
-    local button = create("TextButton", {
-        Name = name,
-        LayoutOrder = index,
-        Size = UDim2.new(1, 0, 0, 38),
-        BackgroundColor3 = name == "FARM" and C.RedDark or C.Panel,
-        Text = "   " .. labelName,
-        TextColor3 = name == "FARM" and C.White or C.Muted,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        Font = Enum.Font.GothamBold,
-        TextSize = 11,
-        AutoButtonColor = false,
-    }, sidebar)
-    round(button, 9)
-    navButtons[name] = button
+local mCorner = Instance.new("UICorner") mCorner.CornerRadius = UDim.new(0, 12) mCorner.Parent = main
+local mStroke = Instance.new("UIStroke") mStroke.Color = Color3.fromRGB(255, 48, 75) mStroke.Thickness = 1.5 mStroke.Parent = main
 
-    button.Activated:Connect(function()
-        for _, other in pairs(navButtons) do
-            tween(other, 0.15, {BackgroundColor3 = C.Panel})
-            other.TextColor3 = C.Muted
-        end
-        tween(button, 0.15, {BackgroundColor3 = C.RedDark})
-        button.TextColor3 = C.White
-        renderPage(name)
-    end)
-end
+local resizeBtn = Instance.new("TextButton")
+resizeBtn.Name = "ResizeBtn"
+resizeBtn.Size = UDim2.fromOffset(20, 20)
+resizeBtn.Position = UDim2.new(1, -20, 1, -20)
+resizeBtn.BackgroundColor3 = Color3.fromRGB(24, 24, 32)
+resizeBtn.Text = "⇲"
+resizeBtn.TextColor3 = Color3.fromRGB(255, 48, 75)
+resizeBtn.TextSize = 12
+resizeBtn.Font = Enum.Font.GothamBold
+resizeBtn.ZIndex = 50
+resizeBtn.Parent = main
+local rsCorner = Instance.new("UICorner") rsCorner.CornerRadius = UDim.new(0, 4) rsCorner.Parent = resizeBtn
 
--- OPEN / CLOSE
-local function setOpen(visible)
-    if visible then
-        main.Visible = true
-        main.Size = UDim2.fromOffset(610, 390)
-        tween(main, 0.22, {Size = UDim2.fromOffset(650, 420)})
-    else
-        tween(main, 0.18, {Size = UDim2.fromOffset(610, 390)})
-        task.delay(0.19, function() main.Visible = false end)
+local resizing, resizeStart, startSize = false, nil, nil
+resizeBtn.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        resizing = true resizeStart = input.Position startSize = main.Size
     end
-end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if resizing and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - resizeStart
+        local newX = math.clamp(startSize.X.Offset + delta.X, 320, 800)
+        local newY = math.clamp(startSize.Y.Offset + delta.Y, 220, 600)
+        main.Size = UDim2.fromOffset(newX, newY)
+    end
+end)
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then resizing = false end
+end)
 
-openButton.Activated:Connect(function() setOpen(not main.Visible) end)
-close.Activated:Connect(function() setOpen(false) end)
+local top = Instance.new("Frame")
+top.Size = UDim2.new(1, 0, 0, 45)
+top.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
+top.BorderSizePixel = 0
+top.Parent = main
 
--- DRAG WINDOW
-local dragging, dragStart, startPosition = false, nil, nil
+local line = Instance.new("Frame")
+line.Position = UDim2.new(0, 0, 1, -2)
+line.Size = UDim2.new(1, 0, 0, 2)
+line.BackgroundColor3 = Color3.fromRGB(255, 48, 75)
+line.BorderSizePixel = 0
+line.Parent = top
+
+local title = Instance.new("TextLabel")
+title.Position = UDim2.new(0, 12, 0, 6)
+title.Size = UDim2.new(0, 350, 0, 18)
+title.BackgroundTransparency = 1
+title.Text = "KIÊN LỚP 94 — THCS NGUYỄN VĂN BÁNH"
+title.TextColor3 = Color3.fromRGB(245, 245, 250)
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Font = Enum.Font.GothamBlack
+title.TextSize = 12
+title.Parent = top
+
+local subTitle = Instance.new("TextLabel")
+subTitle.Position = UDim2.new(0, 12, 0, 24)
+subTitle.Size = UDim2.new(0, 300, 0, 14)
+subTitle.BackgroundTransparency = 1
+subTitle.Text = "BLACK NEBULA  •  RADAR TELEPORT ENGINE"
+subTitle.TextColor3 = Color3.fromRGB(145, 145, 160)
+subTitle.TextXAlignment = Enum.TextXAlignment.Left
+subTitle.Font = Enum.Font.GothamMedium
+subTitle.TextSize = 8
+subTitle.Parent = top
+
+local closeBtn = Instance.new("TextButton")
+closeBtn.Position = UDim2.new(1, -32, 0, 8)
+closeBtn.Size = UDim2.fromOffset(24, 24)
+closeBtn.BackgroundColor3 = Color3.fromRGB(24, 24, 32)
+closeBtn.Text = "×"
+closeBtn.TextColor3 = Color3.fromRGB(255, 48, 75)
+closeBtn.TextSize = 18
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.AutoButtonColor = false
+closeBtn.Parent = top
+local cbCorner = Instance.new("UICorner") cbCorner.CornerRadius = UDim.new(0, 6) cbCorner.Parent = closeBtn
+
+local sidebar = Instance.new("Frame")
+sidebar.Position = UDim2.new(0, 0, 0, 45)
+sidebar.Size = UDim2.new(0, 120, 1, -45)
+sidebar.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
+sidebar.BorderSizePixel = 0
+sidebar.Parent = main
+
+local sbList = Instance.new("UIListLayout") sbList.Padding = UDim.new(0, 6) sbList.SortOrder = Enum.SortOrder.LayoutOrder sbList.Parent = sidebar
+local sbPadding = Instance.new("UIPadding") sbPadding.PaddingTop = UDim.new(0, 10) sbPadding.PaddingLeft = UDim.new(0, 8) sbPadding.PaddingRight = UDim.new(0, 8) sbPadding.Parent = sidebar
+
+local contentArea = Instance.new("Frame")
+contentArea.Name = "ContentArea"
+contentArea.Position = UDim2.new(0, 120, 0, 45)
+contentArea.Size = UDim2.new(1, -120, 1, -45)
+contentArea.BackgroundTransparency = 1
+contentArea.Parent = main
+
+openBtn.Activated:Connect(function() main.Visible = not main.Visible end)
+closeBtn.Activated:Connect(function() main.Visible = false end)
+
+local winDragging, winDragStart, winStartPos = false, nil, nil
 top.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPosition = main.Position
+        winDragging = true winDragStart = input.Position winStartPos = main.Position
     end
 end)
-
 UserInputService.InputChanged:Connect(function(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-        local delta = input.Position - dragStart
-        main.Position = UDim2.new(startPosition.X.Scale, startPosition.X.Offset + delta.X, startPosition.Y.Scale, startPosition.Y.Offset + delta.Y)
+    if winDragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - winDragStart
+        main.Position = UDim2.new(winStartPos.X.Scale, winStartPos.X.Offset + delta.X, winStartPos.Y.Scale, winStartPos.Y.Offset + delta.Y)
     end
 end)
-
 UserInputService.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = false
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then winDragging = false end
+end)
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Lighting = game:GetService("Lighting")
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+local Terrain = workspace:FindFirstChildOfClass("Terrain")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local mainGui = playerGui:WaitForChild("KEY_Lop94")
+local mainFrame = mainGui:WaitForChild("Main")
+local sidebar = mainFrame:WaitForChild("Frame")
+local contentArea = mainFrame:WaitForChild("ContentArea")
+
+local function createTabFrame(name)
+    local scroll = Instance.new("ScrollingFrame")
+    scroll.Name = name .. "_Frame"
+    scroll.Position = UDim2.new(0, 10, 0, 10)
+    scroll.Size = UDim2.new(1, -20, 1, -20)
+    scroll.BackgroundTransparency = 1
+    scroll.BorderSizePixel = 0
+    scroll.ScrollBarThickness = 3
+    scroll.ScrollBarImageColor3 = Color3.fromRGB(255, 48, 75)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    scroll.Visible = false
+    scroll.Parent = contentArea
+
+    local layout = Instance.new("UIListLayout") layout.Padding = UDim.new(0, 8) layout.SortOrder = Enum.SortOrder.LayoutOrder layout.Parent = scroll
+    return scroll
+end
+
+local tabFarmFrame = createTabFrame("FARM")
+local tabLagFrame = createTabFrame("LAG")
+local tabInfoFrame = createTabFrame("INFO")
+
+local function addToggle(parent, name, desc, defaultState, callback)
+    local card = Instance.new("Frame")
+    card.Size = UDim2.new(1, -4, 0, 52)
+    card.BackgroundColor3 = Color3.fromRGB(24, 24, 32)
+    card.BorderSizePixel = 0
+    card.Parent = parent
+
+    local cc = Instance.new("UICorner") cc.CornerRadius = UDim.new(0, 8) cc.Parent = card
+    local cs = Instance.new("UIStroke") cs.Color = Color3.fromRGB(120, 20, 40) cs.Thickness = 1 cs.Transparency = 0.3 cs.Parent = card
+
+    local t1 = Instance.new("TextLabel")
+    t1.Position = UDim2.new(0, 10, 0, 8) t1.Size = UDim2.new(1, -60, 0, 16)
+    t1.BackgroundTransparency = 1 t1.Text = name t1.TextColor3 = Color3.fromRGB(245, 245, 250)
+    t1.TextXAlignment = Enum.TextXAlignment.Left t1.Font = Enum.Font.GothamBold t1.TextSize = 11 t1.Parent = card
+
+    local t2 = Instance.new("TextLabel")
+    t2.Position = UDim2.new(0, 10, 0, 26) t2.Size = UDim2.new(1, -60, 0, 18)
+    t2.BackgroundTransparency = 1 t2.Text = desc t2.TextColor3 = Color3.fromRGB(145, 145, 160)
+    t2.TextXAlignment = Enum.TextXAlignment.Left t2.Font = Enum.Font.Gotham t2.TextSize = 9 t2.TextWrapped = true t2.Parent = card
+
+    local switch = Instance.new("TextButton")
+    switch.AnchorPoint = Vector2.new(1, 0.5) switch.Position = UDim2.new(1, -10, 0.5, 0)
+    switch.Size = UDim2.fromOffset(36, 18)
+    switch.BackgroundColor3 = defaultState and Color3.fromRGB(255, 48, 75) or Color3.fromRGB(55, 55, 66)
+    switch.Text = "" switch.AutoButtonColor = false switch.Parent = card
+    local sc = Instance.new("UICorner") sc.CornerRadius = UDim.new(0, 9) sc.Parent = switch
+
+    local knob = Instance.new("Frame")
+    knob.Position = defaultState and UDim2.new(1, -16, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
+    knob.Size = UDim2.fromOffset(12, 12) knob.BackgroundColor3 = Color3.fromRGB(245, 245, 250) knob.BorderSizePixel = 0 knob.Parent = switch
+    local kc = Instance.new("UICorner") kc.CornerRadius = UDim.new(0, 6) kc.Parent = knob
+
+    local state = defaultState
+    switch.Activated:Connect(function()
+        state = not state
+        switch.BackgroundColor3 = state and Color3.fromRGB(255, 48, 75) or Color3.fromRGB(55, 55, 66)
+        knob.Position = state and UDim2.new(1, -16, 0.5, -6) or UDim2.new(0, 2, 0.5, -6)
+        callback(state)
+    end)
+end
+
+local function addButton(parent, name, desc, btnText, callback)
+    local card = Instance.new("Frame")
+    card.Size = UDim2.new(1, -4, 0, 52)
+    card.BackgroundColor3 = Color3.fromRGB(24, 24, 32)
+    card.BorderSizePixel = 0
+    card.Parent = parent
+
+    local cc = Instance.new("UICorner") cc.CornerRadius = UDim.new(0, 8) cc.Parent = card
+    local cs = Instance.new("UIStroke") cs.Color = Color3.fromRGB(120, 20, 40) cs.Thickness = 1 cs.Transparency = 0.3 cs.Parent = card
+
+    local t1 = Instance.new("TextLabel")
+    t1.Position = UDim2.new(0, 10, 0, 8) t1.Size = UDim2.new(1, -90, 0, 16)
+    t1.BackgroundTransparency = 1 t1.Text = name t1.TextColor3 = Color3.fromRGB(245, 245, 250)
+    t1.TextXAlignment = Enum.TextXAlignment.Left t1.Font = Enum.Font.GothamBold t1.TextSize = 11 t1.Parent = card
+
+    local t2 = Instance.new("TextLabel")
+    t2.Position = UDim2.new(0, 10, 0, 26) t2.Size = UDim2.new(1, -90, 0, 18)
+    t2.BackgroundTransparency = 1 t2.Text = desc t2.TextColor3 = Color3.fromRGB(145, 145, 160)
+    t2.TextXAlignment = Enum.TextXAlignment.Left t2.Font = Enum.Font.Gotham t2.TextSize = 9 t2.TextWrapped = true t2.Parent = card
+
+    local action = Instance.new("TextButton")
+    action.AnchorPoint = Vector2.new(1, 0.5) action.Position = UDim2.new(1, -10, 0.5, 0)
+    action.Size = UDim2.fromOffset(70, 24) action.BackgroundColor3 = Color3.fromRGB(120, 20, 40)
+    action.Text = btnText action.TextColor3 = Color3.fromRGB(245, 245, 250) action.Font = Enum.Font.GothamBold action.TextSize = 8 action.Parent = card
+    local ac = Instance.new("UICorner") ac.CornerRadius = UDim.new(0, 6) ac.Parent = action
+
+    action.Activated:Connect(callback)
+end
+
+local tabButtons = {}
+local function switchTab(tabName, frame)
+    for name, btn in pairs(tabButtons) do
+        btn.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
+        btn.TextColor3 = Color3.fromRGB(145, 145, 160)
     end
+    for _, child in pairs(contentArea:GetChildren()) do
+        if child:IsA("ScrollingFrame") then child.Visible = false end
+    end
+    tabButtons[tabName].BackgroundColor3 = Color3.fromRGB(120, 20, 40)
+    tabButtons[tabName].TextColor3 = Color3.fromRGB(245, 245, 250)
+    frame.Visible = true
+end
+
+local function addTabButton(name, frame, order)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1, 0, 0, 30)
+    btn.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
+    btn.Text = name
+    btn.TextColor3 = Color3.fromRGB(145, 145, 160)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 10
+    btn.LayoutOrder = order
+    btn.AutoButtonColor = false
+    btn.Parent = sidebar
+    local bc = Instance.new("UICorner") bc.CornerRadius = UDim.new(0, 6) bc.Parent = btn
+
+    tabButtons[name] = btn
+    btn.Activated:Connect(function() switchTab(name, frame) end)
+end
+
+addTabButton("⚡ FARM", tabFarmFrame, 1)
+addTabButton("🚀 FIT LAG", tabLagFrame, 2)
+addTabButton("📌 THÔNG TIN", tabInfoFrame, 3)
+
+local counterLabel = Instance.new("TextLabel")
+counterLabel.Size = UDim2.new(1, -4, 0, 28)
+counterLabel.BackgroundColor3 = Color3.fromRGB(20, 8, 8)
+counterLabel.Text = "Số lần Teleport linh hồn: 0 / 500"
+counterLabel.TextColor3 = Color3.fromRGB(255, 220, 100)
+counterLabel.Font = Enum.Font.GothamBold
+counterLabel.TextSize = 10
+counterLabel.Parent = tabFarmFrame
+local clCorner = Instance.new("UICorner") clCorner.CornerRadius = UDim.new(0, 6) clCorner.Parent = counterLabel
+
+addToggle(tabFarmFrame, "Auto Radar Teleport Soul", "Quét radar liên tục & tele tức thì nhặt linh hồn.", false, function(v)
+    getgenv().kienConfig.AutoSoul = v
 end)
 
--- ĐỌC SỐ HỒN MÀN HÌNH
-local function getScreenSoulCount()
-    local count = 0
+addToggle(tabFarmFrame, "Về Nhà Khi Đủ 500 Lần Tele", "Chạy đủ 500 lần tele nhặt soul sẽ tự về tọa độ nhà.", true, function(v)
+    getgenv().kienConfig.AutoReturnHome = v
+end)
+
+addToggle(tabLagFrame, "Super Fit Lag Mạnh Nhất", "Xóa hiệu ứng đồ họa nhẹ máy Realme.", false, function(v)
+    getgenv().kienConfig.FitLag = v
+end)
+
+addButton(tabLagFrame, "Đổi Server Ít Người", "Chuyển sang server vắng một mình.", "THỰC HIỆN", function()
     pcall(function()
-        for _, gui in pairs(playerGui:GetDescendants()) do
-            if gui:IsA("TextLabel") or gui:IsA("TextButton") then
-                local text = gui.Text:lower()
-                if text:find("soul") or text:find("hồn") or (gui.Position.X.Scale == 0 and gui.Position.Y.Scale > 0.7) then
-                    local numbers = text:match("%d+")
-                    if numbers then
-                        local val = tonumber(numbers)
-                        if val and val > count then count = val end
-                    end
+        local servers = {}
+        local req = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+        if req and req.data then
+            for _, s in pairs(req.data) do
+                if type(s) == "table" and s.playing and s.maxPlayers and s.id then
+                    if s.playing < s.maxPlayers and s.id ~= game.JobId then table.insert(servers, s.id) end
                 end
             end
         end
+        if #servers > 0 then TeleportService:TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], player) end
     end)
-    if count == 0 then count = getgenv().kienConfig.SessionSouls end
-    return count
-end
+end)
 
--- FIT LAG
+addButton(tabInfoFrame, "Chủ Script: Trương Trọng Kiên", "Lớp 9 - THCS Nguyễn Văn Bánh", "OK", function() end)
+addButton(tabInfoFrame, "Tọa Độ Nhà", "CFrame.new(-0.19, 22.22, -2791.91)", "OK", function() end)
+
+switchTab("⚡ FARM", tabFarmFrame)
+
 task.spawn(function()
     while true do
         task.wait(2)
@@ -564,7 +415,6 @@ task.spawn(function()
     end
 end)
 
--- VÒNG LẶP RADAR QUÉT SOUL LIÊN TỤC VÔ TẬN
 task.spawn(function()
     while true do
         task.wait(0.001)
@@ -574,14 +424,11 @@ task.spawn(function()
 
             if getgenv().kienConfig.AutoSoul then
                 pcall(function()
-                    if getgenv().kienConfig.AutoReturnHome then
-                        local currentSouls = getScreenSoulCount()
-                        if currentSouls >= getgenv().kienConfig.RequiredSouls then
-                            hrp.CFrame = HOME_CFRAME
-                            notify("Đã đủ 500 hồn! Tự động về nhà an toàn.")
-                            task.wait(4)
-                            return
-                        end
+                    if getgenv().kienConfig.AutoReturnHome and getgenv().kienConfig.TeleportCount >= getgenv().kienConfig.RequiredSouls then
+                        hrp.CFrame = getgenv().HOME_CFRAME
+                        counterLabel.Text = "ĐÃ ĐỦ 500 LẦN TELE! ĐÃ VỀ NHÀ."
+                        task.wait(5)
+                        return
                     end
 
                     local bestTarget = nil
@@ -622,7 +469,7 @@ task.spawn(function()
                     if bestTarget and bestTarget.position then
                         hrp.CFrame = CFrame.new(bestTarget.position + Vector3.new(0, 1.5, 0))
                         
-                        if remote then
+                        if getgenv().kienRemote then
                             local vecPos = (typeof(vector) == "table" and vector.create) and vector.create(bestTarget.position.X, bestTarget.position.Y, bestTarget.position.Z) or Vector3.new(bestTarget.position.X, bestTarget.position.Y, bestTarget.position.Z)
                             
                             local args = {
@@ -636,17 +483,18 @@ task.spawn(function()
                             }
                             
                             for i = 1, 3 do
-                                remote:FireServer(unpack(args))
+                                getgenv().kienRemote:FireServer(unpack(args))
                             end
                         end
                         
-                        getgenv().kienConfig.SessionSouls = getgenv().kienConfig.SessionSouls + 1
+                        getgenv().kienConfig.TeleportCount = getgenv().kienConfig.TeleportCount + 1
+                        counterLabel.Text = "Số lần Teleport linh hồn: " .. tostring(getgenv().kienConfig.TeleportCount) .. " / 500"
+                        task.wait(0.05)
                     end
                 end)
+            else
+                task.wait(0.1)
             end
         end
     end
 end)
-
-renderPage("FARM")
-notify("KIÊN LỚP 94 — SẴN SÀNG QUÉT RADAR SOUL")
