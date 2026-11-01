@@ -1,6 +1,6 @@
 --[[
-    Script Name: √12kientomato Hub Pro Max - Ultimate Clean Edition
-    Features: Ultra Transparent Glassmorphism UI + Only Logo [K] Toggle + Soul Reader + Auto Home Toggle + Fit Lag + Hop Server
+    Script Name: √12kientomato Hub Pro Max - Original Golden Edition
+    Features: Restored Original Smooth Auto Soul Engine + Native UI + Logo [K] Toggle + Auto Return Home
 ]]
 
 local Players = game:GetService("Players")
@@ -46,11 +46,11 @@ ScreenGui.Parent = playerGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Nút Bật/Tắt Menu: Duy nhất 1 nút Logo Rồng [ K ] siêu gọn nằm sát góc trái trên cùng cạnh Roblox Logo
+-- Nút Bật/Tắt Menu: Duy nhất 1 nút Logo Rồng [ K ] siêu gọn nằm sát góc trái trên cùng
 local ToggleBtn = Instance.new("TextButton")
 ToggleBtn.Parent = ScreenGui
 ToggleBtn.BackgroundColor3 = Color3.fromRGB(20, 5, 5)
-ToggleBtn.BackgroundTransparency = 0.3
+ToggleBtn.BackgroundTransparency = 0.2
 ToggleBtn.Position = UDim2.new(0, 10, 0, 10)
 ToggleBtn.Size = UDim2.new(0, 110, 0, 38)
 ToggleBtn.Font = Enum.Font.GothamBold
@@ -65,7 +65,6 @@ TBtnCorner.Parent = ToggleBtn
 
 local TBtnStroke = Instance.new("UIStroke")
 TBtnStroke.Color = Color3.fromRGB(255, 50, 50)
-TBtnStroke.Transparency = 0.2
 TBtnStroke.Thickness = 2
 TBtnStroke.Parent = ToggleBtn
 
@@ -73,7 +72,7 @@ TBtnStroke.Parent = ToggleBtn
 local MainFrame = Instance.new("Frame")
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 3, 3)
-MainFrame.BackgroundTransparency = 0.35
+MainFrame.BackgroundTransparency = 0.25
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.Size = UDim2.new(0, 310, 0, 260)
@@ -88,7 +87,6 @@ MCorner.Parent = MainFrame
 
 local MStroke = Instance.new("UIStroke")
 MStroke.Color = Color3.fromRGB(255, 60, 60)
-MStroke.Transparency = 0.3
 MStroke.Thickness = 2
 MStroke.Parent = MainFrame
 
@@ -108,7 +106,6 @@ Title.ZIndex = 6
 local CloseBtn = Instance.new("TextButton")
 CloseBtn.Parent = MainFrame
 CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
-CloseBtn.BackgroundTransparency = 0.3
 CloseBtn.Position = UDim2.new(1, -35, 0, 8)
 CloseBtn.Size = UDim2.new(0, 26, 0, 26)
 CloseBtn.Font = Enum.Font.GothamBold
@@ -138,7 +135,6 @@ local function createToggle(name, defaultState, callback)
     local btn = Instance.new("TextButton")
     btn.Parent = TabContainer
     btn.BackgroundColor3 = Color3.fromRGB(30, 10, 10)
-    btn.BackgroundTransparency = 0.25
     btn.Size = UDim2.new(1, 0, 0, 40)
     btn.Font = Enum.Font.GothamBold
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -166,7 +162,6 @@ local function createButton(name, callback)
     local btn = Instance.new("TextButton")
     btn.Parent = TabContainer
     btn.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
-    btn.BackgroundTransparency = 0.25
     btn.Size = UDim2.new(1, 0, 0, 38)
     btn.Font = Enum.Font.GothamBold
     btn.Text = name
@@ -179,11 +174,10 @@ local function createButton(name, callback)
     return btn
 end
 
--- Nhãn trạng thái hiển thị số linh hồn quét từ màn hình
+-- Nhãn trạng thái hiển thị số linh hồn
 local StatusLabel = Instance.new("TextLabel")
 StatusLabel.Parent = TabContainer
 StatusLabel.BackgroundColor3 = Color3.fromRGB(20, 8, 8)
-StatusLabel.BackgroundTransparency = 0.3
 StatusLabel.Size = UDim2.new(1, 0, 0, 38)
 StatusLabel.Font = Enum.Font.Gotham
 StatusLabel.Text = "Đang quét số linh hồn trên màn hình..."
@@ -193,7 +187,7 @@ StatusLabel.ZIndex = 6
 local SLCorner = Instance.new("UICorner") SLCorner.CornerRadius = UDim.new(0, 8) SLCorner.Parent = StatusLabel
 
 -- Thêm các tính năng vào Menu
-createToggle("Auto Soul (Teleport Toàn Map)", false, function(v)
+createToggle("Auto Soul (Bản Gốc Mượt Mà)", false, function(v)
     getgenv().kienConfig.AutoSoul = v
 end)
 
@@ -224,7 +218,7 @@ createButton("Đổi Server Ít Người (Ưu tiên 1 mình)", function()
     end)
 end)
 
--- Bật/Tắt Menu duy nhất qua nút Rồng [ K ] góc trái
+-- Bật/Tắt Menu qua nút Rồng [ K ]
 ToggleBtn.MouseButton1Click:Connect(function()
     MainFrame.Visible = not MainFrame.Visible
 end)
@@ -233,7 +227,7 @@ CloseBtn.MouseButton1Click:Connect(function()
     MainFrame.Visible = false
 end)
 
--- Hàm quét số linh hồn trực tiếp từ TextLabel trên màn hình (gần số tiền góc trái)
+-- Hàm quét số linh hồn trên màn hình
 local function getScreenSoulCount()
     local count = 0
     pcall(function()
@@ -264,7 +258,7 @@ task.spawn(function()
         task.wait(1)
         pcall(function()
             local currentSouls = getScreenSoulCount()
-            StatusLabel.Text = "Hồn trên màn hình: " .. tostring(currentSouls) .. " / 500"
+            StatusLabel.Text = "Hồn trên màn hình: " .. tostring(currentSouls) .." / 500"
         end)
     end
 end)
@@ -305,7 +299,7 @@ task.spawn(function()
     end
 end)
 
--- Vòng lặp Auto Farm & Kiểm tra điều kiện về nhà
+-- Vòng lặp Auto Farm bản gốc mượt mà (Teleport thẳng tới linh hồn và nhặt ngay lập tức)
 task.spawn(function()
     local blacklist = {}
 
@@ -317,12 +311,11 @@ task.spawn(function()
 
             if getgenv().kienConfig.AutoSoul and remote then
                 pcall(function()
-                    -- Chỉ tele về nhà khi bật tính năng AutoReturnHome
                     if getgenv().kienConfig.AutoReturnHome then
                         local currentSouls = getScreenSoulCount()
                         if currentSouls >= getgenv().kienConfig.RequiredSouls then
                             hrp.CFrame = HOME_CFRAME
-                            task.wait(5) -- Đợi 5 giây
+                            task.wait(5)
                             return
                         end
                     end
