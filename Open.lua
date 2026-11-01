@@ -1,6 +1,6 @@
 --[[
-    Script Name: kiên 94 Hub Pro Max (Part 1 - Dragon Edition)
-    Features: Dragon 'K' Logo + Full Map Smart Teleport + Camera Control Panel (Up/Down)
+    Script Name: kiên 94 Hub Pro Max (Part 1 - Ultra Glassmorphic Edition)
+    Features: Slide-to-Open Dragon 'K' Button + Super Transparent Glass UI + Tabbed Navigation
 ]]
 
 local Players = game:GetService("Players")
@@ -10,7 +10,7 @@ local VirtualUser = game:GetService("VirtualUser")
 local TweenService = game:GetService("TweenService")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
-local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 local Terrain = workspace:FindFirstChildOfClass("Terrain")
 
 local player = Players.LocalPlayer
@@ -27,10 +27,8 @@ end)
 getgenv().kienConfig = {
     AutoSoul = false,
     FitLag = false,
-    Delay = 0.01,
-    SafeDistance = 12, -- Bán kính né người chơi (mét)
-    OriginCFrame = nil,
-    CamHeight = 0
+    Delay = 0.008,
+    SafeDistance = 12
 }
 
 -- Xóa GUI cũ nếu có
@@ -44,36 +42,49 @@ ScreenGui.Parent = playerGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Nút Bật/Tắt Menu cố định góc trái trên cùng (LOGO RỒNG CHỮ K)
-local ToggleMenuBtn = Instance.new("TextButton")
-ToggleMenuBtn.Name = "ToggleMenuBtn"
-ToggleMenuBtn.Parent = ScreenGui
-ToggleMenuBtn.BackgroundColor3 = Color3.fromRGB(30, 8, 8)
-ToggleMenuBtn.BackgroundTransparency = 0.15
-ToggleMenuBtn.Position = UDim2.new(0, 15, 0, 15)
-ToggleMenuBtn.Size = UDim2.new(0, 135, 0, 42)
-ToggleMenuBtn.Font = Enum.Font.GothamBold
-ToggleMenuBtn.Text = "🐉 [ K ] DRAGON"
-ToggleMenuBtn.TextColor3 = Color3.fromRGB(255, 60, 60)
-ToggleMenuBtn.TextSize = 13
-ToggleMenuBtn.ZIndex = 10
+-- Nút Trượt Ngang Bật/Tắt Menu (Slide Toggle) ở góc trái trên cùng
+local ToggleSlider = Instance.new("Frame")
+ToggleSlider.Name = "ToggleSlider"
+ToggleSlider.Parent = ScreenGui
+ToggleSlider.BackgroundColor3 = Color3.fromRGB(20, 5, 5)
+ToggleSlider.BackgroundTransparency = 0.4
+ToggleSlider.Position = UDim2.new(0, 15, 0, 15)
+ToggleSlider.Size = UDim2.new(0, 130, 0, 42)
+ToggleSlider.ZIndex = 10
 
-local TBtnCorner = Instance.new("UICorner")
-TBtnCorner.CornerRadius = UDim.new(0, 12)
-TBtnCorner.Parent = ToggleMenuBtn
+local TSliderCorner = Instance.new("UICorner")
+TSliderCorner.CornerRadius = UDim.new(0, 21)
+TSliderCorner.Parent = ToggleSlider
 
-local TBtnStroke = Instance.new("UIStroke")
-TBtnStroke.Color = Color3.fromRGB(255, 30, 30)
-TBtnStroke.Transparency = 0.1
-TBtnStroke.Thickness = 2.5
-TBtnStroke.Parent = ToggleMenuBtn
+local TSliderStroke = Instance.new("UIStroke")
+TSliderStroke.Color = Color3.fromRGB(255, 50, 50)
+TSliderStroke.Transparency = 0.2
+TSliderStroke.Thickness = 2
+TSliderStroke.Parent = ToggleSlider
 
--- Khung chính Menu
+-- Thanh trượt (Knob) mang hình tượng Rồng [ K ]
+local Knob = Instance.new("TextButton")
+Knob.Name = "Knob"
+Knob.Parent = ToggleSlider
+Knob.BackgroundColor3 = Color3.fromRGB(220, 30, 30)
+Knob.Position = UDim2.new(0, 3, 0, 3)
+Knob.Size = UDim2.new(0, 50, 0, 36)
+Knob.Font = Enum.Font.GothamBold
+Knob.Text = "🐉 K"
+Knob.TextColor3 = Color3.fromRGB(255, 255, 255)
+Knob.TextSize = 12
+Knob.ZIndex = 11
+
+local KnobCorner = Instance.new("UICorner")
+KnobCorner.CornerRadius = UDim.new(0, 18)
+KnobCorner.Parent = Knob
+
+-- Khung chính Menu (Siêu trong suốt Glassmorphism Đỏ Ruby)
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(20, 8, 8)
-MainFrame.BackgroundTransparency = 0.2
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 5, 5)
+MainFrame.BackgroundTransparency = 0.35
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.Size = UDim2.new(0, 0, 0, 0)
@@ -88,12 +99,12 @@ UICorner.CornerRadius = UDim.new(0, 18)
 UICorner.Parent = MainFrame
 
 local UIStroke = Instance.new("UIStroke")
-UIStroke.Color = Color3.fromRGB(255, 50, 50)
-UIStroke.Transparency = 0.2
-UIStroke.Thickness = 2.2
+UIStroke.Color = Color3.fromRGB(255, 60, 60)
+UIStroke.Transparency = 0.3
+UIStroke.Thickness = 2
 UIStroke.Parent = MainFrame
 
--- Tiêu đề Menu & Nút điều khiển phụ
+-- Tiêu đề Menu & Nút phụ
 local Title = Instance.new("TextLabel")
 Title.Parent = MainFrame
 Title.BackgroundTransparency = 1
@@ -101,7 +112,7 @@ Title.Position = UDim2.new(0, 0, 0, 8)
 Title.Size = UDim2.new(0.65, 0, 0, 28)
 Title.Font = Enum.Font.GothamBold
 Title.Text = "⚡ KIÊN 94 DRAGON HUB ⚡"
-Title.TextColor3 = Color3.fromRGB(255, 80, 80)
+Title.TextColor3 = Color3.fromRGB(255, 90, 90)
 Title.TextSize = 12
 Title.ZIndex = 6
 
@@ -109,7 +120,7 @@ Title.ZIndex = 6
 local MinimizeBtn = Instance.new("TextButton")
 MinimizeBtn.Parent = MainFrame
 MinimizeBtn.BackgroundColor3 = Color3.fromRGB(180, 100, 20)
-MinimizeBtn.BackgroundTransparency = 0.2
+MinimizeBtn.BackgroundTransparency = 0.3
 MinimizeBtn.Position = UDim2.new(0.67, 0, 0, 8)
 MinimizeBtn.Size = UDim2.new(0, 48, 0, 26)
 MinimizeBtn.Font = Enum.Font.GothamBold
@@ -123,7 +134,7 @@ local MinCorner = Instance.new("UICorner") MinCorner.CornerRadius = UDim.new(0, 
 local DestroyBtn = Instance.new("TextButton")
 DestroyBtn.Parent = MainFrame
 DestroyBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
-DestroyBtn.BackgroundTransparency = 0.2
+DestroyBtn.BackgroundTransparency = 0.3
 DestroyBtn.Position = UDim2.new(0.84, 0, 0, 8)
 DestroyBtn.Size = UDim2.new(0, 38, 0, 26)
 DestroyBtn.Font = Enum.Font.GothamBold
@@ -175,50 +186,6 @@ Tab3Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 Tab3Btn.TextSize = 9
 Tab3Btn.ZIndex = 6
 local T3C = Instance.new("UICorner") T3C.CornerRadius = UDim.new(0, 6) T3C.Parent = Tab3Btn
-
--- CỤM NÚT ĐIỀU KHIỂN CAMERA NÂNG CAO (Nằm ẩn bên phải màn hình, chỉ hiện khi bật Auto Farm)
-local CamControlGui = Instance.new("Frame")
-CamControlGui.Name = "CamControlGui"
-CamControlGui.Parent = ScreenGui
-CamControlGui.BackgroundTransparency = 1
-CamControlGui.Position = UDim2.new(1, -110, 0.5, -90)
-CamControlGui.Size = UDim2.new(0, 90, 0, 180)
-CamControlGui.Visible = false
-CamControlGui.ZIndex = 20
-
--- Nút Bay Lên (Up)
-local UpBtn = Instance.new("TextButton")
-UpBtn.Parent = CamControlGui
-UpBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
-UpBtn.BackgroundTransparency = 0.3
-UpBtn.Size = UDim2.new(1, 0, 0, 48)
-UpBtn.Font = Enum.Font.GothamBold
-UpBtn.Text = "▲ BAY LÊN"
-UpBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-UpBtn.TextSize = 11
-UpBtn.ZIndex = 20
-local UpC = Instance.new("UICorner") UpC.CornerRadius = UDim.new(0, 8) UpC.Parent = UpBtn
-
--- Nút Hạ Xuống (Down)
-local DownBtn = Instance.new("TextButton")
-DownBtn.Parent = CamControlGui
-DownBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 180)
-DownBtn.BackgroundTransparency = 0.3
-DownBtn.Position = UDim2.new(0, 0, 0, 56)
-DownBtn.Size = UDim2.new(1, 0, 0, 48)
-DownBtn.Font = Enum.Font.GothamBold
-DownBtn.Text = "▼ HẠ XUỐNG"
-DownBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-DownBtn.TextSize = 11
-DownBtn.ZIndex = 20
-local DownC = Instance.new("UICorner") DownC.CornerRadius = UDim.new(0, 8) DownC.Parent = DownBtn
-
--- Trạng thái điều hướng camera
-local camUpHeld, camDownHeld = false, false
-UpBtn.MouseButton1Down:Connect(function() camUpHeld = true end)
-UpBtn.MouseButton1Up:Connect(function() camUpHeld = false end)
-DownBtn.MouseButton1Down:Connect(function() camDownHeld = true end)
-DownBtn.MouseButton1Up:Connect(function() camDownHeld = false end)
 --[[
     Script Name: kiên 94 Hub Pro Max (Part 2 - Execution Engine)
 ]]
@@ -237,7 +204,7 @@ AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 AutoSoulBtn.BackgroundTransparency = 0.2
 AutoSoulBtn.Size = UDim2.new(1, 0, 0, 48)
 AutoSoulBtn.Font = Enum.Font.GothamBold
-AutoSoulBtn.Text = "Auto Soul (Teleport Toàn Map): OFF"
+AutoSoulBtn.Text = "Auto Soul (Teleport Khám Phá): OFF"
 AutoSoulBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 AutoSoulBtn.TextSize = 11
 AutoSoulBtn.ZIndex = 6
@@ -249,7 +216,7 @@ SoulStatus.BackgroundTransparency = 1
 SoulStatus.Position = UDim2.new(0, 0, 0.45, 0)
 SoulStatus.Size = UDim2.new(1, 0, 0.5, 0)
 SoulStatus.Font = Enum.Font.Gotham
-SoulStatus.Text = "Trạng thái: Lọc sạch linh hồn bám người, Teleport toàn map 100%."
+SoulStatus.Text = "Trạng thái: Farm mượt mà, bạn thoải mái chạy đi khám phá map."
 SoulStatus.TextColor3 = Color3.fromRGB(220, 180, 180)
 SoulStatus.TextSize = 11
 SoulStatus.TextWrapped = true
@@ -317,7 +284,7 @@ FitLagDesc.BackgroundTransparency = 1
 FitLagDesc.Position = UDim2.new(0, 0, 0.5, 0)
 FitLagDesc.Size = UDim2.new(1, 0, 0.4, 0)
 FitLagDesc.Font = Enum.Font.Gotham
-FitLagDesc.Text = "Xóa hiệu ứng, làm mờ map (giữ nguyên linh hồn & đứng bình thường)."
+FitLagDesc.Text = "Xóa hiệu ứng, làm mờ map trong suốt mượt mà."
 FitLagDesc.TextColor3 = Color3.fromRGB(220, 180, 180)
 FitLagDesc.TextSize = 10
 FitLagDesc.TextWrapped = true
@@ -346,29 +313,58 @@ Tab3Btn.MouseButton1Click:Connect(function()
     Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 15, 15) Tab2Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 end)
 
--- Hiệu ứng mở menu
+-- LOGIC TRƯỢT NGANG NÚT BẬT/TẮT MENU (Slide Toggle)
 local menuOpen = false
-ToggleMenuBtn.MouseButton1Click:Connect(function()
-    menuOpen = not menuOpen
-    if menuOpen then
-        MainFrame.Visible = true
-        MainFrame.Size = UDim2.new(0, 0, 0, 0)
-        MainFrame.Rotation = -180
-        
-        TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 290, 0, 230),
-            Rotation = 0,
-            Position = UDim2.new(0.5, 0, 0.5, 0)
-        }):Play()
-    else
-        local tw = TweenService:Create(MainFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-            Size = UDim2.new(0, 0, 0, 0),
-            Rotation = 180
-        })
-        tw:Play()
-        tw.Completed:Connect(function()
-            if not menuOpen then MainFrame.Visible = false end
-        end)
+local dragging = false
+local dragStart = 0
+local startPos = 0
+
+Knob.MouseButton1Down:Connect(function(inputX)
+    dragging = true
+    dragStart = UserInputService:GetMouseLocation().X
+    startPos = Knob.Position.X.Offset
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        if dragging then
+            dragging = false
+            local currentX = Knob.Position.X.Offset
+            if currentX > 35 then
+                -- Kéo sang phải -> Mở Menu
+                menuOpen = true
+                TweenService:Create(Knob, TweenInfo.new(0.2), {Position = UDim2.new(0, 77, 0, 3)}):Play()
+                MainFrame.Visible = true
+                MainFrame.Size = UDim2.new(0, 0, 0, 0)
+                MainFrame.Rotation = -180
+                TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+                    Size = UDim2.new(0, 290, 0, 230),
+                    Rotation = 0,
+                    Position = UDim2.new(0.5, 0, 0.5, 0)
+                }):Play()
+            else
+                -- Kéo về trái -> Đóng Menu
+                menuOpen = false
+                TweenService:Create(Knob, TweenInfo.new(0.2), {Position = UDim2.new(0, 3, 0, 3)}):Play()
+                local tw = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+                    Size = UDim2.new(0, 0, 0, 0),
+                    Rotation = 180
+                })
+                tw:Play()
+                tw.Completed:Connect(function()
+                    if not menuOpen then MainFrame.Visible = false end
+                end)
+            end
+        end
+    end
+end)
+
+RunService.RenderStepped:Connect(function()
+    if dragging then
+        local mouseX = UserInputService:GetMouseLocation().X
+        local delta = mouseX - dragStart
+        local newX = math.clamp(startPos + delta, 3, 77)
+        Knob.Position = UDim2.new(0, newX, 0, 3)
     end
 end)
 
@@ -393,12 +389,11 @@ DestroyBtn.MouseButton1Click:Connect(function()
         getgenv().kienConfig.AutoSoul = false
         getgenv().kienConfig.FitLag = false
         if antiAfkConn then antiAfkConn:Disconnect() end
-        camera.CameraType = Enum.CameraType.Custom
         ScreenGui:Destroy()
     end)
 end)
 
--- Xử lý Auto Soul (Ghi nhớ vị trí khi bật, tele thực thụ toàn map, tắt tự về chỗ cũ)
+-- Xử lý Auto Soul (Ghi nhớ vị trí khi bật, tự về chỗ cũ khi tắt, cho phép bạn đi khám phá map thoải mái)
 AutoSoulBtn.MouseButton1Click:Connect(function()
     getgenv().kienConfig.AutoSoul = not getgenv().kienConfig.AutoSoul
     local char = player.Character
@@ -407,18 +402,14 @@ AutoSoulBtn.MouseButton1Click:Connect(function()
     if getgenv().kienConfig.AutoSoul then
         if hrp then
             getgenv().kienConfig.OriginCFrame = hrp.CFrame
-            getgenv().kienConfig.CamHeight = 0
         end
         AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(50, 200, 90)
-        AutoSoulBtn.Text = "Auto Soul (Teleport Toàn Map): ON"
-        SoulStatus.Text = "Trạng thái: Đang Teleport toàn map né người chuẩn 100%..."
-        CamControlGui.Visible = true
+        AutoSoulBtn.Text = "Auto Soul (Khám Phá): ON"
+        SoulStatus.Text = "Trạng thái: Đang farm ẩn danh, bạn có thể tự do chạy đi chơi!"
     else
         AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-        AutoSoulBtn.Text = "Auto Soul (Teleport Toàn Map): OFF"
+        AutoSoulBtn.Text = "Auto Soul (Khám Phá): OFF"
         SoulStatus.Text = "Trạng thái: Đã tắt, đang về chỗ cũ..."
-        camera.CameraType = Enum.CameraType.Custom
-        CamControlGui.Visible = false
 
         if hrp and getgenv().kienConfig.OriginCFrame then
             hrp.CFrame = getgenv().kienConfig.OriginCFrame
@@ -498,7 +489,7 @@ task.spawn(function()
     end
 end)
 
--- Vòng lặp Auto Farm Teleport thực thụ toàn map + Lọc thông minh linh hồn bám người + Camera tự do
+-- Vòng lặp Auto Farm Teleport chuẩn xác tuyệt đối (Không bị lơ lửng, hạ xuống lượm ngay lập tức)
 task.spawn(function()
     local blacklist = {}
 
@@ -509,15 +500,6 @@ task.spawn(function()
             local hrp = character.HumanoidRootPart
 
             if getgenv().kienConfig.AutoSoul and remote then
-                -- Điều khiển camera tự do khi bật Auto (Hỗ trợ nút Bay Lên / Hạ Xuống)
-                camera.CameraType = Enum.CameraType.Scriptable
-                if camUpHeld then getgenv().kienConfig.CamHeight = getgenv().kienConfig.CamHeight + 1.5 end
-                if camDownHeld then getgenv().kienConfig.CamHeight = getgenv().kienConfig.CamHeight - 1.5 end
-                
-                if getgenv().kienConfig.OriginCFrame then
-                    camera.CFrame = (getgenv().kienConfig.OriginCFrame + Vector3.new(0, 15 + getgenv().kienConfig.CamHeight, 0)) * CFrame.Angles(math.rad(-35), 0, 0)
-                end
-
                 pcall(function()
                     local bestTarget = nil
                     local shortestDist = math.huge
@@ -528,16 +510,15 @@ task.spawn(function()
                         end
                     end
 
-                    -- Quét 100% toàn bộ linh hồn trên toàn bản đồ
                     for _, obj in pairs(workspace:GetDescendants()) do
                         if not getgenv().kienConfig.AutoSoul then break end
                         
                         if (obj.Name == "GraveyardSoul" or obj.Name:lower():find("soul")) and not blacklist[obj] then
-                            -- Kiểm tra xem linh hồn có liên quan tới người chơi nào khác không
                             local isPlayerRelated = false
                             local ancestor = obj.Parent
                             while ancestor and ancestor ~= workspace do
-                                if Players:GetPlayerFromCharacter(ancestor) then
+                                local p = Players:GetPlayerFromCharacter(ancestor)
+                                if p and p ~= player then
                                     isPlayerRelated = true
                                     break
                                 end
@@ -556,7 +537,6 @@ task.spawn(function()
                                 end
 
                                 if pos then
-                                    -- BỘ LỌC THÔNG MINH: Kiểm tra xem quanh vị trí linh hồn có người chơi nào cắm chốt trong bán kính SafeDistance không
                                     local tooCloseToOtherPlayer = false
                                     for _, otherPlayer in pairs(Players:GetPlayers()) do
                                         if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
@@ -568,7 +548,6 @@ task.spawn(function()
                                         end
                                     end
 
-                                    -- Chỉ chọn các linh hồn hoàn toàn cô độc, không có ai gần
                                     if not tooCloseToOtherPlayer then
                                         local dist = (hrp.Position - pos).Magnitude
                                         if dist < shortestDist then
@@ -584,10 +563,10 @@ task.spawn(function()
                     if bestTarget then
                         blacklist[bestTarget.instance] = true
                         
-                        -- TELEPORT THỰC THỤ: Dịch chuyển nhân vật thẳng đến tọa độ linh hồn trên toàn map
-                        hrp.CFrame = CFrame.new(bestTarget.position + Vector3.new(0, 2, 0))
+                        -- TELEPORT CHUẨN XÁC: Đặt chân đúng ngay sát linh hồn (Cộng thêm 1.5 đơn vị chiều cao để không bị chìm hay lơ lửng)
+                        hrp.CFrame = CFrame.new(bestTarget.position + Vector3.new(0, 1.5, 0))
                         
-                        -- Gửi tín hiệu nhặt điểm siêu tốc (Multi-fire x5)
+                        -- Gửi lệnh nhặt siêu tốc
                         local args = {
                             "GraveyardSoul",
                             {
@@ -605,7 +584,6 @@ task.spawn(function()
                     end
                 end)
             else
-                camera.CameraType = Enum.CameraType.Custom
                 blacklist = {}
             end
         end
