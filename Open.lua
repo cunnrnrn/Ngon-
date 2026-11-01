@@ -1,6 +1,6 @@
 --[[
-    Script Name: √12kientomato Hub Pro Max (Part 1 - Dragon Edition)
-    Features: Dragon 'K' Logo + Fast Teleport Auto Soul + Camera Lock + Super Fit Lag
+    Script Name: kiên 94 Hub Pro Max (Part 1 - Dragon Edition)
+    Features: Dragon 'K' Logo + Full Map Smart Teleport + Camera Control Panel (Up/Down)
 ]]
 
 local Players = game:GetService("Players")
@@ -10,6 +10,7 @@ local VirtualUser = game:GetService("VirtualUser")
 local TweenService = game:GetService("TweenService")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
 local Terrain = workspace:FindFirstChildOfClass("Terrain")
 
 local player = Players.LocalPlayer
@@ -27,8 +28,9 @@ getgenv().kienConfig = {
     AutoSoul = false,
     FitLag = false,
     Delay = 0.01,
-    SafeDistance = 10,
-    OriginCFrame = nil
+    SafeDistance = 12, -- Bán kính né người chơi (mét)
+    OriginCFrame = nil,
+    CamHeight = 0
 }
 
 -- Xóa GUI cũ nếu có
@@ -42,7 +44,7 @@ ScreenGui.Parent = playerGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Nút Bật/Tắt Menu cố định góc trái trên cùng (LOGO CHỮ K HÌNH CON RỒNG)
+-- Nút Bật/Tắt Menu cố định góc trái trên cùng (LOGO RỒNG CHỮ K)
 local ToggleMenuBtn = Instance.new("TextButton")
 ToggleMenuBtn.Name = "ToggleMenuBtn"
 ToggleMenuBtn.Parent = ScreenGui
@@ -173,8 +175,52 @@ Tab3Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 Tab3Btn.TextSize = 9
 Tab3Btn.ZIndex = 6
 local T3C = Instance.new("UICorner") T3C.CornerRadius = UDim.new(0, 6) T3C.Parent = Tab3Btn
+
+-- CỤM NÚT ĐIỀU KHIỂN CAMERA NÂNG CAO (Nằm ẩn bên phải màn hình, chỉ hiện khi bật Auto Farm)
+local CamControlGui = Instance.new("Frame")
+CamControlGui.Name = "CamControlGui"
+CamControlGui.Parent = ScreenGui
+CamControlGui.BackgroundTransparency = 1
+CamControlGui.Position = UDim2.new(1, -110, 0.5, -90)
+CamControlGui.Size = UDim2.new(0, 90, 0, 180)
+CamControlGui.Visible = false
+CamControlGui.ZIndex = 20
+
+-- Nút Bay Lên (Up)
+local UpBtn = Instance.new("TextButton")
+UpBtn.Parent = CamControlGui
+UpBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
+UpBtn.BackgroundTransparency = 0.3
+UpBtn.Size = UDim2.new(1, 0, 0, 48)
+UpBtn.Font = Enum.Font.GothamBold
+UpBtn.Text = "▲ BAY LÊN"
+UpBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+UpBtn.TextSize = 11
+UpBtn.ZIndex = 20
+local UpC = Instance.new("UICorner") UpC.CornerRadius = UDim.new(0, 8) UpC.Parent = UpBtn
+
+-- Nút Hạ Xuống (Down)
+local DownBtn = Instance.new("TextButton")
+DownBtn.Parent = CamControlGui
+DownBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 180)
+DownBtn.BackgroundTransparency = 0.3
+DownBtn.Position = UDim2.new(0, 0, 0, 56)
+DownBtn.Size = UDim2.new(1, 0, 0, 48)
+DownBtn.Font = Enum.Font.GothamBold
+DownBtn.Text = "▼ HẠ XUỐNG"
+DownBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+DownBtn.TextSize = 11
+DownBtn.ZIndex = 20
+local DownC = Instance.new("UICorner") DownC.CornerRadius = UDim.new(0, 8) DownC.Parent = DownBtn
+
+-- Trạng thái điều hướng camera
+local camUpHeld, camDownHeld = false, false
+UpBtn.MouseButton1Down:Connect(function() camUpHeld = true end)
+UpBtn.MouseButton1Up:Connect(function() camUpHeld = false end)
+DownBtn.MouseButton1Down:Connect(function() camDownHeld = true end)
+DownBtn.MouseButton1Up:Connect(function() camDownHeld = false end)
 --[[
-    Script Name: √12kientomato Hub Pro Max (Part 2 - Execution Engine)
+    Script Name: kiên 94 Hub Pro Max (Part 2 - Execution Engine)
 ]]
 
 -- Container Tab 1 (Auto Soul)
@@ -191,7 +237,7 @@ AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 AutoSoulBtn.BackgroundTransparency = 0.2
 AutoSoulBtn.Size = UDim2.new(1, 0, 0, 48)
 AutoSoulBtn.Font = Enum.Font.GothamBold
-AutoSoulBtn.Text = "Auto Soul (Siêu Tốc Ẩn Danh): OFF"
+AutoSoulBtn.Text = "Auto Soul (Teleport Toàn Map): OFF"
 AutoSoulBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 AutoSoulBtn.TextSize = 11
 AutoSoulBtn.ZIndex = 6
@@ -203,7 +249,7 @@ SoulStatus.BackgroundTransparency = 1
 SoulStatus.Position = UDim2.new(0, 0, 0.45, 0)
 SoulStatus.Size = UDim2.new(1, 0, 0.5, 0)
 SoulStatus.Font = Enum.Font.Gotham
-SoulStatus.Text = "Trạng thái: Tự ghi nhớ vị trí, nhặt siêu tốc, tắt tự về chỗ cũ."
+SoulStatus.Text = "Trạng thái: Lọc sạch linh hồn bám người, Teleport toàn map 100%."
 SoulStatus.TextColor3 = Color3.fromRGB(220, 180, 180)
 SoulStatus.TextSize = 11
 SoulStatus.TextWrapped = true
@@ -352,7 +398,7 @@ DestroyBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- Xử lý Auto Soul
+-- Xử lý Auto Soul (Ghi nhớ vị trí khi bật, tele thực thụ toàn map, tắt tự về chỗ cũ)
 AutoSoulBtn.MouseButton1Click:Connect(function()
     getgenv().kienConfig.AutoSoul = not getgenv().kienConfig.AutoSoul
     local char = player.Character
@@ -361,15 +407,18 @@ AutoSoulBtn.MouseButton1Click:Connect(function()
     if getgenv().kienConfig.AutoSoul then
         if hrp then
             getgenv().kienConfig.OriginCFrame = hrp.CFrame
+            getgenv().kienConfig.CamHeight = 0
         end
         AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(50, 200, 90)
-        AutoSoulBtn.Text = "Auto Soul (Siêu Tốc Ẩn Danh): ON"
-        SoulStatus.Text = "Trạng thái: Đang nhặt linh hồn siêu tốc..."
+        AutoSoulBtn.Text = "Auto Soul (Teleport Toàn Map): ON"
+        SoulStatus.Text = "Trạng thái: Đang Teleport toàn map né người chuẩn 100%..."
+        CamControlGui.Visible = true
     else
         AutoSoulBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-        AutoSoulBtn.Text = "Auto Soul (Siêu Tốc Ẩn Danh): OFF"
+        AutoSoulBtn.Text = "Auto Soul (Teleport Toàn Map): OFF"
         SoulStatus.Text = "Trạng thái: Đã tắt, đang về chỗ cũ..."
         camera.CameraType = Enum.CameraType.Custom
+        CamControlGui.Visible = false
 
         if hrp and getgenv().kienConfig.OriginCFrame then
             hrp.CFrame = getgenv().kienConfig.OriginCFrame
@@ -449,10 +498,8 @@ task.spawn(function()
     end
 end)
 
--- Vòng lặp Auto Farm Siêu Tốc + Khóa Camera + Smart Blacklist
+-- Vòng lặp Auto Farm Teleport thực thụ toàn map + Lọc thông minh linh hồn bám người + Camera tự do
 task.spawn(function()
-    local lockedCameraCF = nil
-    local isLockedCam = false
     local blacklist = {}
 
     while true do
@@ -462,14 +509,13 @@ task.spawn(function()
             local hrp = character.HumanoidRootPart
 
             if getgenv().kienConfig.AutoSoul and remote then
-                if not isLockedCam then
-                    lockedCameraCF = camera.CFrame
-                    isLockedCam = true
-                    camera.CameraType = Enum.CameraType.Scriptable
-                end
+                -- Điều khiển camera tự do khi bật Auto (Hỗ trợ nút Bay Lên / Hạ Xuống)
+                camera.CameraType = Enum.CameraType.Scriptable
+                if camUpHeld then getgenv().kienConfig.CamHeight = getgenv().kienConfig.CamHeight + 1.5 end
+                if camDownHeld then getgenv().kienConfig.CamHeight = getgenv().kienConfig.CamHeight - 1.5 end
                 
-                if lockedCameraCF then
-                    camera.CFrame = lockedCameraCF
+                if getgenv().kienConfig.OriginCFrame then
+                    camera.CFrame = (getgenv().kienConfig.OriginCFrame + Vector3.new(0, 15 + getgenv().kienConfig.CamHeight, 0)) * CFrame.Angles(math.rad(-35), 0, 0)
                 end
 
                 pcall(function()
@@ -482,10 +528,12 @@ task.spawn(function()
                         end
                     end
 
+                    -- Quét 100% toàn bộ linh hồn trên toàn bản đồ
                     for _, obj in pairs(workspace:GetDescendants()) do
                         if not getgenv().kienConfig.AutoSoul then break end
                         
                         if (obj.Name == "GraveyardSoul" or obj.Name:lower():find("soul")) and not blacklist[obj] then
+                            -- Kiểm tra xem linh hồn có liên quan tới người chơi nào khác không
                             local isPlayerRelated = false
                             local ancestor = obj.Parent
                             while ancestor and ancestor ~= workspace do
@@ -508,6 +556,7 @@ task.spawn(function()
                                 end
 
                                 if pos then
+                                    -- BỘ LỌC THÔNG MINH: Kiểm tra xem quanh vị trí linh hồn có người chơi nào cắm chốt trong bán kính SafeDistance không
                                     local tooCloseToOtherPlayer = false
                                     for _, otherPlayer in pairs(Players:GetPlayers()) do
                                         if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
@@ -519,6 +568,7 @@ task.spawn(function()
                                         end
                                     end
 
+                                    -- Chỉ chọn các linh hồn hoàn toàn cô độc, không có ai gần
                                     if not tooCloseToOtherPlayer then
                                         local dist = (hrp.Position - pos).Magnitude
                                         if dist < shortestDist then
@@ -534,9 +584,10 @@ task.spawn(function()
                     if bestTarget then
                         blacklist[bestTarget.instance] = true
                         
-                        -- Dịch chuyển siêu tốc tới sát linh hồn để nhặt
+                        -- TELEPORT THỰC THỤ: Dịch chuyển nhân vật thẳng đến tọa độ linh hồn trên toàn map
                         hrp.CFrame = CFrame.new(bestTarget.position + Vector3.new(0, 2, 0))
                         
+                        -- Gửi tín hiệu nhặt điểm siêu tốc (Multi-fire x5)
                         local args = {
                             "GraveyardSoul",
                             {
@@ -554,12 +605,8 @@ task.spawn(function()
                     end
                 end)
             else
-                if isLockedCam then
-                    isLockedCam = false
-                    camera.CameraType = Enum.CameraType.Custom
-                    lockedCameraCF = nil
-                    blacklist = {}
-                end
+                camera.CameraType = Enum.CameraType.Custom
+                blacklist = {}
             end
         end
     end
