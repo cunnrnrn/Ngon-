@@ -84,7 +84,7 @@ local main = Instance.new("Frame")
 main.Name = "Main"
 main.AnchorPoint = Vector2.new(0.5, 0.5)
 main.Position = UDim2.new(0.5, 0, 0.5, 0)
-main.Size = UDim2.fromOffset(480, 300)
+main.Size = UDim2.fromOffset(500, 320)
 main.BackgroundColor3 = Color3.fromRGB(10, 10, 14)
 main.BorderSizePixel = 0
 main.Visible = false
@@ -116,8 +116,8 @@ end)
 UserInputService.InputChanged:Connect(function(input)
     if resizing and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
         local delta = input.Position - resizeStart
-        local newX = math.clamp(startSize.X.Offset + delta.X, 320, 800)
-        local newY = math.clamp(startSize.Y.Offset + delta.Y, 220, 600)
+        local newX = math.clamp(startSize.X.Offset + delta.X, 350, 800)
+        local newY = math.clamp(startSize.Y.Offset + delta.Y, 250, 600)
         main.Size = UDim2.fromOffset(newX, newY)
     end
 end)
@@ -140,7 +140,7 @@ line.Parent = top
 
 local title = Instance.new("TextLabel")
 title.Position = UDim2.new(0, 12, 0, 6)
-title.Size = UDim2.new(0, 350, 0, 18)
+title.Size = UDim2.new(0, 380, 0, 18)
 title.BackgroundTransparency = 1
 title.Text = "KIÊN LỚP 94 — THCS NGUYỄN VĂN BÁNH"
 title.TextColor3 = Color3.fromRGB(245, 245, 250)
@@ -153,7 +153,7 @@ local subTitle = Instance.new("TextLabel")
 subTitle.Position = UDim2.new(0, 12, 0, 24)
 subTitle.Size = UDim2.new(0, 300, 0, 14)
 subTitle.BackgroundTransparency = 1
-subTitle.Text = "BLACK NEBULA  •  RADAR TELEPORT ENGINE"
+subTitle.Text = "BLACK NEBULA  •  INSTANT BLACKLIST ENGINE"
 subTitle.TextColor3 = Color3.fromRGB(145, 145, 160)
 subTitle.TextXAlignment = Enum.TextXAlignment.Left
 subTitle.Font = Enum.Font.GothamMedium
@@ -175,7 +175,7 @@ local cbCorner = Instance.new("UICorner") cbCorner.CornerRadius = UDim.new(0, 6)
 local sidebar = Instance.new("Frame")
 sidebar.Name = "Sidebar"
 sidebar.Position = UDim2.new(0, 0, 0, 45)
-sidebar.Size = UDim2.new(0, 120, 1, -45)
+sidebar.Size = UDim2.new(0, 130, 1, -45)
 sidebar.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
 sidebar.BorderSizePixel = 0
 sidebar.Parent = main
@@ -185,8 +185,8 @@ local sbPadding = Instance.new("UIPadding") sbPadding.PaddingTop = UDim.new(0, 1
 
 local contentArea = Instance.new("Frame")
 contentArea.Name = "ContentArea"
-contentArea.Position = UDim2.new(0, 120, 0, 45)
-contentArea.Size = UDim2.new(1, -120, 1, -45)
+contentArea.Position = UDim2.new(0, 130, 0, 45)
+contentArea.Size = UDim2.new(1, -130, 1, -45)
 contentArea.BackgroundTransparency = 1
 contentArea.Parent = main
 
@@ -330,7 +330,7 @@ end
 
 local function addTabButton(name, frame, order)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, 0, 0, 30)
+    btn.Size = UDim2.new(1, 0, 0, 32)
     btn.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
     btn.Text = name
     btn.TextColor3 = Color3.fromRGB(145, 145, 160)
@@ -359,11 +359,11 @@ counterLabel.TextSize = 10
 counterLabel.Parent = tabFarmFrame
 local clCorner = Instance.new("UICorner") clCorner.CornerRadius = UDim.new(0, 6) clCorner.Parent = counterLabel
 
-addToggle(tabFarmFrame, "Auto Radar Teleport Soul", "Quét radar & bỏ qua linh hồn đã nhặt.", false, function(v)
+addToggle(tabFarmFrame, "Auto Radar Teleport Soul", "Teleport tức thì & cho vào danh sách đen ngay.", false, function(v)
     getgenv().kienConfig.AutoSoul = v
 end)
 
-addToggle(tabFarmFrame, "Về Nhà Khi Đủ 500 Lần Tele", "Chạy đủ 500 lần tele nhặt soul sẽ tự về nhà.", true, function(v)
+addToggle(tabFarmFrame, "Về Nhà Khi Đủ 500 Lần Tele", "Đủ 500 lần tele nhặt soul sẽ tự về nhà.", true, function(v)
     getgenv().kienConfig.AutoReturnHome = v
 end)
 
@@ -416,7 +416,7 @@ task.spawn(function()
     end
 end)
 
--- VÒNG LẶP TELEPORT TỨC THÌ CÓ BLACKLIST (DANH SÁCH ĐEN BỎ QUA SOUL ĐÃ NHẶT)
+-- VÒNG LẶP TELEPORT TỨC THÌ + BLACKLIST TỨC THÌ KHI VỪA TELE TỚI
 task.spawn(function()
     local blacklist = {}
 
@@ -430,12 +430,11 @@ task.spawn(function()
                 pcall(function()
                     if getgenv().kienConfig.AutoReturnHome and getgenv().kienConfig.TeleportCount >= getgenv().kienConfig.RequiredSouls then
                         hrp.CFrame = getgenv().HOME_CFRAME
-                        counterLabel.Text = "ĐẢ ĐỦ 500 LẦN TELE! ĐÃ VỀ NHÀ."
+                        counterLabel.Text = "ĐÃ ĐỦ 500 LẦN TELE! ĐÃ VỀ NHÀ."
                         task.wait(5)
                         return
                     end
 
-                    -- Tự dọn dẹp danh sách đen nếu linh hồn không còn tồn tại trên map
                     for obj, _ in pairs(blacklist) do
                         if not obj or not obj.Parent then
                             blacklist[obj] = nil
@@ -448,7 +447,6 @@ task.spawn(function()
                     for _, obj in pairs(workspace:GetDescendants()) do
                         if not getgenv().kienConfig.AutoSoul then break end
                         
-                        -- Kiểm tra nếu đúng tên linh hồn VÀ CHƯA CÓ TRONG DANH SÁCH ĐEN
                         if (obj.Name == "GraveyardSoul" or obj.Name:lower():find("soul")) and not blacklist[obj] then
                             local isPlayerRelated = false
                             local ancestor = obj.Parent
@@ -479,7 +477,7 @@ task.spawn(function()
                     end
 
                     if bestTarget and bestTarget.position then
-                        -- LƯU LINH HỒN NÀY VÀO BLACKLIST ĐỂ BỎ QUA LẦN SAU
+                        -- ĐƯA NGAY VÀO BLACKLIST TỨC THÌ TRƯỚC KHI TELE ĐỂ KHÔNG BAO GIỜ QUAY LẠI NỮA
                         blacklist[bestTarget.instance] = true
 
                         -- TELEPORT TỨC THÌ ĐẾN VỊ TRÍ SOUL
@@ -505,9 +503,8 @@ task.spawn(function()
                         
                         getgenv().kienConfig.TeleportCount = getgenv().kienConfig.TeleportCount + 1
                         counterLabel.Text = "Số lần Teleport linh hồn: " .. tostring(getgenv().kienConfig.TeleportCount) .. " / 500"
-                        task.wait(0.05)
+                        task.wait(0.02)
                     else
-                        -- Nếu không còn linh hồn mới chưa nhặt, reset danh sách đen để quét lại lượt mới
                         blacklist = {}
                         task.wait(0.1)
                     end
