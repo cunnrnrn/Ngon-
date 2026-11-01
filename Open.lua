@@ -1,6 +1,6 @@
 --[[
-    Script Name: kiên 94 Hub Pro Max (Part 1 - Ultra Glassmorphic Edition)
-    Features: Slide-to-Open Dragon 'K' Button + Super Transparent Glass UI + Tabbed Navigation
+    Script Name: √12kientomato Hub Pro Max (Part 1 - Soul Counter & Fixed GUI)
+    Features: Dragon 'K' Button + Live Soul Counter (Bottom Left) + Red Neon Glassmorphism UI
 ]]
 
 local Players = game:GetService("Players")
@@ -10,7 +10,6 @@ local VirtualUser = game:GetService("VirtualUser")
 local TweenService = game:GetService("TweenService")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
-local UserInputService = game:GetService("UserInputService")
 local Terrain = workspace:FindFirstChildOfClass("Terrain")
 
 local player = Players.LocalPlayer
@@ -28,58 +27,101 @@ getgenv().kienConfig = {
     AutoSoul = false,
     FitLag = false,
     Delay = 0.008,
-    SafeDistance = 12
+    SafeDistance = 12,
+    SessionSouls = 0
 }
 
 -- Xóa GUI cũ nếu có
-if playerGui:FindFirstChild("kien_94_GUI") then
-    playerGui["kien_94_GUI"]:Destroy()
+if playerGui:FindFirstChild("√12kientomato_GUI") then
+    playerGui["√12kientomato_GUI"]:Destroy()
 end
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "kien_94_GUI"
+ScreenGui.Name = "√12kientomato_GUI"
 ScreenGui.Parent = playerGui
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Nút Trượt Ngang Bật/Tắt Menu (Slide Toggle) ở góc trái trên cùng
-local ToggleSlider = Instance.new("Frame")
-ToggleSlider.Name = "ToggleSlider"
-ToggleSlider.Parent = ScreenGui
-ToggleSlider.BackgroundColor3 = Color3.fromRGB(20, 5, 5)
-ToggleSlider.BackgroundTransparency = 0.4
-ToggleSlider.Position = UDim2.new(0, 15, 0, 15)
-ToggleSlider.Size = UDim2.new(0, 130, 0, 42)
-ToggleSlider.ZIndex = 10
+-- Nút Bật/Tắt Menu CHẠM LÀ MỞ ở góc trái trên cùng (Logo Rồng [ K ])
+local ToggleMenuBtn = Instance.new("TextButton")
+ToggleMenuBtn.Name = "ToggleMenuBtn"
+ToggleMenuBtn.Parent = ScreenGui
+ToggleMenuBtn.BackgroundColor3 = Color3.fromRGB(30, 8, 8)
+ToggleMenuBtn.BackgroundTransparency = 0.2
+ToggleMenuBtn.Position = UDim2.new(0, 15, 0, 15)
+ToggleMenuBtn.Size = UDim2.new(0, 130, 0, 42)
+ToggleMenuBtn.Font = Enum.Font.GothamBold
+ToggleMenuBtn.Text = "🐉 [ K ] DRAGON"
+ToggleMenuBtn.TextColor3 = Color3.fromRGB(255, 60, 60)
+ToggleMenuBtn.TextSize = 13
+ToggleMenuBtn.ZIndex = 10
 
-local TSliderCorner = Instance.new("UICorner")
-TSliderCorner.CornerRadius = UDim.new(0, 21)
-TSliderCorner.Parent = ToggleSlider
+local TBtnCorner = Instance.new("UICorner")
+TBtnCorner.CornerRadius = UDim.new(0, 12)
+TBtnCorner.Parent = ToggleMenuBtn
 
-local TSliderStroke = Instance.new("UIStroke")
-TSliderStroke.Color = Color3.fromRGB(255, 50, 50)
-TSliderStroke.Transparency = 0.2
-TSliderStroke.Thickness = 2
-TSliderStroke.Parent = ToggleSlider
+local TBtnStroke = Instance.new("UIStroke")
+TBtnStroke.Color = Color3.fromRGB(255, 30, 30)
+TBtnStroke.Transparency = 0.2
+TBtnStroke.Thickness = 2.2
+TBtnStroke.Parent = ToggleMenuBtn
 
--- Thanh trượt (Knob) mang hình tượng Rồng [ K ]
-local Knob = Instance.new("TextButton")
-Knob.Name = "Knob"
-Knob.Parent = ToggleSlider
-Knob.BackgroundColor3 = Color3.fromRGB(220, 30, 30)
-Knob.Position = UDim2.new(0, 3, 0, 3)
-Knob.Size = UDim2.new(0, 50, 0, 36)
-Knob.Font = Enum.Font.GothamBold
-Knob.Text = "🐉 K"
-Knob.TextColor3 = Color3.fromRGB(255, 255, 255)
-Knob.TextSize = 12
-Knob.ZIndex = 11
+-- KHUNG HIỂN THỊ SỐ LINH HỒN Ở GÓC DƯỚI BÊN TRÁI MÀN HÌNH (Giống thanh tiền)
+local SoulCounterFrame = Instance.new("Frame")
+SoulCounterFrame.Name = "SoulCounterFrame"
+SoulCounterFrame.Parent = ScreenGui
+SoulCounterFrame.BackgroundColor3 = Color3.fromRGB(18, 6, 6)
+SoulCounterFrame.BackgroundTransparency = 0.25
+SoulCounterFrame.Position = UDim2.new(0, 15, 1, -65)
+SoulCounterFrame.Size = UDim2.new(0, 180, 0, 45)
+SoulCounterFrame.ZIndex = 8
 
-local KnobCorner = Instance.new("UICorner")
-KnobCorner.CornerRadius = UDim.new(0, 18)
-KnobCorner.Parent = Knob
+local SCFrameCorner = Instance.new("UICorner")
+SCFrameCorner.CornerRadius = UDim.new(0, 10)
+SCFrameCorner.Parent = SoulCounterFrame
 
--- Khung chính Menu (Siêu trong suốt Glassmorphism Đỏ Ruby)
+local SCFrameStroke = Instance.new("UIStroke")
+SCFrameStroke.Color = Color3.fromRGB(255, 60, 60)
+SCFrameStroke.Transparency = 0.3
+SCFrameStroke.Thickness = 1.8
+SCFrameStroke.Parent = SoulCounterFrame
+
+local SoulIcon = Instance.new("TextLabel")
+SoulIcon.Parent = SoulCounterFrame
+SoulIcon.BackgroundTransparency = 1
+SoulIcon.Position = UDim2.new(0, 8, 0, 0)
+SoulIcon.Size = UDim2.new(0, 35, 1, 0)
+SoulIcon.Font = Enum.Font.GothamBold
+SoulIcon.Text = "👻"
+SoulIcon.TextSize = 22
+SoulIcon.ZIndex = 9
+
+local SoulCountLabel = Instance.new("TextLabel")
+SoulCountLabel.Name = "SoulCountLabel"
+SoulCountLabel.Parent = SoulCounterFrame
+SoulCountLabel.BackgroundTransparency = 1
+SoulCountLabel.Position = UDim2.new(0, 42, 0, 4)
+SoulCountLabel.Size = UDim2.new(1, -45, 0, 20)
+SoulCountLabel.Font = Enum.Font.GothamBold
+SoulCountLabel.Text = "Linh hồn: 0"
+SoulCountLabel.TextColor3 = Color3.fromRGB(255, 220, 100)
+SoulCountLabel.TextSize = 13
+SoulCountLabel.TextXAlignment = Enum.TextXAlignment.Left
+SoulCountLabel.ZIndex = 9
+
+local SoulSubLabel = Instance.new("TextLabel")
+SoulSubLabel.Parent = SoulCounterFrame
+SoulSubLabel.BackgroundTransparency = 1
+SoulSubLabel.Position = UDim2.new(0, 42, 0, 24)
+SoulSubLabel.Size = UDim2.new(1, -45, 0, 16)
+SoulSubLabel.Font = Enum.Font.Gotham
+SoulSubLabel.Text = "Đã nhặt: +0"
+SoulSubLabel.TextColor3 = Color3.fromRGB(180, 255, 180)
+SoulSubLabel.TextSize = 10
+SoulSubLabel.TextXAlignment = Enum.TextXAlignment.Left
+SoulSubLabel.ZIndex = 9
+
+-- Khung chính Menu (Glassmorphism Đỏ Ruby trong suốt)
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
@@ -187,7 +229,7 @@ Tab3Btn.TextSize = 9
 Tab3Btn.ZIndex = 6
 local T3C = Instance.new("UICorner") T3C.CornerRadius = UDim.new(0, 6) T3C.Parent = Tab3Btn
 --[[
-    Script Name: kiên 94 Hub Pro Max (Part 2 - Execution Engine)
+    Script Name: √12kientomato Hub Pro Max (Part 2 - Execution Engine)
 ]]
 
 -- Container Tab 1 (Auto Soul)
@@ -313,58 +355,28 @@ Tab3Btn.MouseButton1Click:Connect(function()
     Tab2Btn.BackgroundColor3 = Color3.fromRGB(45, 15, 15) Tab2Btn.TextColor3 = Color3.fromRGB(220, 150, 150)
 end)
 
--- LOGIC TRƯỢT NGANG NÚT BẬT/TẮT MENU (Slide Toggle)
+-- HIỆU ỨNG MỞ/ĐÓNG MENU KHI BẤM CHẠM NÚT [ K ]
 local menuOpen = false
-local dragging = false
-local dragStart = 0
-local startPos = 0
-
-Knob.MouseButton1Down:Connect(function(inputX)
-    dragging = true
-    dragStart = UserInputService:GetMouseLocation().X
-    startPos = Knob.Position.X.Offset
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        if dragging then
-            dragging = false
-            local currentX = Knob.Position.X.Offset
-            if currentX > 35 then
-                -- Kéo sang phải -> Mở Menu
-                menuOpen = true
-                TweenService:Create(Knob, TweenInfo.new(0.2), {Position = UDim2.new(0, 77, 0, 3)}):Play()
-                MainFrame.Visible = true
-                MainFrame.Size = UDim2.new(0, 0, 0, 0)
-                MainFrame.Rotation = -180
-                TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-                    Size = UDim2.new(0, 290, 0, 230),
-                    Rotation = 0,
-                    Position = UDim2.new(0.5, 0, 0.5, 0)
-                }):Play()
-            else
-                -- Kéo về trái -> Đóng Menu
-                menuOpen = false
-                TweenService:Create(Knob, TweenInfo.new(0.2), {Position = UDim2.new(0, 3, 0, 3)}):Play()
-                local tw = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-                    Size = UDim2.new(0, 0, 0, 0),
-                    Rotation = 180
-                })
-                tw:Play()
-                tw.Completed:Connect(function()
-                    if not menuOpen then MainFrame.Visible = false end
-                end)
-            end
-        end
-    end
-end)
-
-RunService.RenderStepped:Connect(function()
-    if dragging then
-        local mouseX = UserInputService:GetMouseLocation().X
-        local delta = mouseX - dragStart
-        local newX = math.clamp(startPos + delta, 3, 77)
-        Knob.Position = UDim2.new(0, newX, 0, 3)
+ToggleMenuBtn.MouseButton1Click:Connect(function()
+    menuOpen = not menuOpen
+    if menuOpen then
+        MainFrame.Visible = true
+        MainFrame.Size = UDim2.new(0, 0, 0, 0)
+        MainFrame.Rotation = -180
+        TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, 290, 0, 230),
+            Rotation = 0,
+            Position = UDim2.new(0.5, 0, 0.5, 0)
+        }):Play()
+    else
+        local tw = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+            Size = UDim2.new(0, 0, 0, 0),
+            Rotation = 180
+        })
+        tw:Play()
+        tw.Completed:Connect(function()
+            if not menuOpen then MainFrame.Visible = false end
+        end)
     end
 end)
 
@@ -393,7 +405,7 @@ DestroyBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- Xử lý Auto Soul (Ghi nhớ vị trí khi bật, tự về chỗ cũ khi tắt, cho phép bạn đi khám phá map thoải mái)
+-- Xử lý Auto Soul
 AutoSoulBtn.MouseButton1Click:Connect(function()
     getgenv().kienConfig.AutoSoul = not getgenv().kienConfig.AutoSoul
     local char = player.Character
@@ -453,6 +465,34 @@ FitLagBtn.MouseButton1Click:Connect(function()
     end
 end)
 
+-- VÒNG LẶP ĐẾM VÀ CẬP NHẬT SỐ LINH HỒN REALTIME GÓC TRÁI DƯỚI
+task.spawn(function()
+    while true do
+        task.wait(0.5)
+        pcall(function()
+            local totalSouls = 0
+            -- Quét dữ liệu leaderstats chính chủ của game
+            local leaderstats = player:FindFirstChild("leaderstats")
+            if leaderstats then
+                for _, stat in pairs(leaderstats:GetChildren()) do
+                    if stat.Name:lower():find("soul") or stat.Name:lower():find("hồn") or stat.Name:lower():find("point") then
+                        totalSouls = stat.Value
+                        break
+                    end
+                end
+            end
+            
+            -- Cập nhật chữ hiển thị trên thanh
+            if totalSouls > 0 then
+                SoulCountLabel.Text = "Linh hồn: " .. tostring(totalSouls)
+            else
+                SoulCountLabel.Text = "Linh hồn: " .. tostring(getgenv().kienConfig.SessionSouls)
+            end
+            SoulSubLabel.Text = "Đã nhặt (Phiên): +" .. tostring(getgenv().kienConfig.SessionSouls)
+        end)
+    end
+end)
+
 -- Vòng lặp Fit Lag
 task.spawn(function()
     while true do
@@ -489,7 +529,7 @@ task.spawn(function()
     end
 end)
 
--- Vòng lặp Auto Farm Teleport chuẩn xác tuyệt đối (Không bị lơ lửng, hạ xuống lượm ngay lập tức)
+-- Vòng lặp Auto Farm Teleport chuẩn xác
 task.spawn(function()
     local blacklist = {}
 
@@ -563,10 +603,8 @@ task.spawn(function()
                     if bestTarget then
                         blacklist[bestTarget.instance] = true
                         
-                        -- TELEPORT CHUẨN XÁC: Đặt chân đúng ngay sát linh hồn (Cộng thêm 1.5 đơn vị chiều cao để không bị chìm hay lơ lửng)
                         hrp.CFrame = CFrame.new(bestTarget.position + Vector3.new(0, 1.5, 0))
                         
-                        -- Gửi lệnh nhặt siêu tốc
                         local args = {
                             "GraveyardSoul",
                             {
@@ -579,6 +617,8 @@ task.spawn(function()
                         for i = 1, 5 do
                             remote:FireServer(unpack(args))
                         end
+                        
+                        getgenv().kienConfig.SessionSouls = getgenv().kienConfig.SessionSouls + 1
                     else
                         task.wait(0.1)
                     end
